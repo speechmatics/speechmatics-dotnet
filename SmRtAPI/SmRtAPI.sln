@@ -7,6 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpeechmaticsAPI", "SmRtAPI\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeechmaticsAPI.Tests", "SpeechmaticsAPI.Tests\SpeechmaticsAPI.Tests.csproj", "{3DE10437-F1FE-4CF8-BA2B-F6778CD58ECC}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8547BB54-0B55-47F3-90A6-C3445CEB1300}"
+	ProjectSection(SolutionItems) = preProject
+		speechmatics.snk = speechmatics.snk
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
