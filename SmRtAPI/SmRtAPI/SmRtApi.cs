@@ -27,7 +27,7 @@ namespace SpeechmaticsAPI
 
         public Uri WsUrl { get; }
 
-        public StringBuilder FinalTranscript => _finalTranscript;
+        public string FinalTranscript => _finalTranscript.ToString();
 
         public SmRtApi(string wsUrl, CultureInfo model, Stream stream = null)
         {
@@ -109,6 +109,10 @@ namespace SpeechmaticsAPI
                 {
                     _finalTranscript.Append(jsonObject.Value<string>("transcript"));
                     break;
+                }
+                case "EndOfTranscript":
+                {
+                    return true;
                 }
                 default:
                 {
