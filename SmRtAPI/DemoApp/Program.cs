@@ -18,6 +18,7 @@ namespace DemoApp
                     var api = new SmRtApi("wss://api.rt.speechmatics.io:9000/", CultureInfo.GetCultureInfo("en-US"),
                         stream);
                     api.Run();
+                    Console.WriteLine(api.FinalTranscript);
                 }
                 catch (AggregateException e)
                 {

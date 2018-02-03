@@ -23,12 +23,16 @@ namespace SpeechmaticsAPI
         private readonly string _model;
         private int _sequenceNumber;
         private int _ackedSequenceNumbers;
+        private readonly StringBuilder _finalTranscript;
 
         public Uri WsUrl { get; }
+
+        public StringBuilder FinalTranscript => _finalTranscript;
 
         public SmRtApi(string wsUrl, CultureInfo model, Stream stream = null)
         {
             _stream = stream;
+            _finalTranscript = new StringBuilder();
             _model = model.Name;
             _resetEvent = new AutoResetEvent(false);
             WsUrl = new Uri(wsUrl);
@@ -41,19 +45,32 @@ namespace SpeechmaticsAPI
         {
             _resetEvent.Reset();
 
+            var connect = _wsClient.ConnectAsync(WsUrl, _cancellationToken);
+            Debug.WriteLine("Starting connection");
+            connect.Wait(_cancellationToken);
+            if (connect.IsFaulted || _wsClient.State != WebSocketState.Open)
+            {
+                throw new InvalidOperationException("Connection failed");
+            }
+            Debug.WriteLine("Connection succeeded");
+
             Task.Factory.StartNew(async () =>
             {
                 var receiveBuffer = new ArraySegment<byte>(new byte[32768]);
 
-                var connect = _wsClient.ConnectAsync(WsUrl, _cancellationToken);
-                Debug.WriteLine("Starting connection");
-                await connect;
-                if (connect.IsFaulted || _wsClient.State != WebSocketState.Open)
+                while (true)
                 {
-                    throw new InvalidOperationException("Connection failed");
+                    var webSocketReceiveResult = await _wsClient.ReceiveAsync(receiveBuffer, _cancellationToken);
+                    if (ProcessMessage(webSocketReceiveResult, receiveBuffer))
+                    {
+                        _resetEvent.Set();
+                        break;
+                    }
                 }
+            }, _cancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
 
-                Debug.WriteLine("Connection succeeded");
+            Task.Factory.StartNew(async () =>
+            {
                 await StartRecognition();
 
                 var streamBuffer = new byte[2048];
@@ -61,11 +78,6 @@ namespace SpeechmaticsAPI
 
                 while ((bytesRead = _stream.Read(streamBuffer, 0, streamBuffer.Length)) > 0)
                 {
-                    var webSocketReceiveResult = await _wsClient.ReceiveAsync(receiveBuffer, _cancellationToken);
-                    if (ProcessMessage(webSocketReceiveResult, receiveBuffer))
-                    {
-                        break;
-                    }
                     await SendData(new ArraySegment<byte>(streamBuffer, 0, bytesRead));
                 }
                 _resetEvent.Set();
@@ -91,6 +103,11 @@ namespace SpeechmaticsAPI
                 {
                     Console.WriteLine("Got ack for {0}", jsonObject.Value<int>("seq_no"));
                     Interlocked.Increment(ref _ackedSequenceNumbers);
+                    break;
+                }
+                case "AddTranscript":
+                {
+                    _finalTranscript.Append(jsonObject.GetValue<string>("transcript"));
                     break;
                 }
                 default:
@@ -124,11 +141,11 @@ namespace SpeechmaticsAPI
 
             Debug.WriteLine("seq_no = {0}, acked = {1}", msg.seq_no, _ackedSequenceNumbers);
 
-            //while (msg.seq_no - _ackedSequenceNumbers > 20)
-            //{
-            //    Debug.WriteLine("seq_no = {0}, acked = {1}", msg.seq_no, _ackedSequenceNumbers);
-            //    Thread.Sleep(100);
-            //}
+            while (msg.seq_no - _ackedSequenceNumbers > 20)
+            {
+                Debug.WriteLine("seq_no = {0}, acked = {1}", msg.seq_no, _ackedSequenceNumbers);
+                Thread.Sleep(100);
+            }
 
             await msg.Send(_wsClient, _cancellationToken);
 

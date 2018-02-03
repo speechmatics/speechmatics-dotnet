@@ -13,9 +13,7 @@ namespace SpeechmaticsAPI.Messages
         }
 
         public int sample_rate { get; }
-
         public string type { get; }
-
         public string encoding { get; }
     }
 }
