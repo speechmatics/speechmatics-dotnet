@@ -76,7 +76,7 @@ namespace SpeechmaticsAPI
                 var streamBuffer = new byte[2048];
                 int bytesRead;
 
-                while ((bytesRead = _stream.Read(streamBuffer, 0, streamBuffer.Length)) > 0)
+                while ((bytesRead = _stream.Read(streamBuffer, 0, streamBuffer.Length)) > 0 && !_resetEvent.WaitOne(0))
                 {
                     await SendData(new ArraySegment<byte>(streamBuffer, 0, bytesRead));
                 }
@@ -107,7 +107,7 @@ namespace SpeechmaticsAPI
                 }
                 case "AddTranscript":
                 {
-                    _finalTranscript.Append(jsonObject.GetValue<string>("transcript"));
+                    _finalTranscript.Append(jsonObject.Value<string>("transcript"));
                     break;
                 }
                 default:
@@ -140,13 +140,6 @@ namespace SpeechmaticsAPI
             };
 
             Debug.WriteLine("seq_no = {0}, acked = {1}", msg.seq_no, _ackedSequenceNumbers);
-
-            while (msg.seq_no - _ackedSequenceNumbers > 20)
-            {
-                Debug.WriteLine("seq_no = {0}, acked = {1}", msg.seq_no, _ackedSequenceNumbers);
-                Thread.Sleep(100);
-            }
-
             await msg.Send(_wsClient, _cancellationToken);
 
             if (data.Count > messageBlockSize)
