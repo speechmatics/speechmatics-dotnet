@@ -1,182 +1,125 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using Newtonsoft.Json.Linq;
 using SpeechmaticsAPI.Enumerations;
 
 namespace SpeechmaticsAPI
 {
     using System;
     using System.Net.WebSockets;
-    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using Messages;
 
     public class SmRtApi
     {
-        private readonly Action<string> _addTranscriptCallback;
         private readonly Stream _stream;
-        private readonly AutoResetEvent _resetEvent;
-        private readonly ClientWebSocket _wsClient;
-        private readonly CancellationToken _cancellationToken;
-        private readonly string _model;
-        private int _sequenceNumber;
-        private int _ackedSequenceNumbers;
 
+        internal Action<string> AddTranscriptCallback { get; }
+        internal string Model { get; }
+        internal int SampleRate { get; }
+        internal AudioFormatType AudioFormat { get; }
+        internal AudioFormatEncoding AudioFormatEncoding { get; }
+        internal AutoResetEvent MessageLoopResetEvent { get; }
+
+        /// <summary>
+        /// Cancellation token for async operations
+        /// </summary>
+        public CancellationToken CancelToken { get; }
+
+        /// <summary>
+        /// The websocket URL this API instance is connected to
+        /// </summary>
         public Uri WsUrl { get; }
 
+        /// <summary>
+        /// Transcribe a file from a stream
+        /// </summary>
+        /// <param name="wsUrl">A websocket endpoint e.g. wss://192.168.1.10:9000/</param>
+        /// <param name="addTranscriptCallback">A callback function for the AddTranscript message</param>
+        /// <param name="model">Language model</param>
+        /// <param name="stream">A stream to read input from</param>
         public SmRtApi(string wsUrl,
             Action<string> addTranscriptCallback,
             CultureInfo model,
-            Stream stream)
+            Stream stream) : this(wsUrl, addTranscriptCallback, model, stream, AudioFormatType.File, AudioFormatEncoding.File, 0)
         {
-            _addTranscriptCallback = addTranscriptCallback;
-            _stream = stream;
-            _model = model.Name;
-            _resetEvent = new AutoResetEvent(false);
-            WsUrl = new Uri(wsUrl);
-            _wsClient = new ClientWebSocket();
-            var src = new CancellationTokenSource();
-            _cancellationToken = src.Token;
         }
 
-        public CancellationToken CancelToken => _cancellationToken;
+        /// <summary>
+        /// Transcribe raw audio from a stream
+        /// </summary>
+        /// <param name="wsUrl">A websocket endpoint e.g. wss://192.168.1.10:9000/</param>
+        /// <param name="addTranscriptCallback">A callback function for the AddTranscript message</param>
+        /// <param name="model">Language model</param>
+        /// <param name="stream">A stream to read input from</param>
+        /// <param name="audioFormat">Raw</param>
+        /// <param name="audioFormatEncoding">PCM encoding type</param>
+        /// <param name="sampleRate">e.g. 16000, 44100</param>
+        public SmRtApi(string wsUrl,
+            Action<string> addTranscriptCallback,
+            CultureInfo model,
+            Stream stream,
+            AudioFormatType audioFormat,
+            AudioFormatEncoding audioFormatEncoding,
+            int sampleRate)
+        {
+            if (audioFormat == AudioFormatType.File && audioFormatEncoding != AudioFormatEncoding.File
+                || audioFormatEncoding == AudioFormatEncoding.File && audioFormat != AudioFormatType.File)
+            {
+                throw new ArgumentException("audioFormat and audioFormatEncoding must both be File");
+            }
+
+            AddTranscriptCallback = addTranscriptCallback;
+            AudioFormat = audioFormat;
+            AudioFormatEncoding = audioFormatEncoding;
+            SampleRate = sampleRate;
+            Model = model.Name;
+            MessageLoopResetEvent = new AutoResetEvent(false);
+            WsUrl = new Uri(wsUrl);
+            _stream = stream;
+
+            var src = new CancellationTokenSource();
+            CancelToken = src.Token;
+        }
 
         /// <summary>
         /// Start the message loop and do not return until the file is transcribed
         /// </summary>
+        [SuppressMessage("ReSharper", "AccessToDisposedClosure")]
+        // Justification: The AutoResetEvent prevent the using block from terminating until the web socket client is no longer needed.
         public void Run()
         {
-            _resetEvent.Reset();
-
-            var connect = _wsClient.ConnectAsync(WsUrl, _cancellationToken);
-            Debug.WriteLine("Starting connection");
-            connect.Wait(_cancellationToken);
-            if (connect.IsFaulted || _wsClient.State != WebSocketState.Open)
+            using (var wsClient = new ClientWebSocket())
             {
-                throw new InvalidOperationException("Connection failed");
+                MessageLoopResetEvent.Reset();
+
+                var connect = wsClient.ConnectAsync(WsUrl, CancelToken);
+                Debug.WriteLine("Starting connection");
+                connect.Wait(CancelToken);
+                if (connect.IsFaulted || wsClient.State != WebSocketState.Open)
+                {
+                    throw new InvalidOperationException("Connection failed");
+                }
+                Debug.WriteLine("Connection succeeded");
+
+                /* The reading loop */
+                Task.Factory.StartNew(async () =>
+                {
+                    var reader = new MessageReader(this, wsClient);
+                    await reader.Start();
+
+                }, CancelToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+
+                /* The writing loop */
+                Task.Factory.StartNew(async () =>
+                {
+                    var writer = new MessageWriter(this, wsClient, _stream);
+                    await writer.Start();
+                }, CancelToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+
+                MessageLoopResetEvent.WaitOne();
             }
-            Debug.WriteLine("Connection succeeded");
-
-            /* The reading loop */
-            Task.Factory.StartNew(async () =>
-            {
-                var receiveBuffer = new ArraySegment<byte>(new byte[32768]);
-
-                while (true)
-                {
-                    var webSocketReceiveResult = await _wsClient.ReceiveAsync(receiveBuffer, _cancellationToken);
-                    if (ProcessMessage(webSocketReceiveResult, receiveBuffer))
-                    {
-                        _resetEvent.Set();
-                        break;
-                    }
-                }
-            }, _cancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
-
-            /* The writing loop */
-            Task.Factory.StartNew(async () =>
-            {
-                await StartRecognition();
-
-                var streamBuffer = new byte[2048];
-                int bytesRead;
-
-                while ((bytesRead = _stream.Read(streamBuffer, 0, streamBuffer.Length)) > 0 && !_resetEvent.WaitOne(0))
-                {
-                    await SendData(new ArraySegment<byte>(streamBuffer, 0, bytesRead));
-                }
-
-                var endOfStream = new EndOfStreamMessage(_sequenceNumber);
-                await endOfStream.Send(_wsClient, _cancellationToken);
-            }, _cancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
-
-            _resetEvent.WaitOne();
-        }
-
-        private bool ProcessMessage(WebSocketReceiveResult result, ArraySegment<byte> message)
-        {
-            var subset = new ArraySegment<byte>(message.Array, 0, result.Count);
-            var messageAsString = Encoding.UTF8.GetString(subset.ToArray());
-            dynamic jsonObject = JObject.Parse(messageAsString);
-
-            switch (jsonObject.Value<string>("message"))
-            {
-                case "RecognitionStarted":
-                {
-                    Debug.WriteLine("Recognition started");
-                    break;
-                }
-                case "DataAdded":
-                {
-                    // Log the ack
-                    Interlocked.Increment(ref _ackedSequenceNumbers);
-                    break;
-                }
-                case "AddTranscript":
-                {
-                    string transcript = jsonObject.Value<string>("transcript");
-                    _addTranscriptCallback(transcript);
-                    break;
-                }
-                case "EndOfTranscript":
-                {
-                    return true;
-                }
-                default:
-                {
-                    Debug.WriteLine(messageAsString);
-                    break;
-                }
-            }
-            return result.MessageType == WebSocketMessageType.Close;
-        }
-
-        /// <summary>
-        /// Send a block of data as a sequence of AddData and binary messages.
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        async Task SendData(ArraySegment<byte> data)
-        {
-            // This is the size of the binary websocket message
-            const int messageBlockSize = 1024;
-
-            var arrayCopy = data.ToArray();
-            var finalSectionOffset = 0;
-
-            var msg = new AddDataMessage
-            {
-                size = data.Count,
-                offset = 0,
-                seq_no = Interlocked.Add(ref _sequenceNumber, 1)
-            };
-
-            Debug.WriteLine("seq_no = {0}, acked = {1}", msg.seq_no, _ackedSequenceNumbers);
-            await msg.Send(_wsClient, _cancellationToken);
-
-            if (data.Count > messageBlockSize)
-            {
-                for (var offset = 0; offset < data.Count / messageBlockSize; offset += messageBlockSize)
-                {
-                    finalSectionOffset += messageBlockSize;
-                    await _wsClient.SendAsync(new ArraySegment<byte>(arrayCopy, offset, messageBlockSize),
-                        WebSocketMessageType.Binary, false, _cancellationToken);
-                }
-            }
-
-            await _wsClient.SendAsync(
-                new ArraySegment<byte>(arrayCopy, finalSectionOffset, data.Count - finalSectionOffset),
-                WebSocketMessageType.Binary, true, _cancellationToken);
-        }
-
-        async Task StartRecognition()
-        {
-            var audioFormat = new AudioFormatSubMessage(AudioFormatType.File, AudioFormatEncoding.File, 44100);
-            var msg = new StartRecognitionMessage(audioFormat, _model, OutputFormat.Json, "rt_test");
-            await msg.Send(_wsClient, _cancellationToken);
         }
     }
 }
