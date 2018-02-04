@@ -1,5 +1,4 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.IO;
 using NUnit.Framework;
 using SpeechmaticsAPI.Enumerations;
@@ -26,21 +25,6 @@ namespace SpeechmaticsAPI.Tests
             var audioFormat = new AudioFormatSubMessage(AudioFormatType.Raw, AudioFormatEncoding.PcmS16Le, 44100);
             var msg = new StartRecognitionMessage(audioFormat, "en-US", OutputFormat.Json);
             Assert.AreEqual(expected, msg.AsJson(), "Message serialization unexpected");
-        }
-
-        [Test]
-        public void Go()
-        {
-            var api = new SmRtApi("wss://192.168.1.7:9000/", _ => {}, CultureInfo.GetCultureInfo("en-US"), Stream.Null);
-
-            try
-            {
-                api.Run();
-            }
-            catch (AggregateException e)
-            {
-                Console.WriteLine(e);
-            }
         }
     }
 }
