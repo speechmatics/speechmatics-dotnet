@@ -16,18 +16,34 @@ namespace SpeechmaticsAPI
     {
         private readonly Stream _stream;
 
+        /// <summary>
+        /// Callback executed when the AddTranscript message is received from the server.
+        /// </summary>
         public Action<string> AddTranscriptCallback { get; }
+        /// <summary>
+        /// Transcription language as an ISO code, e.g. en-US, en-GB, fr, ru, ja...
+        /// </summary>
         public string Model { get; }
+        /// <summary>
+        /// Audio sample rate, e.g. 16000 (for 16kHz), 44100 (for 44.1kHz CD quality)
+        /// </summary>
         public int SampleRate { get; }
+        /// <summary>
+        /// Enum of File or Raw
+        /// </summary>
         public AudioFormatType AudioFormat { get; }
+        /// <summary>
+        /// If <paramref name="AudioFormat"/> is File, this must also be File. Otherwise, a choice of PCM encodings.
+        /// </summary>
         public AudioFormatEncoding AudioFormatEncoding { get; }
+        /// <summary>
+        /// Do not use.
+        /// </summary>
         public AutoResetEvent MessageLoopResetEvent { get; }
-
         /// <summary>
         /// Cancellation token for async operations
         /// </summary>
         public CancellationToken CancelToken { get; }
-
         /// <summary>
         /// The websocket URL this API instance is connected to
         /// </summary>
