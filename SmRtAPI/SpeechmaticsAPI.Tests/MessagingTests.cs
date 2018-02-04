@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using System.IO;
 using NUnit.Framework;
 using SpeechmaticsAPI.Enumerations;
 using SpeechmaticsAPI.Messages;
@@ -13,7 +14,7 @@ namespace SpeechmaticsAPI.Tests
         public void Constructor()
         {
             var url = "wss://this/";
-            var s = new SmRtApi(url, CultureInfo.CurrentCulture);
+            var s = new SmRtApi(url, _ => {}, CultureInfo.CurrentCulture, Stream.Null);
             Assert.AreEqual(url, s.WsUrl.AbsoluteUri, "Get WS url back");
         }
 
@@ -30,7 +31,7 @@ namespace SpeechmaticsAPI.Tests
         [Test]
         public void Go()
         {
-            var api = new SmRtApi("wss://192.168.1.7:9000/", CultureInfo.GetCultureInfo("en-US"));
+            var api = new SmRtApi("wss://192.168.1.7:9000/", _ => {}, CultureInfo.GetCultureInfo("en-US"), Stream.Null);
 
             try
             {

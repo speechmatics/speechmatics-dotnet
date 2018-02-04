@@ -16,6 +16,7 @@ namespace SpeechmaticsAPI
 
     public class SmRtApi
     {
+        private readonly Action<string> _addTranscriptCallback;
         private readonly Stream _stream;
         private readonly AutoResetEvent _resetEvent;
         private readonly ClientWebSocket _wsClient;
@@ -23,16 +24,16 @@ namespace SpeechmaticsAPI
         private readonly string _model;
         private int _sequenceNumber;
         private int _ackedSequenceNumbers;
-        private readonly StringBuilder _finalTranscript;
 
         public Uri WsUrl { get; }
 
-        public string FinalTranscript => _finalTranscript.ToString();
-
-        public SmRtApi(string wsUrl, CultureInfo model, Stream stream = null)
+        public SmRtApi(string wsUrl,
+            Action<string> addTranscriptCallback,
+            CultureInfo model,
+            Stream stream)
         {
+            _addTranscriptCallback = addTranscriptCallback;
             _stream = stream;
-            _finalTranscript = new StringBuilder();
             _model = model.Name;
             _resetEvent = new AutoResetEvent(false);
             WsUrl = new Uri(wsUrl);
@@ -41,6 +42,11 @@ namespace SpeechmaticsAPI
             _cancellationToken = src.Token;
         }
 
+        public CancellationToken CancelToken => _cancellationToken;
+
+        /// <summary>
+        /// Start the message loop and do not return until the file is transcribed
+        /// </summary>
         public void Run()
         {
             _resetEvent.Reset();
@@ -54,6 +60,7 @@ namespace SpeechmaticsAPI
             }
             Debug.WriteLine("Connection succeeded");
 
+            /* The reading loop */
             Task.Factory.StartNew(async () =>
             {
                 var receiveBuffer = new ArraySegment<byte>(new byte[32768]);
@@ -69,6 +76,7 @@ namespace SpeechmaticsAPI
                 }
             }, _cancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
 
+            /* The writing loop */
             Task.Factory.StartNew(async () =>
             {
                 await StartRecognition();
@@ -80,7 +88,9 @@ namespace SpeechmaticsAPI
                 {
                     await SendData(new ArraySegment<byte>(streamBuffer, 0, bytesRead));
                 }
-                _resetEvent.Set();
+
+                var endOfStream = new EndOfStreamMessage(_sequenceNumber);
+                await endOfStream.Send(_wsClient, _cancellationToken);
             }, _cancellationToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
 
             _resetEvent.WaitOne();
@@ -96,18 +106,19 @@ namespace SpeechmaticsAPI
             {
                 case "RecognitionStarted":
                 {
-                    Console.WriteLine("Recognition started");
+                    Debug.WriteLine("Recognition started");
                     break;
                 }
                 case "DataAdded":
                 {
-                    Console.WriteLine("Got ack for {0}", jsonObject.Value<int>("seq_no"));
+                    // Log the ack
                     Interlocked.Increment(ref _ackedSequenceNumbers);
                     break;
                 }
                 case "AddTranscript":
                 {
-                    _finalTranscript.Append(jsonObject.Value<string>("transcript"));
+                    string transcript = jsonObject.Value<string>("transcript");
+                    _addTranscriptCallback(transcript);
                     break;
                 }
                 case "EndOfTranscript":
@@ -116,7 +127,7 @@ namespace SpeechmaticsAPI
                 }
                 default:
                 {
-                    Console.WriteLine(messageAsString);
+                    Debug.WriteLine(messageAsString);
                     break;
                 }
             }

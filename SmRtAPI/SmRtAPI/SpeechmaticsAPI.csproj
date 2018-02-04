@@ -4,6 +4,12 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>C:\Users\msnsp\Documents\smrtapi.net\SmRtAPI\speechmatics.snk</AssemblyOriginatorKeyFile>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>James Gilmore</Authors>
+    <Company />
+    <Product>Speechmatics Realtime API</Product>
+    <PackageId>SpeechmaticsRTAPI</PackageId>
+    <PackageProjectUrl>https://github.com/jrg1381/smrtapi.net</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
