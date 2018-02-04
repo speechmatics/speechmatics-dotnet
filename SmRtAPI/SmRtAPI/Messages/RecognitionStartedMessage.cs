@@ -1,6 +1,6 @@
 ﻿namespace SpeechmaticsAPI.Messages
 {
-    public class RecognitionStartedMessage : BaseMessage
+    internal class RecognitionStartedMessage : BaseMessage
     {
         public override string message => "RecognitionStarted";
     }

@@ -1,6 +1,6 @@
 ﻿namespace SpeechmaticsAPI.Messages
 {
-    public class AddDataMessage : BaseMessage
+    internal class AddDataMessage : BaseMessage
     {
         public override string message => "AddData";
         public int size;

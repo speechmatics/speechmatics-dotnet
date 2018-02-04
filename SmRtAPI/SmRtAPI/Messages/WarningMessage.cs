@@ -1,6 +1,6 @@
 namespace SpeechmaticsAPI.Messages
 {
-    public class WarningMessage : BaseMessage
+    internal class WarningMessage : BaseMessage
     {
         public string reason;
         public override string message => "Warning";

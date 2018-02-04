@@ -1,6 +1,6 @@
 namespace SpeechmaticsAPI.Messages
 {
-    public class EndOfStreamMessage : BaseMessage
+    internal class EndOfStreamMessage : BaseMessage
     {
         public EndOfStreamMessage(int lastSequenceNumber)
         {

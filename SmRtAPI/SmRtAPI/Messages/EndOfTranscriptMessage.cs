@@ -1,6 +1,6 @@
 namespace SpeechmaticsAPI.Messages
 {
-    public class EndOfTranscriptMessage : BaseMessage
+    internal class EndOfTranscriptMessage : BaseMessage
     {
         public override string message => "EndOfTranscript";
     }
