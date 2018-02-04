@@ -1,4 +1,4 @@
-﻿namespace SpeechmaticsAPI.Enumerations
+﻿namespace Speechmatics.Realtime.Client.Enumerations
 {
     /*
      *   * `model` (String): language product used to process the job (for example `en-US`)

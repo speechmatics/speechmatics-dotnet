@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
-using SpeechmaticsAPI.Enumerations;
+using Speechmatics.Realtime.Client.Enumerations;
 
-namespace SpeechmaticsAPI
+namespace Speechmatics.Realtime.Client
 {
     internal static class ExtensionMethods
     {

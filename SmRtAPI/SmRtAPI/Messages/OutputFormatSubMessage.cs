@@ -1,6 +1,6 @@
-﻿using SpeechmaticsAPI.Enumerations;
+﻿using Speechmatics.Realtime.Client.Enumerations;
 
-namespace SpeechmaticsAPI.Messages
+namespace Speechmatics.Realtime.Client.Messages
 {
     public class OutputFormatSubMessage
     {

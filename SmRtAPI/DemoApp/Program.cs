@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.IO;
 using System.Text;
-using SpeechmaticsAPI;
+using Speechmatics.Realtime.Client;
 
 namespace DemoApp
 {

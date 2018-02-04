@@ -8,8 +8,11 @@
     <Authors>James Gilmore</Authors>
     <Company />
     <Product>Speechmatics Realtime API</Product>
-    <PackageId>SpeechmaticsRTAPI</PackageId>
+    <PackageId>Speechmatics.Realtime.Client</PackageId>
     <PackageProjectUrl>https://github.com/jrg1381/smrtapi.net</PackageProjectUrl>
+    <Version>0.5.0</Version>
+    <AssemblyName>Speechmatics.Realtime.Client</AssemblyName>
+    <RootNamespace>Speechmatics.Realtime.Client</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

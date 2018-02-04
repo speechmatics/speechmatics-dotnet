@@ -4,11 +4,11 @@ using System.Linq;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
-using SpeechmaticsAPI.Enumerations;
-using SpeechmaticsAPI.Interfaces;
-using SpeechmaticsAPI.Messages;
+using Speechmatics.Realtime.Client.Enumerations;
+using Speechmatics.Realtime.Client.Interfaces;
+using Speechmatics.Realtime.Client.Messages;
 
-namespace SpeechmaticsAPI
+namespace Speechmatics.Realtime.Client
 {
     internal class MessageWriter
     {

@@ -7,7 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace SpeechmaticsAPI.Messages
+namespace Speechmatics.Realtime.Client.Messages
 {
     internal class AddTranscriptMessage : BaseMessage
     {

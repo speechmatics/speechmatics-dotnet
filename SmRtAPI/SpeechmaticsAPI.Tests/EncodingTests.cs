@@ -1,8 +1,9 @@
 ﻿using System.Globalization;
 using System.IO;
 using NUnit.Framework;
-using SpeechmaticsAPI.Enumerations;
-using SpeechmaticsAPI.Messages;
+using Speechmatics.Realtime.Client;
+using Speechmatics.Realtime.Client.Enumerations;
+using Speechmatics.Realtime.Client.Messages;
 
 namespace SpeechmaticsAPI.Tests
 {

@@ -1,4 +1,4 @@
-﻿namespace SpeechmaticsAPI.Enumerations
+﻿namespace Speechmatics.Realtime.Client.Enumerations
 {
     public enum AudioFormatType
     {

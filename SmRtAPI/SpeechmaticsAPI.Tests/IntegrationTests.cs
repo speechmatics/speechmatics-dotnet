@@ -3,6 +3,7 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using NUnit.Framework;
+using Speechmatics.Realtime.Client;
 
 namespace SpeechmaticsAPI.Tests
 {

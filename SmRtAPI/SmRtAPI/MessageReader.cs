@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
-using SpeechmaticsAPI.Interfaces;
+using Speechmatics.Realtime.Client.Interfaces;
 
-namespace SpeechmaticsAPI
+namespace Speechmatics.Realtime.Client
 {
     internal class MessageReader
     {

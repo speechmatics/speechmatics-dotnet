@@ -1,17 +1,16 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
-using SpeechmaticsAPI.Enumerations;
-using SpeechmaticsAPI.Interfaces;
+using System.Net.WebSockets;
+using System.Threading;
+using System.Threading.Tasks;
+using Speechmatics.Realtime.Client.Enumerations;
+using Speechmatics.Realtime.Client.Interfaces;
 
-namespace SpeechmaticsAPI
+namespace Speechmatics.Realtime.Client
 {
-    using System;
-    using System.Net.WebSockets;
-    using System.Threading;
-    using System.Threading.Tasks;
-
     public class SmRtApi : ISmRtApi
     {
         private readonly Stream _stream;
@@ -45,6 +44,7 @@ namespace SpeechmaticsAPI
         /// </summary>
         public Uri WsUrl { get; }
 
+        /// <inheritdoc />
         /// <summary>
         /// Transcribe a file from a stream
         /// </summary>
