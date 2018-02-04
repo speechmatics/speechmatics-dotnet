@@ -5,6 +5,7 @@ using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 using SpeechmaticsAPI.Enumerations;
+using SpeechmaticsAPI.Interfaces;
 using SpeechmaticsAPI.Messages;
 
 namespace SpeechmaticsAPI

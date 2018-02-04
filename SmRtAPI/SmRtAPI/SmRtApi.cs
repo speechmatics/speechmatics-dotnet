@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.IO;
 using SpeechmaticsAPI.Enumerations;
+using SpeechmaticsAPI.Interfaces;
 
 namespace SpeechmaticsAPI
 {

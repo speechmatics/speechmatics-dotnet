@@ -2,7 +2,7 @@
 using System.Threading;
 using SpeechmaticsAPI.Enumerations;
 
-namespace SpeechmaticsAPI
+namespace SpeechmaticsAPI.Interfaces
 {
     internal interface ISmRtApi
     {
