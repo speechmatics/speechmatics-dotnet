@@ -6,7 +6,7 @@ using SpeechmaticsAPI;
 
 namespace DemoApp
 {
-    class Program
+    public class Program
     {
         private const string SampleAudio = "2013-8-british-soccer-football-commentary-alex-warner.mp3";
 
