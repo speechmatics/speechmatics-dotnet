@@ -33,7 +33,7 @@ namespace SpeechmaticsAPI
         /// </summary>
         public AudioFormatType AudioFormat { get; }
         /// <summary>
-        /// If <paramref name="AudioFormat"/> is File, this must also be File. Otherwise, a choice of PCM encodings.
+        /// If AudioFormat is File, this must also be File. Otherwise, a choice of PCM encodings.
         /// </summary>
         public AudioFormatEncoding AudioFormatEncoding { get; }
         /// <summary>

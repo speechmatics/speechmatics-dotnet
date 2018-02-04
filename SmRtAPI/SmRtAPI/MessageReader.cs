@@ -10,7 +10,7 @@ using SpeechmaticsAPI.Interfaces;
 
 namespace SpeechmaticsAPI
 {
-    class MessageReader
+    internal class MessageReader
     {
         private int _ackedSequenceNumbers;
         private readonly ClientWebSocket _wsClient;

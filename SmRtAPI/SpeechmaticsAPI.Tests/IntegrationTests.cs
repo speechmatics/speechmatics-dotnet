@@ -12,6 +12,12 @@ namespace SpeechmaticsAPI.Tests
         private const string SampleAudio = "2013-8-british-soccer-football-commentary-alex-warner.mp3";
 
         [TestCase("en-US")]
+        public void RunAgainstLive(string language)
+        {
+            RunTest(language);
+        }
+
+        [TestCase("en-US")]
         [TestCase("en-AU")]
         [TestCase("en-GB")]
         [TestCase("it")]
@@ -22,7 +28,13 @@ namespace SpeechmaticsAPI.Tests
         [TestCase("fr")]
         [TestCase("ru")]
         [TestCase("sv")]
-        public void RunAgainstLive(string language)
+        [Explicit]
+        public void RunAgainstLiveAllLanguages(string language)
+        {
+            RunTest(language);
+        }
+
+        private static void RunTest(string language)
         {
             string expectedTranscript;
             var sampleAudioSource = Path.Combine(TestContext.CurrentContext.TestDirectory, SampleAudio);
@@ -56,9 +68,6 @@ namespace SpeechmaticsAPI.Tests
                 // TODO: Word error rate comparison
                 //Assert.AreEqual(expectedTranscript, builder.ToString(), "Unexpected transcript in the bagging area");
             }
-
-
-
         }
     }
 }

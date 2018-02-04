@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using System.IO;
-using System.Reflection;
 using NUnit.Framework;
 using SpeechmaticsAPI.Enumerations;
 using SpeechmaticsAPI.Messages;

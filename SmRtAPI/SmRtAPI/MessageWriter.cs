@@ -20,13 +20,13 @@ namespace SpeechmaticsAPI
 
         internal MessageWriter(ISmRtApi smRtApi,
             ClientWebSocket client,
-            AutoResetEvent _resetEvent,
+            AutoResetEvent resetEvent,
             Stream stream)
         {
             _api = smRtApi;
             _stream = stream;
             _wsClient = client;
-            this._resetEvent = _resetEvent;
+            _resetEvent = resetEvent;
         }
 
         public async Task Start()
