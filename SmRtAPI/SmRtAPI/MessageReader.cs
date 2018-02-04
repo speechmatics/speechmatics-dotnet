@@ -41,7 +41,7 @@ namespace SpeechmaticsAPI
         {
             var subset = new ArraySegment<byte>(message.Array, 0, result.Count);
             var messageAsString = Encoding.UTF8.GetString(subset.ToArray());
-            dynamic jsonObject = JObject.Parse(messageAsString);
+            var jsonObject = JObject.Parse(messageAsString);
 
             switch (jsonObject.Value<string>("message"))
             {

@@ -11,8 +11,18 @@ namespace SpeechmaticsAPI.Tests
     {
         private const string SampleAudio = "2013-8-british-soccer-football-commentary-alex-warner.mp3";
 
-        [Test]
-        public void RunAgainstLive()
+        [TestCase("en-US")]
+        [TestCase("en-AU")]
+        [TestCase("en-GB")]
+        [TestCase("it")]
+        [TestCase("nl")]
+        [TestCase("de")]
+        [TestCase("ja")]
+        [TestCase("es")]
+        [TestCase("fr")]
+        [TestCase("ru")]
+        [TestCase("sv")]
+        public void RunAgainstLive(string language)
         {
             string expectedTranscript;
             var sampleAudioSource = Path.Combine(TestContext.CurrentContext.TestDirectory, SampleAudio);
@@ -30,7 +40,7 @@ namespace SpeechmaticsAPI.Tests
                 {
                     var api = new SmRtApi("wss://api.rt.speechmatics.io:9000/",
                         s => builder.Append(s),
-                        CultureInfo.GetCultureInfo("en-US"),
+                        CultureInfo.GetCultureInfo(language),
                         stream
                     );
                     // Run() will block until the transcription is complete.
