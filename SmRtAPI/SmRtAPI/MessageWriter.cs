@@ -14,9 +14,9 @@ namespace SpeechmaticsAPI
         private readonly ClientWebSocket _wsClient;
         private int _sequenceNumber;
         private readonly Stream _stream;
-        private readonly SmRtApi _api;
+        private readonly ISmRtApi _api;
 
-        internal MessageWriter(SmRtApi api, 
+        internal MessageWriter(ISmRtApi api, 
             ClientWebSocket client,
             Stream stream)
         {

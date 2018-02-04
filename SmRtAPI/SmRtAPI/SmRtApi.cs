@@ -11,16 +11,16 @@ namespace SpeechmaticsAPI
     using System.Threading;
     using System.Threading.Tasks;
 
-    public class SmRtApi
+    public class SmRtApi : ISmRtApi
     {
         private readonly Stream _stream;
 
-        internal Action<string> AddTranscriptCallback { get; }
-        internal string Model { get; }
-        internal int SampleRate { get; }
-        internal AudioFormatType AudioFormat { get; }
-        internal AudioFormatEncoding AudioFormatEncoding { get; }
-        internal AutoResetEvent MessageLoopResetEvent { get; }
+        public Action<string> AddTranscriptCallback { get; }
+        public string Model { get; }
+        public int SampleRate { get; }
+        public AudioFormatType AudioFormat { get; }
+        public AudioFormatEncoding AudioFormatEncoding { get; }
+        public AutoResetEvent MessageLoopResetEvent { get; }
 
         /// <summary>
         /// Cancellation token for async operations

@@ -13,9 +13,9 @@ namespace SpeechmaticsAPI
     {
         private int _ackedSequenceNumbers;
         private readonly ClientWebSocket _wsClient;
-        private readonly SmRtApi _api;
+        private readonly ISmRtApi _api;
 
-        internal MessageReader(SmRtApi api, ClientWebSocket client)
+        internal MessageReader(ISmRtApi api, ClientWebSocket client)
         {
             _api = api;
             _wsClient = client;
