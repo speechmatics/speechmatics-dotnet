@@ -11,7 +11,6 @@ namespace SpeechmaticsAPI.Interfaces
         int SampleRate { get; }
         AudioFormatType AudioFormat { get; }
         AudioFormatEncoding AudioFormatEncoding { get; }
-        AutoResetEvent MessageLoopResetEvent { get; }
 
         /// <summary>
         /// Cancellation token for async operations

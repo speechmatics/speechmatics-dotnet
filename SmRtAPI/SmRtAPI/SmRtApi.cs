@@ -37,10 +37,6 @@ namespace SpeechmaticsAPI
         /// </summary>
         public AudioFormatEncoding AudioFormatEncoding { get; }
         /// <summary>
-        /// Do not use.
-        /// </summary>
-        public AutoResetEvent MessageLoopResetEvent { get; }
-        /// <summary>
         /// Cancellation token for async operations
         /// </summary>
         public CancellationToken CancelToken { get; }
@@ -92,7 +88,6 @@ namespace SpeechmaticsAPI
             AudioFormatEncoding = audioFormatEncoding;
             SampleRate = sampleRate;
             Model = model.Name;
-            MessageLoopResetEvent = new AutoResetEvent(false);
             WsUrl = new Uri(wsUrl);
             _stream = stream;
 
@@ -107,35 +102,36 @@ namespace SpeechmaticsAPI
         // Justification: The AutoResetEvent prevent the using block from terminating until the web socket client is no longer needed.
         public void Run()
         {
-            using (var wsClient = new ClientWebSocket())
+            using (var resetEvent = new AutoResetEvent(false))
             {
-                MessageLoopResetEvent.Reset();
-
-                var connect = wsClient.ConnectAsync(WsUrl, CancelToken);
-                Debug.WriteLine("Starting connection");
-                connect.Wait(CancelToken);
-                if (connect.IsFaulted || wsClient.State != WebSocketState.Open)
+                using (var wsClient = new ClientWebSocket())
                 {
-                    throw new InvalidOperationException("Connection failed");
+                    var connect = wsClient.ConnectAsync(WsUrl, CancelToken);
+                    Debug.WriteLine("Starting connection");
+                    connect.Wait(CancelToken);
+                    if (connect.IsFaulted || wsClient.State != WebSocketState.Open)
+                    {
+                        throw new InvalidOperationException("Connection failed");
+                    }
+                    Debug.WriteLine("Connection succeeded");
+
+                    /* The reading loop */
+                    Task.Factory.StartNew(async () =>
+                    {
+                        var reader = new MessageReader(this, wsClient, resetEvent);
+                        await reader.Start();
+
+                    }, CancelToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+
+                    /* The writing loop */
+                    Task.Factory.StartNew(async () =>
+                    {
+                        var writer = new MessageWriter(this, wsClient, resetEvent, _stream);
+                        await writer.Start();
+                    }, CancelToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+
+                    resetEvent.WaitOne();
                 }
-                Debug.WriteLine("Connection succeeded");
-
-                /* The reading loop */
-                Task.Factory.StartNew(async () =>
-                {
-                    var reader = new MessageReader(this, wsClient);
-                    await reader.Start();
-
-                }, CancelToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
-
-                /* The writing loop */
-                Task.Factory.StartNew(async () =>
-                {
-                    var writer = new MessageWriter(this, wsClient, _stream);
-                    await writer.Start();
-                }, CancelToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
-
-                MessageLoopResetEvent.WaitOne();
             }
         }
     }

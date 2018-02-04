@@ -13,17 +13,20 @@ namespace SpeechmaticsAPI
     internal class MessageWriter
     {
         private readonly ClientWebSocket _wsClient;
+        private readonly AutoResetEvent _resetEvent;
         private int _sequenceNumber;
         private readonly Stream _stream;
         private readonly ISmRtApi _api;
 
-        internal MessageWriter(ISmRtApi api, 
+        internal MessageWriter(ISmRtApi smRtApi,
             ClientWebSocket client,
+            AutoResetEvent _resetEvent,
             Stream stream)
         {
-            _api = api;
+            _api = smRtApi;
             _stream = stream;
             _wsClient = client;
+            this._resetEvent = _resetEvent;
         }
 
         public async Task Start()
@@ -33,7 +36,7 @@ namespace SpeechmaticsAPI
             var streamBuffer = new byte[2048];
             int bytesRead;
 
-            while ((bytesRead = _stream.Read(streamBuffer, 0, streamBuffer.Length)) > 0 && !_api.MessageLoopResetEvent.WaitOne(0))
+            while ((bytesRead = _stream.Read(streamBuffer, 0, streamBuffer.Length)) > 0 && !_resetEvent.WaitOne(0))
             {
                 await SendData(new ArraySegment<byte>(streamBuffer, 0, bytesRead));
             }

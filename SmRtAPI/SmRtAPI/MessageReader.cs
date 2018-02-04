@@ -14,12 +14,14 @@ namespace SpeechmaticsAPI
     {
         private int _ackedSequenceNumbers;
         private readonly ClientWebSocket _wsClient;
+        private readonly AutoResetEvent _resetEvent;
         private readonly ISmRtApi _api;
 
-        internal MessageReader(ISmRtApi api, ClientWebSocket client)
+        internal MessageReader(ISmRtApi smRtApi, ClientWebSocket client, AutoResetEvent resetEvent)
         {
-            _api = api;
+            _api = smRtApi;
             _wsClient = client;
+            _resetEvent = resetEvent;
         }
 
         internal async Task Start()
@@ -31,7 +33,7 @@ namespace SpeechmaticsAPI
                 var webSocketReceiveResult = await _wsClient.ReceiveAsync(receiveBuffer, _api.CancelToken);
                 if (ProcessMessage(webSocketReceiveResult, receiveBuffer))
                 {
-                    _api.MessageLoopResetEvent.Set();
+                    _resetEvent.Set();
                     break;
                 }
             }

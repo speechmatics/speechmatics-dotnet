@@ -11,7 +11,7 @@ namespace DemoApp
         private const string SampleAudio = "2013-8-british-soccer-football-commentary-alex-warner.mp3";
 
         // ReSharper disable once UnusedParameter.Local
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             var builder = new StringBuilder();
 
