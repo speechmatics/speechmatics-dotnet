@@ -11,8 +11,9 @@ C# client for Speechmatics real time API
                 try
                 {
                     /*
-                     * The API constructor is passed the websockets URL, callbacks for the messages it might receive,
-                     * the language to transcribe (as a .NET CultureInfo object) and stream to read data from.
+                     * The API constructor is passed the websockets URL, callbacks for 
+                     * the messages it might receive, the language to transcribe (as
+                     * a .NET CultureInfo object) and stream to read data from.
                      */
                     var api = new SmRtApi("wss://api.rt.speechmatics.io:9000/",
                         s => builder.Append(s),
