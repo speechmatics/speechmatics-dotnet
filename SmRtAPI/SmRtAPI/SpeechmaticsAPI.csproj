@@ -10,9 +10,22 @@
     <Product>Speechmatics Realtime API</Product>
     <PackageId>Speechmatics.Realtime.Client</PackageId>
     <PackageProjectUrl>https://github.com/jrg1381/smrtapi.net</PackageProjectUrl>
-    <Version>0.5.0</Version>
+    <Version>0.5.1</Version>
     <AssemblyName>Speechmatics.Realtime.Client</AssemblyName>
     <RootNamespace>Speechmatics.Realtime.Client</RootNamespace>
+    <AssemblyVersion>0.5.0.1</AssemblyVersion>
+    <FileVersion>0.5.0.1</FileVersion>
+    <Description>A .NET client for the Speechmatics realtime speech transcription engine</Description>
+    <PackageLicenseUrl>https://github.com/jrg1381/smrtapi.net/blob/master/LICENSE</PackageLicenseUrl>
+    <Copyright>James Gilmore</Copyright>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard2.0\Speechmatics.Realtime.Client.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\Speechmatics.Realtime.Client.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

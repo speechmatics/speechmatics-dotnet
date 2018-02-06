@@ -11,6 +11,11 @@ using Speechmatics.Realtime.Client.Interfaces;
 
 namespace Speechmatics.Realtime.Client
 {
+    /// <summary>
+    /// Speechmatics realtime API.
+    /// 
+    /// Each instance represents a separate connection to the transcription engine.
+    /// </summary>
     public class SmRtApi : ISmRtApi
     {
         private readonly Stream _stream;
