@@ -1,6 +1,12 @@
 # smrtapi.net
 C# client for Speechmatics real time API
 
+## Installation
+```powershell
+Install-Package Speechmatics.Realtime.Client -Version 0.5.1
+```
+
+## Sample code
 ```csharp
         public static void Main(string[] args)
         {
