@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.IO;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
-using Speechmatics.Realtime.Client.Enumerations;
 using Speechmatics.Realtime.Client.Interfaces;
 
 namespace Speechmatics.Realtime.Client
@@ -25,21 +23,9 @@ namespace Speechmatics.Realtime.Client
         /// </summary>
         public Action<string> AddTranscriptCallback { get; }
         /// <summary>
-        /// Transcription language as an ISO code, e.g. en-US, en-GB, fr, ru, ja...
+        /// Configuration object - audio properties and language
         /// </summary>
-        public string Model { get; }
-        /// <summary>
-        /// Audio sample rate, e.g. 16000 (for 16kHz), 44100 (for 44.1kHz CD quality)
-        /// </summary>
-        public int SampleRate { get; }
-        /// <summary>
-        /// Enum of File or Raw
-        /// </summary>
-        public AudioFormatType AudioFormat { get; }
-        /// <summary>
-        /// If AudioFormat is File, this must also be File. Otherwise, a choice of PCM encodings.
-        /// </summary>
-        public AudioFormatEncoding AudioFormatEncoding { get; }
+        public SmRtApiConfig Configuration { get; }
         /// <summary>
         /// Cancellation token for async operations
         /// </summary>
@@ -49,50 +35,20 @@ namespace Speechmatics.Realtime.Client
         /// </summary>
         public Uri WsUrl { get; }
 
-        /// <inheritdoc />
-        /// <summary>
-        /// Transcribe a file from a stream
-        /// </summary>
-        /// <param name="wsUrl">A websocket endpoint e.g. wss://192.168.1.10:9000/</param>
-        /// <param name="addTranscriptCallback">A callback function for the AddTranscript message</param>
-        /// <param name="model">Language model</param>
-        /// <param name="stream">A stream to read input from</param>
-        public SmRtApi(string wsUrl,
-            Action<string> addTranscriptCallback,
-            CultureInfo model,
-            Stream stream) : this(wsUrl, addTranscriptCallback, model, stream, AudioFormatType.File, AudioFormatEncoding.File, 0)
-        {
-        }
-
         /// <summary>
         /// Transcribe raw audio from a stream
         /// </summary>
         /// <param name="wsUrl">A websocket endpoint e.g. wss://192.168.1.10:9000/</param>
         /// <param name="addTranscriptCallback">A callback function for the AddTranscript message</param>
-        /// <param name="model">Language model</param>
         /// <param name="stream">A stream to read input from</param>
-        /// <param name="audioFormat">Raw</param>
-        /// <param name="audioFormatEncoding">PCM encoding type</param>
-        /// <param name="sampleRate">e.g. 16000, 44100</param>
+        /// <param name="configuration">Configuration object (model, audio properties)</param>
         public SmRtApi(string wsUrl,
             Action<string> addTranscriptCallback,
-            CultureInfo model,
             Stream stream,
-            AudioFormatType audioFormat,
-            AudioFormatEncoding audioFormatEncoding,
-            int sampleRate)
+            SmRtApiConfig configuration)
         {
-            if (audioFormat == AudioFormatType.File && audioFormatEncoding != AudioFormatEncoding.File
-                || audioFormatEncoding == AudioFormatEncoding.File && audioFormat != AudioFormatType.File)
-            {
-                throw new ArgumentException("audioFormat and audioFormatEncoding must both be File");
-            }
-
             AddTranscriptCallback = addTranscriptCallback;
-            AudioFormat = audioFormat;
-            AudioFormatEncoding = audioFormatEncoding;
-            SampleRate = sampleRate;
-            Model = model.Name;
+            Configuration = configuration;
             WsUrl = new Uri(wsUrl);
             _stream = stream;
 

@@ -25,8 +25,8 @@ namespace DemoApp
                      */
                     var api = new SmRtApi("wss://api.rt.speechmatics.io:9000/",
                         s => builder.Append(s),
-                        CultureInfo.GetCultureInfo("en-US"),
-                        stream
+                        stream,
+                        new SmRtApiConfig("en-US")
                     );
                     // Run() will block until the transcription is complete.
                     api.Run();

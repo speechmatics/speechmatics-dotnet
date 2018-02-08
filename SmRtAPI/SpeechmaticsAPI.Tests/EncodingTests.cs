@@ -14,7 +14,7 @@ namespace SpeechmaticsAPI.Tests
         public void Constructor()
         {
             var url = "wss://this/";
-            var s = new SmRtApi(url, _ => { }, CultureInfo.CurrentCulture, Stream.Null);
+            var s = new SmRtApi(url, _ => { }, Stream.Null, new SmRtApiConfig("ru"));
             Assert.AreEqual(url, s.WsUrl.AbsoluteUri, "Get WS url back");
         }
 
