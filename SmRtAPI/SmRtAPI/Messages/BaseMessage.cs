@@ -9,17 +9,15 @@ using Newtonsoft.Json;
 
 namespace Speechmatics.Realtime.Client.Messages
 {
-    internal class AddTranscriptMessage : BaseMessage
+    /// <summary>
+    /// Base class for all messages
+    /// </summary>
+    public abstract class BaseMessage
     {
-        public override string message => "AddTranscript";
-        public double start_time;
-        public double length;
-        public string transcript;
-        public WordSubMessage[] words;
-    }
-
-    internal abstract class BaseMessage
-    {
+        /// <summary>
+        /// Json serialized message
+        /// </summary>
+        /// <returns></returns>
         public string AsJson()
         {
             using (var sw = new StringWriter())
@@ -29,6 +27,12 @@ namespace Speechmatics.Realtime.Client.Messages
             }
         }
 
+        /// <summary>
+        /// Send the message to the supplied websocket as JSON
+        /// </summary>
+        /// <param name="webSocket"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
         public async Task Send(ClientWebSocket webSocket, CancellationToken token)
         {
             var asJson = AsJson();

@@ -6,7 +6,9 @@ namespace Speechmatics.Realtime.Client.Interfaces
 {
     internal interface ISmRtApi
     {
-        Action<string> AddTranscriptCallback { get; }
+        /// <summary>
+        /// All configuration for the stream format and callbacks
+        /// </summary>
         SmRtApiConfig Configuration { get; }
 
         /// <summary>

@@ -19,10 +19,6 @@ namespace Speechmatics.Realtime.Client
         private readonly Stream _stream;
 
         /// <summary>
-        /// Callback executed when the AddTranscript message is received from the server.
-        /// </summary>
-        public Action<string> AddTranscriptCallback { get; }
-        /// <summary>
         /// Configuration object - audio properties and language
         /// </summary>
         public SmRtApiConfig Configuration { get; }
@@ -39,15 +35,12 @@ namespace Speechmatics.Realtime.Client
         /// Transcribe raw audio from a stream
         /// </summary>
         /// <param name="wsUrl">A websocket endpoint e.g. wss://192.168.1.10:9000/</param>
-        /// <param name="addTranscriptCallback">A callback function for the AddTranscript message</param>
         /// <param name="stream">A stream to read input from</param>
         /// <param name="configuration">Configuration object (model, audio properties)</param>
         public SmRtApi(string wsUrl,
-            Action<string> addTranscriptCallback,
             Stream stream,
             SmRtApiConfig configuration)
         {
-            AddTranscriptCallback = addTranscriptCallback;
             Configuration = configuration;
             WsUrl = new Uri(wsUrl);
             _stream = stream;

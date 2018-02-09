@@ -25,6 +25,30 @@ namespace Speechmatics.Realtime.Client
         /// If AudioFormat is File, this must also be File. Otherwise, a choice of PCM encodings.
         /// </summary>
         public AudioFormatEncoding AudioFormatEncoding { get; internal set; }
+        /// <summary>
+        /// Action to perform on receiving a transcript
+        /// </summary>
+        public Action<string> AddTranscriptCallback { get; set; }
+        /// <summary>
+        /// Action to perform on extended transcript data
+        /// </summary>
+        public Action<Messages.AddTranscriptMessage> AddTranscriptMessageCallback { get; set; }
+        /// <summary>
+        /// Action to perform on end of transcript
+        /// </summary>
+        public Action EndOfTranscriptCallback { get; set; }
+        /// <summary>
+        /// Action to perform on extended partial transcript data
+        /// </summary>
+        public Action<Messages.AddTranscriptMessage> AddPartialTranscriptMessageCallback { get; set; }
+        /// <summary>
+        /// Action to perform when a warning message is received
+        /// </summary>
+        public Action<Messages.WarningMessage> WarningMessageCallback { get; set; }
+        /// <summary>
+        /// Action to perform when an error message is received
+        /// </summary>
+        public Action<Messages.ErrorMessage> ErrorMessageCallback { get; set; }
 
         /// <summary>
         /// Constructor
