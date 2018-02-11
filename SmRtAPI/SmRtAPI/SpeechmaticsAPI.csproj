@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>C:\Users\msnsp\Documents\smrtapi.net\SmRtAPI\speechmatics.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\speechmatics.snk</AssemblyOriginatorKeyFile>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>James Gilmore</Authors>
     <Company />
