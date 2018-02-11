@@ -18,7 +18,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\Release\netstandard2.0\Speechmatics.Realtime.Client.dll" target="lib\netstandard2.0\Speechmatics.Realtime.Client.dll" />
-    <file src="bin\Release\netstandard2.0\Speechmatics.Realtime.Client.xml" target="lib\netstandard2.0\Speechmatics.Realtime.Client.xml" />
+    <file src="Speechmatics.Realtime.Client.dll" target="lib\netstandard2.0\Speechmatics.Realtime.Client.dll" />
+    <file src="Speechmatics.Realtime.Client.xml" target="lib\netstandard2.0\Speechmatics.Realtime.Client.xml" />
   </files>
 </package>
