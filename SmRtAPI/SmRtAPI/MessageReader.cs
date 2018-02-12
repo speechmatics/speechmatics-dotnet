@@ -5,8 +5,10 @@ using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Speechmatics.Realtime.Client.Interfaces;
+using Speechmatics.Realtime.Client.Messages;
 
 namespace Speechmatics.Realtime.Client
 {
@@ -61,12 +63,29 @@ namespace Speechmatics.Realtime.Client
                 case "AddTranscript":
                 {
                     string transcript = jsonObject.Value<string>("transcript");
-                    _api.AddTranscriptCallback(transcript);
+                    _api.Configuration.AddTranscriptCallback?.Invoke(transcript);
+                    _api.Configuration.AddTranscriptMessageCallback?.Invoke(JsonConvert.DeserializeObject<AddTranscriptMessage>(messageAsString));
+                    break;
+                }
+                case "AddPartialTranscript":
+                {
+                    _api.Configuration.AddPartialTranscriptMessageCallback?.Invoke(JsonConvert.DeserializeObject<AddTranscriptMessage>(messageAsString));
                     break;
                 }
                 case "EndOfTranscript":
                 {
+                    _api.Configuration.EndOfTranscriptCallback?.Invoke();
                     return true;
+                }
+                case "Error":
+                {
+                    _api.Configuration.ErrorMessageCallback?.Invoke(JsonConvert.DeserializeObject<ErrorMessage>(messageAsString));
+                    return true;
+                }
+                case "Warning":
+                {
+                    _api.Configuration.WarningMessageCallback?.Invoke(JsonConvert.DeserializeObject<WarningMessage>(messageAsString));
+                    break;
                 }
                 default:
                 {

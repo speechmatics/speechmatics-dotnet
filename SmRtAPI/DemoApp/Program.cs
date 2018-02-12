@@ -23,10 +23,16 @@ namespace DemoApp
                      * The API constructor is passed the websockets URL, callbacks for the messages it might receive,
                      * the language to transcribe (as a .NET CultureInfo object) and stream to read data from.
                      */
+                    var config = new SmRtApiConfig("en-US")
+                    {
+                        AddTranscriptCallback = s => builder.Append(s),
+                        AddTranscriptMessageCallback = s => Console.WriteLine(s.words),
+                        AddPartialTranscriptMessageCallback = Console.WriteLine
+                    };
+
                     var api = new SmRtApi("wss://api.rt.speechmatics.io:9000/",
-                        s => builder.Append(s),
-                        CultureInfo.GetCultureInfo("en-US"),
-                        stream
+                        stream,
+                        config
                     );
                     // Run() will block until the transcription is complete.
                     api.Run();

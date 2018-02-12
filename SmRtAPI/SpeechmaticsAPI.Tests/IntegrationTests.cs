@@ -51,10 +51,11 @@ namespace SpeechmaticsAPI.Tests
             {
                 try
                 {
+                    var config = new SmRtApiConfig(language) {AddTranscriptCallback = s => builder.Append(s)};
+
                     var api = new SmRtApi("wss://api.rt.speechmatics.io:9000/",
-                        s => builder.Append(s),
-                        CultureInfo.GetCultureInfo(language),
-                        stream
+                        stream,
+                        config
                     );
                     // Run() will block until the transcription is complete.
                     api.Run();

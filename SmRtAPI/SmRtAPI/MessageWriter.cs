@@ -84,8 +84,10 @@ namespace Speechmatics.Realtime.Client
 
         private async Task StartRecognition()
         {
-            var audioFormat = new AudioFormatSubMessage(_api.AudioFormat, _api.AudioFormatEncoding, _api.SampleRate);
-            var msg = new StartRecognitionMessage(audioFormat, _api.Model, OutputFormat.Json, "rt_test");
+            var audioFormat = new AudioFormatSubMessage(_api.Configuration.AudioFormat,
+                _api.Configuration.AudioFormatEncoding,
+                _api.Configuration.SampleRate);
+            var msg = new StartRecognitionMessage(audioFormat, _api.Configuration.Model, OutputFormat.Json, "rt_test");
             await msg.Send(_wsClient, _api.CancelToken);
         }
     }
