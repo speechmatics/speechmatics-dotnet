@@ -60,6 +60,11 @@ namespace Speechmatics.Realtime.Client
             {
                 using (var wsClient = new ClientWebSocket())
                 {
+                    if (Configuration.Insecure)
+                    {
+                        // TODO: Support this
+                    }
+                    
                     var connect = wsClient.ConnectAsync(WsUrl, CancelToken);
                     Debug.WriteLine("Starting connection");
                     connect.Wait(CancelToken);

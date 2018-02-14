@@ -1,14 +1,19 @@
 ﻿using System;
-using System.Globalization;
 using System.IO;
 using System.Text;
 using Speechmatics.Realtime.Client;
+using Newtonsoft.Json;
 
 namespace DemoApp
 {
     public class Program
     {
         private const string SampleAudio = "2013-8-british-soccer-football-commentary-alex-warner.mp3";
+
+        private static string ToJson(object obj)
+        {
+            return JsonConvert.SerializeObject(obj);
+        }
 
         // ReSharper disable once UnusedParameter.Local
         public static void Main(string[] args)
@@ -26,8 +31,8 @@ namespace DemoApp
                     var config = new SmRtApiConfig("en-US")
                     {
                         AddTranscriptCallback = s => builder.Append(s),
-                        AddTranscriptMessageCallback = s => Console.WriteLine(s.words),
-                        AddPartialTranscriptMessageCallback = Console.WriteLine
+                        AddTranscriptMessageCallback = s => Console.WriteLine(ToJson(s.words)),
+                        AddPartialTranscriptMessageCallback = s => Console.WriteLine(ToJson(s))
                     };
 
                     var api = new SmRtApi("wss://api.rt.speechmatics.io:9000/",

@@ -49,6 +49,10 @@ namespace Speechmatics.Realtime.Client
         /// Action to perform when an error message is received
         /// </summary>
         public Action<Messages.ErrorMessage> ErrorMessageCallback { get; set; }
+        /// <summary>
+        /// True if SSL errors should be ignored (default false)
+        /// </summary>
+        public bool Insecure { get; set; }
 
         /// <summary>
         /// Constructor
@@ -70,7 +74,7 @@ namespace Speechmatics.Realtime.Client
 
             try
             {
-                var culture = new CultureInfo(model);
+                var unused = new CultureInfo(model);
             }
             catch(CultureNotFoundException ex)
             {
