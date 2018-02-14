@@ -15,6 +15,15 @@ namespace DemoApp
             return JsonConvert.SerializeObject(obj);
         }
 
+        private static string RtUrl
+        {
+            get
+            {
+                var host = Environment.GetEnvironmentVariable("TEST_HOST") ?? "api.rt.speechmatics.io";
+                return host.StartsWith("wss://") ? host : $"wss://{host}:9000/";
+            }
+        }
+
         // ReSharper disable once UnusedParameter.Local
         public static void Main(string[] args)
         {
@@ -35,11 +44,12 @@ namespace DemoApp
                         AddPartialTranscriptMessageCallback = s => Console.WriteLine(ToJson(s))
                     };
 
-                    var api = new SmRtApi("wss://api.rt.speechmatics.io:9000/",
+                    var api = new SmRtApi(RtUrl,
                         stream,
                         config
                     );
                     // Run() will block until the transcription is complete.
+                    Console.WriteLine($"Connecting to {RtUrl}");
                     api.Run();
                     Console.WriteLine(builder.ToString());
                 }

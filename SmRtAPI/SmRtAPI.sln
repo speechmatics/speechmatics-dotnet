@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoApp", "DemoApp\DemoApp.csproj", "{161D10E3-5F64-4C6C-8CF2-11504E47CF62}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoAppNetCore", "DemoAppNetCore\DemoAppNetCore.csproj", "{F2755726-2137-4335-A663-C1D76BFBDD8D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoAppNetCore", "DemoAppNetCore\DemoAppNetCore.csproj", "{F2755726-2137-4335-A663-C1D76BFBDD8D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
