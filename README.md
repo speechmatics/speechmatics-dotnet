@@ -47,3 +47,21 @@ namespace DemoApp
     }
 }
 ```
+
+# Sample Dockerfile
+
+```
+FROM microsoft/dotnet as build-env
+WORKDIR /app
+
+RUN git clone https://github.com/jrg1381/smrtapi.net.git
+WORKDIR /app/smrtapi.net/SmRtAPI/DemoAppNetCore
+RUN sed -i 's/<SignAssembly>true<\/SignAssembly>/<SignAssembly>false<\/SignAssembly>/' ../SmRtAPI/SpeechmaticsAPI.csproj
+RUN dotnet build && dotnet publish -c Release -o out
+RUN cp ../DemoApp/*.mp3 ./out
+
+FROM microsoft/dotnet:runtime
+WORKDIR /app
+COPY --from=build-env /app/smrtapi.net/SmRtAPI/DemoAppNetCore/out ./
+ENTRYPOINT ["dotnet", "DemoAppNetCore.dll"]
+```
