@@ -45,6 +45,8 @@ namespace Speechmatics.Realtime.Client
                 throw new InvalidOperationException("Recognition started not received");
             }
 
+            await SetRecognitionConfig();
+
             var streamBuffer = new byte[2048];
             int bytesRead;
 
@@ -100,6 +102,14 @@ namespace Speechmatics.Realtime.Client
                 _api.Configuration.AudioFormatEncoding,
                 _api.Configuration.SampleRate);
             var msg = new StartRecognitionMessage(audioFormat, _api.Configuration.Model, OutputFormat.Json, "rt_test");
+            await msg.Send(_wsClient, _api.CancelToken);
+        }
+
+        private async Task SetRecognitionConfig()
+        {
+            var config = new AdditionalVocabSubMessage();
+
+            var msg = new SetRecognitionConfigMessage(config);
             await msg.Send(_wsClient, _api.CancelToken);
         }
     }

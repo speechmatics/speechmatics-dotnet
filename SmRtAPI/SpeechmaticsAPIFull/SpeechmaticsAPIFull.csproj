@@ -65,6 +65,9 @@
     <Compile Include="..\SmRtAPI\Messages\AddDataMessage.cs">
       <Link>Messages\AddDataMessage.cs</Link>
     </Compile>
+    <Compile Include="..\SmRtAPI\Messages\AdditionalVocabSubMessage.cs">
+      <Link>Messages\AdditionalVocabSubMessage.cs</Link>
+    </Compile>
     <Compile Include="..\SmRtAPI\Messages\AddTranscriptMessage.cs">
       <Link>Messages\AddTranscriptMessage.cs</Link>
     </Compile>
@@ -91,6 +94,9 @@
     </Compile>
     <Compile Include="..\SmRtAPI\Messages\RecognitionStartedMessage.cs">
       <Link>Messages\RecognitionStartedMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\Messages\SetRecognitionConfigMessage.cs">
+      <Link>Messages\SetRecognitionConfigMessage.cs</Link>
     </Compile>
     <Compile Include="..\SmRtAPI\Messages\StartRecognitionMessage.cs">
       <Link>Messages\StartRecognitionMessage.cs</Link>
