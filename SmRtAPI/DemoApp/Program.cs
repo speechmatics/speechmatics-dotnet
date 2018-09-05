@@ -19,6 +19,7 @@ namespace DemoApp
         {
             get
             {
+                return "wss://staging.realtimeappliance.speechmatics.io:9000/";
                 var host = Environment.GetEnvironmentVariable("TEST_HOST") ?? "api.rt.speechmatics.io";
                 return host.StartsWith("wss://") ? host : $"wss://{host}:9000/";
             }
@@ -37,11 +38,14 @@ namespace DemoApp
                      * The API constructor is passed the websockets URL, callbacks for the messages it might receive,
                      * the language to transcribe (as a .NET CultureInfo object) and stream to read data from.
                      */
-                    var config = new SmRtApiConfig("en-US")
+                    var config = new SmRtApiConfig("en")
                     {
                         AddTranscriptCallback = s => builder.Append(s),
                         AddTranscriptMessageCallback = s => Console.WriteLine(ToJson(s.words)),
-                        AddPartialTranscriptMessageCallback = s => Console.WriteLine(ToJson(s))
+                        AddPartialTranscriptMessageCallback = s => Console.WriteLine(ToJson(s)),
+                        ErrorMessageCallback = s => Console.WriteLine(ToJson(s)),
+                        WarningMessageCallback = s => Console.WriteLine(ToJson(s)),
+                        Insecure = true
                     };
 
                     var api = new SmRtApi(RtUrl,

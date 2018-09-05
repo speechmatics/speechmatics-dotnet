@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.WebSockets;
@@ -10,21 +11,29 @@ using Speechmatics.Realtime.Client.Messages;
 
 namespace Speechmatics.Realtime.Client
 {
+    internal class Flag
+    {
+        public bool Status { get; set; }
+    }
+
     internal class MessageWriter
     {
         private readonly ClientWebSocket _wsClient;
         private readonly AutoResetEvent _resetEvent;
         private int _sequenceNumber;
         private readonly Stream _stream;
+        private readonly Flag _recognitionStarted;
         private readonly ISmRtApi _api;
 
         internal MessageWriter(ISmRtApi smRtApi,
             ClientWebSocket client,
             AutoResetEvent resetEvent,
-            Stream stream)
+            Stream stream,
+            Flag recognitionStarted)
         {
             _api = smRtApi;
             _stream = stream;
+            _recognitionStarted = recognitionStarted;
             _wsClient = client;
             _resetEvent = resetEvent;
         }
@@ -32,6 +41,13 @@ namespace Speechmatics.Realtime.Client
         public async Task Start()
         {
             await StartRecognition();
+
+            if (!_recognitionStarted.Status)
+            {
+                Debug.Write("Recognition started not received");
+                _resetEvent.Set();
+                throw new InvalidOperationException("Recognition started not received");
+            }
 
             var streamBuffer = new byte[2048];
             int bytesRead;
