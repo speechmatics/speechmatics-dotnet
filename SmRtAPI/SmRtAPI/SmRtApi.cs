@@ -57,7 +57,7 @@ namespace Speechmatics.Realtime.Client
         // Justification: The AutoResetEvent prevent the using block from terminating until the web socket client is no longer needed.
         public void Run()
         {
-            var recognitionStarted = new Flag();
+            var recognitionStarted = new AutoResetEvent(false);
 
             using (var resetEvent = new AutoResetEvent(false))
             {

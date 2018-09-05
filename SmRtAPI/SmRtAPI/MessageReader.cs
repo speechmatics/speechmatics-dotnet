@@ -17,10 +17,10 @@ namespace Speechmatics.Realtime.Client
         private int _ackedSequenceNumbers;
         private readonly ClientWebSocket _wsClient;
         private readonly AutoResetEvent _resetEvent;
-        private readonly Flag _recognitionStarted;
+        private readonly AutoResetEvent _recognitionStarted;
         private readonly ISmRtApi _api;
 
-        internal MessageReader(ISmRtApi smRtApi, ClientWebSocket client, AutoResetEvent resetEvent, Flag recognitionStarted)
+        internal MessageReader(ISmRtApi smRtApi, ClientWebSocket client, AutoResetEvent resetEvent, AutoResetEvent recognitionStarted)
         {
             _api = smRtApi;
             _wsClient = client;
@@ -54,7 +54,7 @@ namespace Speechmatics.Realtime.Client
                 case "RecognitionStarted":
                 {
                     Debug.WriteLine("Recognition started");
-                    _recognitionStarted.Status = true;
+                    _recognitionStarted.Set();
                     break;
                 }
                 case "DataAdded":
