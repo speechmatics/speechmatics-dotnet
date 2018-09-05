@@ -1,12 +1,36 @@
-﻿namespace Speechmatics.Realtime.Client.Messages
+﻿using System.Collections.Generic;
+using System.Linq;
+
+namespace Speechmatics.Realtime.Client.Messages
 {
+    /* 
+     * Looks like [ "foo", "bar", { "content" : "gnocchi", "sounds_like" : [ "nokey", "noki" ] } ]
+     * */
     internal class AdditionalVocabSubMessage
     {
-        public string[] additional_vocab { get; set; }
-
-        public AdditionalVocabSubMessage()
+        class SoundsLike
         {
-            additional_vocab = new string[] {"foo", "bar"};
+            public string content { get; set; }
+            public IEnumerable<string> sounds_like { get; set; }
+        }
+
+        public List<object> additional_vocab { get; }
+
+        public AdditionalVocabSubMessage(IEnumerable<string> plainWords,
+            IDictionary<string, IEnumerable<string>> soundsLikes)
+        {
+            additional_vocab = new List<object>(plainWords);
+
+            foreach (var o in soundsLikes)
+            {
+                var t = new SoundsLike
+                {
+                    content = o.Key,
+                    sounds_like = o.Value
+                };
+
+                additional_vocab.Add(t);
+            }
         }
     }
 }

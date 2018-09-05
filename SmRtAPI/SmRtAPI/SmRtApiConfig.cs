@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Speechmatics.Realtime.Client.Enumerations;
 
@@ -53,6 +54,9 @@ namespace Speechmatics.Realtime.Client
         /// True if SSL errors should be ignored (default false)
         /// </summary>
         public bool Insecure { get; set; }
+
+        public IEnumerable<string> CustomDictionaryPlainWords { get; set; }
+        public IDictionary<string, IEnumerable<string>> CustomDictionarySoundsLikes { get; set; }
 
         /// <summary>
         /// Constructor

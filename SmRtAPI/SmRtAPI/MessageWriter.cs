@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -45,7 +46,12 @@ namespace Speechmatics.Realtime.Client
                 throw new InvalidOperationException("Recognition started not received");
             }
 
-            await SetRecognitionConfig();
+            if (_api.Configuration.CustomDictionaryPlainWords != null ||
+                _api.Configuration.CustomDictionarySoundsLikes != null)
+            {
+                await SetRecognitionConfig(_api.Configuration.CustomDictionaryPlainWords,
+                    _api.Configuration.CustomDictionarySoundsLikes);
+            }
 
             var streamBuffer = new byte[2048];
             int bytesRead;
@@ -105,9 +111,9 @@ namespace Speechmatics.Realtime.Client
             await msg.Send(_wsClient, _api.CancelToken);
         }
 
-        private async Task SetRecognitionConfig()
+        private async Task SetRecognitionConfig(IEnumerable<string> plainWords, IDictionary<string, IEnumerable<string>> soundsLikes)
         {
-            var config = new AdditionalVocabSubMessage();
+            var config = new AdditionalVocabSubMessage(plainWords, soundsLikes);
 
             var msg = new SetRecognitionConfigMessage(config);
             await msg.Send(_wsClient, _api.CancelToken);
