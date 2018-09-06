@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using NUnit.Framework;
 using Speechmatics.Realtime.Client;
@@ -26,6 +27,20 @@ namespace SpeechmaticsAPI.Tests
                 "{\"message\":\"StartRecognition\",\"model\":\"en-US\",\"audio_format\":{\"sample_rate\":44100,\"type\":\"raw\",\"encoding\":\"pcm_s16le\"},\"output_format\":{\"type\":\"json\"},\"auth_token\":\"\",\"user\":1}";
             var audioFormat = new AudioFormatSubMessage(AudioFormatType.Raw, AudioFormatEncoding.PcmS16Le, 44100);
             var msg = new StartRecognitionMessage(audioFormat, "en-US", OutputFormat.Json);
+            Assert.AreEqual(expected, msg.AsJson(), "Message serialization unexpected");
+        }
+
+        [Test]
+        public void SetRecognitionConfigToJson()
+        {
+            // This is just a sanity check for now
+            var expected =
+            "{\"message\":\"SetRecognitionConfig\",\"config\":{\"additional_vocab\":[\"foo\",{\"content\":\"foo\",\"sounds_like\":[\"fooo\",\"barrr\"]}]}}";
+            var x = new Dictionary<string, IEnumerable<string>> { ["foo"] = new List<string> { "fooo", "barrr" } };
+
+            var config = new AdditionalVocabSubMessage(new[] { "foo" }, x);
+            var msg = new SetRecognitionConfigMessage(config);
+            var y = msg.AsJson();
             Assert.AreEqual(expected, msg.AsJson(), "Message serialization unexpected");
         }
     }

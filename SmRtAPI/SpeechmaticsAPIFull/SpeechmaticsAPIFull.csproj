@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1F1232B2-8277-48E6-99CC-31EECBB7C482}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SpeechmaticsAPIFull</RootNamespace>
+    <AssemblyName>Speechmatics.Realtime.Client</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Speechmatics.Realtime.Client.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Speechmatics.Realtime.Client.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\speechmatics.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\SmRtAPI\Enumerations\AudioFormatEncoding.cs">
+      <Link>Enumerations\AudioFormatEncoding.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\Enumerations\AudioFormatType.cs">
+      <Link>Enumerations\AudioFormatType.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\Enumerations\OutputFormat.cs">
+      <Link>Enumerations\OutputFormat.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\ExtensionMethods.cs">
+      <Link>ExtensionMethods.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\Interfaces\ISmRtApi.cs">
+      <Link>Interfaces\ISmRtApi.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\MessageReader.cs">
+      <Link>MessageReader.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\Messages\AddDataMessage.cs">
+      <Link>Messages\AddDataMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\Messages\AdditionalVocabSubMessage.cs">
+      <Link>Messages\AdditionalVocabSubMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\Messages\AddPartialTranscriptMessage.cs">
+      <Link>Messages\AddPartialTranscriptMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\Messages\AddTranscriptMessage.cs">
+      <Link>Messages\AddTranscriptMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\Messages\AudioFormatSubMessage.cs">
+      <Link>Messages\AudioFormatSubMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\Messages\BaseMessage.cs">
+      <Link>Messages\BaseMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\Messages\DataAddedMessage.cs">
+      <Link>Messages\DataAddedMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\Messages\EndOfStreamMessage.cs">
+      <Link>Messages\EndOfStreamMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\Messages\EndOfTranscriptMessage.cs">
+      <Link>Messages\EndOfTranscriptMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\Messages\ErrorMessage.cs">
+      <Link>Messages\ErrorMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\Messages\OutputFormatSubMessage.cs">
+      <Link>Messages\OutputFormatSubMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\Messages\RecognitionStartedMessage.cs">
+      <Link>Messages\RecognitionStartedMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\Messages\SetRecognitionConfigMessage.cs">
+      <Link>Messages\SetRecognitionConfigMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\Messages\StartRecognitionMessage.cs">
+      <Link>Messages\StartRecognitionMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\Messages\WarningMessage.cs">
+      <Link>Messages\WarningMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\Messages\WordSubMessage.cs">
+      <Link>Messages\WordSubMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\MessageWriter.cs">
+      <Link>MessageWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\SmRtApi.cs">
+      <Link>SmRtApi.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\SmRtApiConfig.cs">
+      <Link>SmRtApiConfig.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\speechmatics.snk">
+      <Link>speechmatics.snk</Link>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

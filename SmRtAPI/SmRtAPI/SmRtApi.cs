@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Net;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
@@ -56,40 +57,48 @@ namespace Speechmatics.Realtime.Client
         // Justification: The AutoResetEvent prevent the using block from terminating until the web socket client is no longer needed.
         public void Run()
         {
-            using (var resetEvent = new AutoResetEvent(false))
+            using (var recognitionStarted = new AutoResetEvent(false))
             {
-                using (var wsClient = new ClientWebSocket())
+                using (var transcriptionComplete = new AutoResetEvent(false))
                 {
-                    if (Configuration.Insecure)
+                    using (var wsClient = new ClientWebSocket())
                     {
-                        // TODO: Support this
+                        if (Configuration.Insecure)
+                        {
+                            // TODO: Support this, but .NET Standard doesn't implement insecure websockets yet
+                            // https://github.com/dotnet/corefx/issues/5120
+                            // It's done in .NET Core 2.1, but .NET Standard 2.1 doesn't exist yet
+                            ServicePointManager.ServerCertificateValidationCallback =
+                                (sender, certificate, chain, errors) => true;
+                        }
+
+                        var connect = wsClient.ConnectAsync(WsUrl, CancelToken);
+                        Debug.WriteLine("Starting connection");
+                        connect.Wait(CancelToken);
+                        if (connect.IsFaulted || wsClient.State != WebSocketState.Open)
+                        {
+                            throw new InvalidOperationException("Connection failed");
+                        }
+                        Debug.WriteLine("Connection succeeded");
+
+                        /* The reading loop */
+                        var t1 = Task.Factory.StartNew(async () =>
+                        {
+                            var reader = new MessageReader(this, wsClient, transcriptionComplete, recognitionStarted);
+                            await reader.Start();
+
+                        }, CancelToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+
+                        /* The writing loop */
+                        var t2 = Task.Factory.StartNew(async () =>
+                        {
+                            var writer = new MessageWriter(this, wsClient, transcriptionComplete, _stream, recognitionStarted);
+                            await writer.Start();
+                        }, CancelToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+
+                        transcriptionComplete.WaitOne();
+                        Task.WaitAll(t1, t2);
                     }
-                    
-                    var connect = wsClient.ConnectAsync(WsUrl, CancelToken);
-                    Debug.WriteLine("Starting connection");
-                    connect.Wait(CancelToken);
-                    if (connect.IsFaulted || wsClient.State != WebSocketState.Open)
-                    {
-                        throw new InvalidOperationException("Connection failed");
-                    }
-                    Debug.WriteLine("Connection succeeded");
-
-                    /* The reading loop */
-                    Task.Factory.StartNew(async () =>
-                    {
-                        var reader = new MessageReader(this, wsClient, resetEvent);
-                        await reader.Start();
-
-                    }, CancelToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
-
-                    /* The writing loop */
-                    Task.Factory.StartNew(async () =>
-                    {
-                        var writer = new MessageWriter(this, wsClient, resetEvent, _stream);
-                        await writer.Start();
-                    }, CancelToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
-
-                    resetEvent.WaitOne();
                 }
             }
         }

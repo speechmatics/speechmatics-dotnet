@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net.WebSockets;
@@ -13,30 +15,48 @@ namespace Speechmatics.Realtime.Client
     internal class MessageWriter
     {
         private readonly ClientWebSocket _wsClient;
-        private readonly AutoResetEvent _resetEvent;
+        private readonly AutoResetEvent _transcriptionComplete;
         private int _sequenceNumber;
         private readonly Stream _stream;
+        private readonly AutoResetEvent _recognitionStarted;
         private readonly ISmRtApi _api;
 
         internal MessageWriter(ISmRtApi smRtApi,
             ClientWebSocket client,
-            AutoResetEvent resetEvent,
-            Stream stream)
+            AutoResetEvent transcriptionComplete,
+            Stream stream,
+            AutoResetEvent recognitionStarted)
         {
             _api = smRtApi;
             _stream = stream;
+            _recognitionStarted = recognitionStarted;
             _wsClient = client;
-            _resetEvent = resetEvent;
+            _transcriptionComplete = transcriptionComplete;
         }
 
         public async Task Start()
         {
             await StartRecognition();
 
+            // TODO: make limit configurable
+            if (!_recognitionStarted.WaitOne(10000))
+            {
+                Debug.Write("Recognition started not received");
+                _transcriptionComplete.Set();
+                throw new InvalidOperationException("Recognition started not received");
+            }
+
+            if (_api.Configuration.CustomDictionaryPlainWords != null ||
+                _api.Configuration.CustomDictionarySoundsLikes != null)
+            {
+                await SetRecognitionConfig(_api.Configuration.CustomDictionaryPlainWords,
+                    _api.Configuration.CustomDictionarySoundsLikes);
+            }
+
             var streamBuffer = new byte[2048];
             int bytesRead;
 
-            while ((bytesRead = _stream.Read(streamBuffer, 0, streamBuffer.Length)) > 0 && !_resetEvent.WaitOne(0))
+            while ((bytesRead = _stream.Read(streamBuffer, 0, streamBuffer.Length)) > 0 && !_transcriptionComplete.WaitOne(0))
             {
                 await SendData(new ArraySegment<byte>(streamBuffer, 0, bytesRead));
             }
@@ -88,6 +108,14 @@ namespace Speechmatics.Realtime.Client
                 _api.Configuration.AudioFormatEncoding,
                 _api.Configuration.SampleRate);
             var msg = new StartRecognitionMessage(audioFormat, _api.Configuration.Model, OutputFormat.Json, "rt_test");
+            await msg.Send(_wsClient, _api.CancelToken);
+        }
+
+        private async Task SetRecognitionConfig(IEnumerable<string> plainWords, IDictionary<string, IEnumerable<string>> soundsLikes)
+        {
+            var config = new AdditionalVocabSubMessage(plainWords, soundsLikes);
+
+            var msg = new SetRecognitionConfigMessage(config);
             await msg.Send(_wsClient, _api.CancelToken);
         }
     }

@@ -45,6 +45,9 @@ namespace Speechmatics.Realtime.Client.Messages
             }, token);
         }
 
+        /// <summary>
+        /// Message type, e.g. AddTranscript, AddPartialTranscript, ErrorMessage
+        /// </summary>
         public abstract string message { get; }
     }
 }
