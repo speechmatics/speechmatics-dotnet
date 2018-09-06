@@ -7,10 +7,22 @@
 
     */
 
+/// <summary>
+/// Type of audio
+/// </summary>
     public enum AudioFormatEncoding
     {
+        /// <summary>
+        /// PCM encoded 32-bit floating point (little-endian)
+        /// </summary>
         PcmF32Le,
+        /// <summary>
+        /// PCM encoded 16-bit signed integer (little-endian)
+        /// </summary>
         PcmS16Le,
+        /// <summary>
+        /// Audio file
+        /// </summary>
         File
     }
 }

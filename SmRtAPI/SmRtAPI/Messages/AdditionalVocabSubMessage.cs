@@ -19,7 +19,17 @@ namespace Speechmatics.Realtime.Client.Messages
         public AdditionalVocabSubMessage(IEnumerable<string> plainWords,
             IDictionary<string, IEnumerable<string>> soundsLikes)
         {
-            additional_vocab = new List<object>(plainWords);
+            additional_vocab = new List<object>();
+
+            if (plainWords != null)
+            {
+                additional_vocab.AddRange(plainWords);
+            }
+
+            if (soundsLikes == null)
+            {
+                return;
+            }
 
             foreach (var o in soundsLikes)
             {

@@ -68,6 +68,9 @@
     <Compile Include="..\SmRtAPI\Messages\AdditionalVocabSubMessage.cs">
       <Link>Messages\AdditionalVocabSubMessage.cs</Link>
     </Compile>
+    <Compile Include="..\SmRtAPI\Messages\AddPartialTranscriptMessage.cs">
+      <Link>Messages\AddPartialTranscriptMessage.cs</Link>
+    </Compile>
     <Compile Include="..\SmRtAPI\Messages\AddTranscriptMessage.cs">
       <Link>Messages\AddTranscriptMessage.cs</Link>
     </Compile>

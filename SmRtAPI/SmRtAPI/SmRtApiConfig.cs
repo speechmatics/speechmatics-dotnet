@@ -41,7 +41,7 @@ namespace Speechmatics.Realtime.Client
         /// <summary>
         /// Action to perform on extended partial transcript data
         /// </summary>
-        public Action<Messages.AddTranscriptMessage> AddPartialTranscriptMessageCallback { get; set; }
+        public Action<Messages.AddPartialTranscriptMessage> AddPartialTranscriptMessageCallback { get; set; }
         /// <summary>
         /// Action to perform when a warning message is received
         /// </summary>
@@ -54,8 +54,13 @@ namespace Speechmatics.Realtime.Client
         /// True if SSL errors should be ignored (default false)
         /// </summary>
         public bool Insecure { get; set; }
-
+        /// <summary>
+        /// A list of words to add to the custom dictionary. Pronunciation will be inferred.
+        /// </summary>
         public IEnumerable<string> CustomDictionaryPlainWords { get; set; }
+        /// <summary>
+        /// A mapping of words to alternative phonetic pronunciations, e.g. "gnocchi" => ("nokey", "noki")
+        /// </summary>
         public IDictionary<string, IEnumerable<string>> CustomDictionarySoundsLikes { get; set; }
 
         /// <summary>

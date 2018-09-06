@@ -14,6 +14,7 @@ namespace Speechmatics.Realtime.Client
 {
     internal class MessageReader
     {
+        private string _lastPartial;
         private int _ackedSequenceNumbers;
         private readonly ClientWebSocket _wsClient;
         private readonly AutoResetEvent _resetEvent;
@@ -45,9 +46,13 @@ namespace Speechmatics.Realtime.Client
 
         private bool ProcessMessage(WebSocketReceiveResult result, ArraySegment<byte> message)
         {
+            // Return true if the message should cause the loop to exit, false otherwise.
+
             var subset = new ArraySegment<byte>(message.Array, 0, result.Count);
             var messageAsString = Encoding.UTF8.GetString(subset.ToArray());
             var jsonObject = JObject.Parse(messageAsString);
+
+            Debug.WriteLine(messageAsString);
 
             switch (jsonObject.Value<string>("message"))
             {
@@ -72,11 +77,14 @@ namespace Speechmatics.Realtime.Client
                 }
                 case "AddPartialTranscript":
                 {
-                    _api.Configuration.AddPartialTranscriptMessageCallback?.Invoke(JsonConvert.DeserializeObject<AddTranscriptMessage>(messageAsString));
+                    _lastPartial = jsonObject.Value<string>("transcript");
+                    _api.Configuration.AddPartialTranscriptMessageCallback?.Invoke(JsonConvert.DeserializeObject<AddPartialTranscriptMessage>(messageAsString));
                     break;
                 }
                 case "EndOfTranscript":
                 {
+                    // Sometimes there is a partial without a corresponding transcript, let's pretend it was a transcript here.
+                    _api.Configuration.AddTranscriptCallback?.Invoke(_lastPartial);
                     _api.Configuration.EndOfTranscriptCallback?.Invoke();
                     return true;
                 }

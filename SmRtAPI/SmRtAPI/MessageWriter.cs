@@ -15,7 +15,7 @@ namespace Speechmatics.Realtime.Client
     internal class MessageWriter
     {
         private readonly ClientWebSocket _wsClient;
-        private readonly AutoResetEvent _resetEvent;
+        private readonly AutoResetEvent _transcriptionComplete;
         private int _sequenceNumber;
         private readonly Stream _stream;
         private readonly AutoResetEvent _recognitionStarted;
@@ -23,7 +23,7 @@ namespace Speechmatics.Realtime.Client
 
         internal MessageWriter(ISmRtApi smRtApi,
             ClientWebSocket client,
-            AutoResetEvent resetEvent,
+            AutoResetEvent transcriptionComplete,
             Stream stream,
             AutoResetEvent recognitionStarted)
         {
@@ -31,7 +31,7 @@ namespace Speechmatics.Realtime.Client
             _stream = stream;
             _recognitionStarted = recognitionStarted;
             _wsClient = client;
-            _resetEvent = resetEvent;
+            _transcriptionComplete = transcriptionComplete;
         }
 
         public async Task Start()
@@ -42,7 +42,7 @@ namespace Speechmatics.Realtime.Client
             if (!_recognitionStarted.WaitOne(10000))
             {
                 Debug.Write("Recognition started not received");
-                _resetEvent.Set();
+                _transcriptionComplete.Set();
                 throw new InvalidOperationException("Recognition started not received");
             }
 
@@ -56,7 +56,7 @@ namespace Speechmatics.Realtime.Client
             var streamBuffer = new byte[2048];
             int bytesRead;
 
-            while ((bytesRead = _stream.Read(streamBuffer, 0, streamBuffer.Length)) > 0 && !_resetEvent.WaitOne(0))
+            while ((bytesRead = _stream.Read(streamBuffer, 0, streamBuffer.Length)) > 0 && !_transcriptionComplete.WaitOne(0))
             {
                 await SendData(new ArraySegment<byte>(streamBuffer, 0, bytesRead));
             }
