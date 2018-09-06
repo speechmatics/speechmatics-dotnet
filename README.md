@@ -8,11 +8,33 @@ Install-Package Speechmatics.Realtime.Client
 
 ## Sample code
 ```csharp
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Threading;
+using Speechmatics.Realtime.Client;
+using Newtonsoft.Json;
+
 namespace DemoApp
 {
     public class Program
     {
         private const string SampleAudio = "2013-8-british-soccer-football-commentary-alex-warner.mp3";
+
+        private static string ToJson(object obj)
+        {
+            return JsonConvert.SerializeObject(obj);
+        }
+
+        private static string RtUrl
+        {
+            get
+            {
+                var host = Environment.GetEnvironmentVariable("TEST_HOST") ?? "api.rt.speechmatics.io";
+                return host.StartsWith("wss://") ? host : $"wss://{host}:9000/";
+            }
+        }
 
         // ReSharper disable once UnusedParameter.Local
         public static void Main(string[] args)
@@ -25,14 +47,29 @@ namespace DemoApp
                 {
                     /*
                      * The API constructor is passed the websockets URL, callbacks for the messages it might receive,
-                     * the language to transcribe and stream to read data from.
+                     * the language to transcribe (as a .NET CultureInfo object) and stream to read data from.
                      */
-                    var api = new SmRtApi("wss://api.rt.speechmatics.io:9000/",
-                        s => builder.Append(s),
+                    var config = new SmRtApiConfig("en")
+                    {
+                        AddTranscriptCallback = s => builder.Append(s),
+                        AddTranscriptMessageCallback = s => Console.WriteLine(ToJson(s.words)),
+                        AddPartialTranscriptMessageCallback = s => Console.WriteLine(ToJson(s)),
+                        ErrorMessageCallback = s => Console.WriteLine(ToJson(s)),
+                        WarningMessageCallback = s => Console.WriteLine(ToJson(s)),
+                        CustomDictionaryPlainWords = new[] {"speechmagic"},
+                        CustomDictionarySoundsLikes = new Dictionary<string, IEnumerable<string>>(),
+                        Insecure = true
+                    };
+
+                    // We can do this here, or earlier. It's not used until .Run() is called on the API object.
+                    config.CustomDictionarySoundsLikes["gnocchi"] = new[] {"nokey", "noki"};
+
+                    var api = new SmRtApi(RtUrl,
                         stream,
-                        new SmRtApiConfig("en-US")
+                        config
                     );
                     // Run() will block until the transcription is complete.
+                    Console.WriteLine($"Connecting to {RtUrl}");
                     api.Run();
                     Console.WriteLine(builder.ToString());
                 }
