@@ -10,13 +10,31 @@ namespace Speechmatics.Realtime.Client.Messages
   * `seq_no` (Int, optional): A `seq_no` of a corresponding API call, only present if the `seq_no` was specified in the API call.
   * */
 
+    /// <summary>
+    /// Message returned from server in the case of warning
+    /// </summary>
     public class WarningMessage : BaseMessage
     {
+        /// <summary>
+        /// Human-readable reason
+        /// </summary>
         public string reason;
+        /// <summary>
+        /// Message type
+        /// </summary>
         public override string message => "Warning";
+        /// <summary>
+        /// Code for the warning
+        /// </summary>
         public string type;
+        /// <summary>
+        /// Seq no of corresponding API call which caused the error
+        /// </summary>
         [JsonProperty(Required = Required.Default)]
         public int seq_no;
+        /// <summary>
+        /// RT can be configured to limit the stream length
+        /// </summary>
         public float duration_limit;
     }
 }
