@@ -7,7 +7,8 @@ namespace Speechmatics.Client.RtspExample
 {
     internal class RtspStream : Stream
     {
-        private StreamReader _reader;
+        private bool _disposed;
+        private Stream _baseStream;
         private readonly Process _ffmpegProcess;
 
         public RtspStream(string rtspEndpoint)
@@ -25,13 +26,23 @@ namespace Speechmatics.Client.RtspExample
         public void Go()
         {
             _ffmpegProcess.Start();
-            _reader = _ffmpegProcess.StandardOutput;
+            _baseStream = _ffmpegProcess.StandardOutput.BaseStream;
         }
 
         protected override void Dispose(bool disposing)
         {
-            _ffmpegProcess?.Dispose();
-            base.Dispose();
+            if (_disposed)
+            {
+                return;
+            }
+
+            if (disposing)
+            {
+                _ffmpegProcess?.Dispose();
+            }
+
+            _disposed = true;
+            base.Dispose(disposing);
         }
 
         public override void Flush()
@@ -51,7 +62,7 @@ namespace Speechmatics.Client.RtspExample
 
         public override int Read(byte[] buffer, int offset, int count)
         {
-            return _reader.BaseStream.Read(buffer, offset, count);
+            return _baseStream.Read(buffer, offset, count);
         }
 
         public override void Write(byte[] buffer, int offset, int count)
