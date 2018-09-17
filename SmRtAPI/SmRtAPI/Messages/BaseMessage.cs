@@ -41,7 +41,7 @@ namespace Speechmatics.Realtime.Client.Messages
             await webSocket.SendAsync(new ArraySegment<byte>(bytes, 0, bytes.Length), WebSocketMessageType.Text, true,
                 token).ContinueWith(t =>
             {
-                Debug.WriteLine("Sent {0} {1}, faulted={2}, status={3}", message, asJson, t.IsFaulted, t.Status);
+                Trace.WriteLine($"Sent {message} {asJson}, faulted={t.IsFaulted}, status={t.Status}");
             }, token);
         }
 

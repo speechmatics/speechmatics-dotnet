@@ -52,13 +52,13 @@ namespace Speechmatics.Realtime.Client
             var messageAsString = Encoding.UTF8.GetString(subset.ToArray());
             var jsonObject = JObject.Parse(messageAsString);
 
-            Debug.WriteLine(messageAsString);
+            Trace.WriteLine(messageAsString);
 
             switch (jsonObject.Value<string>("message"))
             {
                 case "RecognitionStarted":
                 {
-                    Debug.WriteLine("Recognition started");
+                    Trace.WriteLine("Recognition started");
                     _recognitionStarted.Set();
                     break;
                 }
@@ -100,7 +100,7 @@ namespace Speechmatics.Realtime.Client
                 }
                 default:
                 {
-                    Debug.WriteLine(messageAsString);
+                    Trace.WriteLine(messageAsString);
                     break;
                 }
             }

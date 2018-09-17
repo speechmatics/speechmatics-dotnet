@@ -41,7 +41,7 @@ namespace Speechmatics.Realtime.Client
             // TODO: make limit configurable
             if (!_recognitionStarted.WaitOne(10000))
             {
-                Debug.Write("Recognition started not received");
+                Trace.Write("Recognition started not received");
                 _transcriptionComplete.Set();
                 throw new InvalidOperationException("Recognition started not received");
             }

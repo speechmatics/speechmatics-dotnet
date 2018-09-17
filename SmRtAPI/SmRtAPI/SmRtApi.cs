@@ -73,13 +73,13 @@ namespace Speechmatics.Realtime.Client
                         }
 
                         var connect = wsClient.ConnectAsync(WsUrl, CancelToken);
-                        Debug.WriteLine("Starting connection");
+                        Trace.WriteLine("Starting connection");
                         connect.Wait(CancelToken);
                         if (connect.IsFaulted || wsClient.State != WebSocketState.Open)
                         {
                             throw new InvalidOperationException("Connection failed");
                         }
-                        Debug.WriteLine("Connection succeeded");
+                        Trace.WriteLine("Connection succeeded");
 
                         /* The reading loop */
                         var t1 = Task.Factory.StartNew(async () =>
