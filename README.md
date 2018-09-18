@@ -102,3 +102,62 @@ WORKDIR /app
 COPY --from=build-env /app/smrtapi.net/SmRtAPI/DemoAppNetCore/out ./
 ENTRYPOINT ["dotnet", "DemoAppNetCore.dll"]
 ```
+
+# Debugging
+
+Merge the following with your `app.config` file to enable debugging to a file. If you don't have an `app.config` file, use this XML as-is. This technique will work whether you're building from source or using the Nuget package.
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <system.diagnostics>
+    <sources>
+      <source name="System.Net" tracemode="includehex" maxdatasize="1024">
+        <listeners>
+          <add name="System.Net"/>
+        </listeners>
+      </source>
+      <source name="System.Net.Cache">
+        <listeners>
+          <add name="System.Net"/>
+        </listeners>
+      </source>
+      <source name="System.Net.Http">
+        <listeners>
+          <add name="System.Net"/>
+        </listeners>
+      </source>
+      <source name="System.Net.Sockets">
+        <listeners>
+          <add name="System.Net"/>
+        </listeners>
+      </source>
+      <source name="System.Net.WebSockets">
+        <listeners>
+          <add name="System.Net"/>
+        </listeners>
+      </source>
+    </sources>
+    <switches>
+      <add name="System.Net" value="Verbose"/>
+      <add name="System.Net.Cache" value="Verbose"/>
+      <add name="System.Net.Http" value="Verbose"/>
+      <add name="System.Net.Sockets" value="Verbose"/>
+      <add name="System.Net.WebSockets" value="Verbose"/>
+    </switches>
+    <sharedListeners>
+      <add name="System.Net"
+           type="System.Diagnostics.TextWriterTraceListener"
+           initializeData="network.log"
+      />
+    </sharedListeners>
+    <trace autoflush="true">
+      <listeners>
+        <add name="file" type="System.Diagnostics.TextWriterTraceListener" initializeData="trace.log"/>
+      </listeners>
+    </trace>
+    </system.diagnostics>
+</configuration>
+```
+
+This will log smrtapi specific information to `trace.log` (and the output window in Visual Studio, if you're running under a debugger) and all network traffic to `network.log`.
