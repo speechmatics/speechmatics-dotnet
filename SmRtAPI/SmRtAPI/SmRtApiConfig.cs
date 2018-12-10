@@ -62,6 +62,10 @@ namespace Speechmatics.Realtime.Client
         /// A mapping of words to alternative phonetic pronunciations, e.g. "gnocchi" => ("nokey", "noki")
         /// </summary>
         public IDictionary<string, IEnumerable<string>> CustomDictionarySoundsLikes { get; set; }
+        /// <summary>
+        /// For language models which support it, an optional spellings region to use for output. e.g. en-GB, en-US (default), en-AU.
+        /// </summary>
+        public string SpellingsRegion { get; set; }
 
         /// <summary>
         /// Constructor

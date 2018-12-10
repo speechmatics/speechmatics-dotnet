@@ -91,6 +91,9 @@
     <Compile Include="..\SmRtAPI\Messages\DataAddedMessage.cs">
       <Link>Messages\DataAddedMessage.cs</Link>
     </Compile>
+    <Compile Include="..\SmRtAPI\Messages\DynamicTranscriptSubMessage.cs">
+      <Link>Messages\DynamicTranscriptSubMessage.cs</Link>
+    </Compile>
     <Compile Include="..\SmRtAPI\Messages\EndOfStreamMessage.cs">
       <Link>Messages\EndOfStreamMessage.cs</Link>
     </Compile>
@@ -108,6 +111,9 @@
     </Compile>
     <Compile Include="..\SmRtAPI\Messages\SetRecognitionConfigMessage.cs">
       <Link>Messages\SetRecognitionConfigMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\Messages\SpellingsRegionSubMessage.cs">
+      <Link>Messages\SpellingsRegionSubMessage.cs</Link>
     </Compile>
     <Compile Include="..\SmRtAPI\Messages\StartRecognitionMessage.cs">
       <Link>Messages\StartRecognitionMessage.cs</Link>

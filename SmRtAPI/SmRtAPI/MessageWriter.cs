@@ -47,7 +47,8 @@ namespace Speechmatics.Realtime.Client
             }
 
             if (_api.Configuration.CustomDictionaryPlainWords != null ||
-                _api.Configuration.CustomDictionarySoundsLikes != null)
+                _api.Configuration.CustomDictionarySoundsLikes != null ||
+                _api.Configuration.SpellingsRegion != null)
             {
                 await SetRecognitionConfig(_api.Configuration.CustomDictionaryPlainWords,
                     _api.Configuration.CustomDictionarySoundsLikes);
@@ -113,9 +114,15 @@ namespace Speechmatics.Realtime.Client
 
         private async Task SetRecognitionConfig(IEnumerable<string> plainWords, IDictionary<string, IEnumerable<string>> soundsLikes)
         {
-            var config = new AdditionalVocabSubMessage(plainWords, soundsLikes);
+            var additionalVocab = new AdditionalVocabSubMessage(plainWords, soundsLikes);
+            SpellingsRegionSubMessage spellingsRegion = null;
 
-            var msg = new SetRecognitionConfigMessage(config);
+            if (!string.IsNullOrEmpty(_api.Configuration.SpellingsRegion))
+            {
+                spellingsRegion = new SpellingsRegionSubMessage(_api.Configuration.SpellingsRegion);
+            }
+
+            var msg = new SetRecognitionConfigMessage(additionalVocab, spellingsRegion);
             await msg.Send(_wsClient, _api.CancelToken);
         }
     }
