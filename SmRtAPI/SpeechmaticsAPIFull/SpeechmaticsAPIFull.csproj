@@ -52,6 +52,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SmRtAPI\DynamicTranscriptConfiguration.cs">
+      <Link>DynamicTranscriptConfiguration.cs</Link>
+    </Compile>
     <Compile Include="..\SmRtAPI\Enumerations\AudioFormatEncoding.cs">
       <Link>Enumerations\AudioFormatEncoding.cs</Link>
     </Compile>
@@ -106,14 +109,14 @@
     <Compile Include="..\SmRtAPI\Messages\OutputFormatSubMessage.cs">
       <Link>Messages\OutputFormatSubMessage.cs</Link>
     </Compile>
+    <Compile Include="..\SmRtAPI\Messages\OutputLocaleSubMessage.cs">
+      <Link>Messages\OutputLocaleSubMessage.cs</Link>
+    </Compile>
     <Compile Include="..\SmRtAPI\Messages\RecognitionStartedMessage.cs">
       <Link>Messages\RecognitionStartedMessage.cs</Link>
     </Compile>
     <Compile Include="..\SmRtAPI\Messages\SetRecognitionConfigMessage.cs">
       <Link>Messages\SetRecognitionConfigMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\Messages\SpellingsRegionSubMessage.cs">
-      <Link>Messages\SpellingsRegionSubMessage.cs</Link>
     </Compile>
     <Compile Include="..\SmRtAPI\Messages\StartRecognitionMessage.cs">
       <Link>Messages\StartRecognitionMessage.cs</Link>

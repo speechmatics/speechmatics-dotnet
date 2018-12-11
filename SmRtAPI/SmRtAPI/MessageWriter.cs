@@ -48,10 +48,10 @@ namespace Speechmatics.Realtime.Client
 
             if (_api.Configuration.CustomDictionaryPlainWords != null ||
                 _api.Configuration.CustomDictionarySoundsLikes != null ||
-                _api.Configuration.SpellingsRegion != null)
+                _api.Configuration.OutputLocale != null ||
+                _api.Configuration.DynamicTranscriptConfiguration != null)
             {
-                await SetRecognitionConfig(_api.Configuration.CustomDictionaryPlainWords,
-                    _api.Configuration.CustomDictionarySoundsLikes);
+                await SetRecognitionConfig();
             }
 
             var streamBuffer = new byte[2048];
@@ -112,17 +112,23 @@ namespace Speechmatics.Realtime.Client
             await msg.Send(_wsClient, _api.CancelToken);
         }
 
-        private async Task SetRecognitionConfig(IEnumerable<string> plainWords, IDictionary<string, IEnumerable<string>> soundsLikes)
+        private async Task SetRecognitionConfig()
         {
-            var additionalVocab = new AdditionalVocabSubMessage(plainWords, soundsLikes);
-            SpellingsRegionSubMessage spellingsRegion = null;
+            var additionalVocab = new AdditionalVocabSubMessage(_api.Configuration.CustomDictionaryPlainWords, _api.Configuration.CustomDictionarySoundsLikes);
+            OutputLocaleSubMessage outputLocale = null;
+            DynamicTranscriptSubMessage dynamicTranscriptSubMessage = null;
 
-            if (!string.IsNullOrEmpty(_api.Configuration.SpellingsRegion))
+            if (!string.IsNullOrEmpty(_api.Configuration.OutputLocale))
             {
-                spellingsRegion = new SpellingsRegionSubMessage(_api.Configuration.SpellingsRegion);
+                outputLocale = new OutputLocaleSubMessage(_api.Configuration.OutputLocale);
             }
 
-            var msg = new SetRecognitionConfigMessage(additionalVocab, spellingsRegion);
+            if (_api.Configuration.DynamicTranscriptConfiguration != null)
+            {
+                dynamicTranscriptSubMessage = new DynamicTranscriptSubMessage(_api.Configuration.DynamicTranscriptConfiguration);
+            }
+
+            var msg = new SetRecognitionConfigMessage(additionalVocab, outputLocale, dynamicTranscriptSubMessage);
             await msg.Send(_wsClient, _api.CancelToken);
         }
     }

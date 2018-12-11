@@ -63,9 +63,13 @@ namespace Speechmatics.Realtime.Client
         /// </summary>
         public IDictionary<string, IEnumerable<string>> CustomDictionarySoundsLikes { get; set; }
         /// <summary>
-        /// For language models which support it, an optional spellings region to use for output. e.g. en-GB, en-US (default), en-AU.
+        /// For language models which support it, an optional output locale to use for output. e.g. en-GB, en-US (default), en-AU.
         /// </summary>
-        public string SpellingsRegion { get; set; }
+        public string OutputLocale { get; set; }
+        /// <summary>
+        /// Dynamic transcript configuration
+        /// </summary>
+        public DynamicTranscriptConfiguration DynamicTranscriptConfiguration { get; set; }
 
         /// <summary>
         /// Constructor

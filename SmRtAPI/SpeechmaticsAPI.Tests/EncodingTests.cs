@@ -35,7 +35,7 @@ namespace SpeechmaticsAPI.Tests
         {
             // This is just a sanity check for now
             var expected =
-            "{\"message\":\"SetRecognitionConfig\",\"config\":{\"additional_vocab\":[\"foo\",{\"content\":\"foo\",\"sounds_like\":[\"fooo\",\"barrr\"]}]}}";
+            "{\"message\":\"SetRecognitionConfig\",\"config\":{\"data\":[\"foo\",{\"content\":\"foo\",\"sounds_like\":[\"fooo\",\"barrr\"]}]}}";
             var x = new Dictionary<string, IEnumerable<string>> { ["foo"] = new List<string> { "fooo", "barrr" } };
 
             var config = new AdditionalVocabSubMessage(new[] { "foo" }, x);

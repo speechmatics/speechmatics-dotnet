@@ -40,9 +40,9 @@ namespace DemoApp
                      * The API constructor is passed the websockets URL, callbacks for the messages it might receive,
                      * the language to transcribe (as a .NET CultureInfo object) and stream to read data from.
                      */
-                    var config = new SmRtApiConfig("en-GB")
+                    var config = new SmRtApiConfig("en")
                     {
-                        SpellingsRegion = "en-GB",
+                        OutputLocale = "en-GB",
                         AddTranscriptCallback = s => builder.Append(s),
                         AddTranscriptMessageCallback = s => Console.WriteLine(ToJson(s.words)),
                         AddPartialTranscriptMessageCallback = s => Console.WriteLine(ToJson(s)),
@@ -50,7 +50,8 @@ namespace DemoApp
                         WarningMessageCallback = s => Console.WriteLine(ToJson(s)),
                         CustomDictionaryPlainWords = new[] {"speechmagic"},
                         CustomDictionarySoundsLikes = new Dictionary<string, IEnumerable<string>>(),
-                        Insecure = true
+                        Insecure = true,
+                        DynamicTranscriptConfiguration = new DynamicTranscriptConfiguration(true, 10, 0.2, 0.4)
                     };
 
                     // We can do this here, or earlier. It's not used until .Run() is called on the API object.

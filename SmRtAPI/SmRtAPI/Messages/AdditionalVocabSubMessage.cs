@@ -14,16 +14,16 @@ namespace Speechmatics.Realtime.Client.Messages
             public IEnumerable<string> sounds_like { get; set; }
         }
 
-        public List<object> additional_vocab { get; }
+        public List<object> Data { get; }
 
         public AdditionalVocabSubMessage(IEnumerable<string> plainWords,
             IDictionary<string, IEnumerable<string>> soundsLikes)
         {
-            additional_vocab = new List<object>();
+            Data = new List<object>();
 
             if (plainWords != null)
             {
-                additional_vocab.AddRange(plainWords);
+                Data.AddRange(plainWords);
             }
 
             if (soundsLikes == null)
@@ -39,7 +39,7 @@ namespace Speechmatics.Realtime.Client.Messages
                     sounds_like = o.Value
                 };
 
-                additional_vocab.Add(t);
+                Data.Add(t);
             }
         }
     }

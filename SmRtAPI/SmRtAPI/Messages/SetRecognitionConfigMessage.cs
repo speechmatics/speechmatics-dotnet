@@ -7,18 +7,18 @@ namespace Speechmatics.Realtime.Client.Messages
     internal class SetRecognitionConfigMessage : BaseMessage
     {
         public SetRecognitionConfigMessage(AdditionalVocabSubMessage additionalVocab = null, 
-            SpellingsRegionSubMessage spellingsRegion = null,
+            OutputLocaleSubMessage outputLocale = null,
             DynamicTranscriptSubMessage dynamicTranscript = null
             )
         {
             config = new Dictionary<string, object>();
             if (additionalVocab != null)
             {
-                additional_vocab = additionalVocab;
+                config["additional_vocab"] = additionalVocab.Data;
             }
-            if (spellingsRegion != null)
+            if (outputLocale != null)
             {
-                config["spellings_region"] = spellingsRegion;
+                config["output_locale"] = outputLocale;
             }
             if (dynamicTranscript != null)
             {
@@ -27,7 +27,6 @@ namespace Speechmatics.Realtime.Client.Messages
         }
 
         public override string message => "SetRecognitionConfig";
-        public AdditionalVocabSubMessage additional_vocab { get; }
         public Dictionary<string, object> config { get; }
     }
 }
