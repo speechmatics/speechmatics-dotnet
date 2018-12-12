@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using NUnit.Framework;
 using Speechmatics.Realtime.Client;
@@ -35,11 +34,11 @@ namespace SpeechmaticsAPI.Tests
         {
             // This is just a sanity check for now
             var expected =
-            "{\"message\":\"SetRecognitionConfig\",\"config\":{\"data\":[\"foo\",{\"content\":\"foo\",\"sounds_like\":[\"fooo\",\"barrr\"]}]}}";
+            "{\"message\":\"SetRecognitionConfig\",\"config\":{\"additional_vocab\":[\"foo\",{\"content\":\"foo\",\"sounds_like\":[\"fooo\",\"barrr\"]}],\"output_locale\":\"en-GB\"}}";
             var x = new Dictionary<string, IEnumerable<string>> { ["foo"] = new List<string> { "fooo", "barrr" } };
 
             var config = new AdditionalVocabSubMessage(new[] { "foo" }, x);
-            var msg = new SetRecognitionConfigMessage(config);
+            var msg = new SetRecognitionConfigMessage(config,"en-GB");
             var y = msg.AsJson();
             Assert.AreEqual(expected, msg.AsJson(), "Message serialization unexpected");
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -115,20 +114,12 @@ namespace Speechmatics.Realtime.Client
         private async Task SetRecognitionConfig()
         {
             var additionalVocab = new AdditionalVocabSubMessage(_api.Configuration.CustomDictionaryPlainWords, _api.Configuration.CustomDictionarySoundsLikes);
-            OutputLocaleSubMessage outputLocale = null;
-            DynamicTranscriptSubMessage dynamicTranscriptSubMessage = null;
 
-            if (!string.IsNullOrEmpty(_api.Configuration.OutputLocale))
-            {
-                outputLocale = new OutputLocaleSubMessage(_api.Configuration.OutputLocale);
-            }
-
-            if (_api.Configuration.DynamicTranscriptConfiguration != null)
-            {
-                dynamicTranscriptSubMessage = new DynamicTranscriptSubMessage(_api.Configuration.DynamicTranscriptConfiguration);
-            }
-
-            var msg = new SetRecognitionConfigMessage(additionalVocab, outputLocale, dynamicTranscriptSubMessage);
+            var msg = new SetRecognitionConfigMessage(
+                additionalVocab,
+                _api.Configuration.OutputLocale,
+                _api.Configuration.DynamicTranscriptConfiguration
+                );
             await msg.Send(_wsClient, _api.CancelToken);
         }
     }

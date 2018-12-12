@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 namespace Speechmatics.Realtime.Client.Messages
 {
@@ -8,12 +7,6 @@ namespace Speechmatics.Realtime.Client.Messages
      * */
     internal class AdditionalVocabSubMessage
     {
-        class SoundsLike
-        {
-            public string content { get; set; }
-            public IEnumerable<string> sounds_like { get; set; }
-        }
-
         public List<object> Data { get; }
 
         public AdditionalVocabSubMessage(IEnumerable<string> plainWords,
@@ -33,7 +26,7 @@ namespace Speechmatics.Realtime.Client.Messages
 
             foreach (var o in soundsLikes)
             {
-                var t = new SoundsLike
+                var t = new 
                 {
                     content = o.Key,
                     sounds_like = o.Value

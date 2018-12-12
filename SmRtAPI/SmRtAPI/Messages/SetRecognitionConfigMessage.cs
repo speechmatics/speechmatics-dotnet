@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Speechmatics.Realtime.Client.Messages
 {
     internal class SetRecognitionConfigMessage : BaseMessage
     {
+        public override string message => "SetRecognitionConfig";
+        public Dictionary<string, object> config { get; }
+
         public SetRecognitionConfigMessage(AdditionalVocabSubMessage additionalVocab = null, 
-            OutputLocaleSubMessage outputLocale = null,
-            DynamicTranscriptSubMessage dynamicTranscript = null
+            string outputLocale = null,
+            DynamicTranscriptConfiguration dynamicTranscript = null
             )
         {
             config = new Dictionary<string, object>();
@@ -22,11 +23,24 @@ namespace Speechmatics.Realtime.Client.Messages
             }
             if (dynamicTranscript != null)
             {
-                config["dynamic_transcript"] = dynamicTranscript;
+                if (dynamicTranscript.UseDefaults)
+                {
+                    config["dynamic_transcript"] = new
+                    {
+                        enabled = dynamicTranscript.Enabled
+                    };
+                }
+                else
+                {
+                    config["dynamic_transcript"] = new
+                    {
+                        max_chars = dynamicTranscript.MaxChars,
+                        min_context = dynamicTranscript.MinContext,
+                        max_delay = dynamicTranscript.MaxDelay,
+                        enabled = dynamicTranscript.Enabled
+                    };
+                }
             }
         }
-
-        public override string message => "SetRecognitionConfig";
-        public Dictionary<string, object> config { get; }
     }
 }
