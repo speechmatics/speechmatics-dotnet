@@ -31,6 +31,8 @@ namespace DemoApp
         public static void Main(string[] args)
         {
             var builder = new StringBuilder();
+            var language = Environment.GetEnvironmentVariable("LANG") ?? "en";
+            Console.WriteLine(language);
 
             using (var stream = File.Open(SampleAudio, FileMode.Open, FileAccess.Read))
             {
@@ -40,7 +42,7 @@ namespace DemoApp
                      * The API constructor is passed the websockets URL, callbacks for the messages it might receive,
                      * the language to transcribe (as a .NET CultureInfo object) and stream to read data from.
                      */
-                    var config = new SmRtApiConfig("en")
+                    var config = new SmRtApiConfig(language)
                     {
                         AddTranscriptCallback = s => builder.Append(s),
                         AddTranscriptMessageCallback = s => Console.WriteLine(ToJson(s.words)),
