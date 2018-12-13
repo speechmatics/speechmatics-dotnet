@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Threading;
 using Speechmatics.Realtime.Client;
 using Newtonsoft.Json;
 
@@ -44,6 +43,7 @@ namespace DemoApp
                      */
                     var config = new SmRtApiConfig(language)
                     {
+                        OutputLocale = "en-GB",
                         AddTranscriptCallback = s => builder.Append(s),
                         AddTranscriptMessageCallback = s => Console.WriteLine(ToJson(s.words)),
                         AddPartialTranscriptMessageCallback = s => Console.WriteLine(ToJson(s)),
@@ -51,7 +51,8 @@ namespace DemoApp
                         WarningMessageCallback = s => Console.WriteLine(ToJson(s)),
                         CustomDictionaryPlainWords = new[] {"speechmagic"},
                         CustomDictionarySoundsLikes = new Dictionary<string, IEnumerable<string>>(),
-                        Insecure = true
+                        Insecure = true,
+                        DynamicTranscriptConfiguration = new DynamicTranscriptConfiguration(true, 10, 0.2, 0.4)
                     };
 
                     // We can do this here, or earlier. It's not used until .Run() is called on the API object.

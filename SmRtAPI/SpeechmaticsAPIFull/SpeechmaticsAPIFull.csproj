@@ -52,6 +52,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SmRtAPI\DynamicTranscriptConfiguration.cs">
+      <Link>DynamicTranscriptConfiguration.cs</Link>
+    </Compile>
     <Compile Include="..\SmRtAPI\Enumerations\AudioFormatEncoding.cs">
       <Link>Enumerations\AudioFormatEncoding.cs</Link>
     </Compile>

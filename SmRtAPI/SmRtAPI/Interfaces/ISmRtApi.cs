@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using Speechmatics.Realtime.Client.Enumerations;
 
 namespace Speechmatics.Realtime.Client.Interfaces
 {

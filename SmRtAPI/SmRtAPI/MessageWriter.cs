@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -47,10 +46,11 @@ namespace Speechmatics.Realtime.Client
             }
 
             if (_api.Configuration.CustomDictionaryPlainWords != null ||
-                _api.Configuration.CustomDictionarySoundsLikes != null)
+                _api.Configuration.CustomDictionarySoundsLikes != null ||
+                _api.Configuration.OutputLocale != null ||
+                _api.Configuration.DynamicTranscriptConfiguration != null)
             {
-                await SetRecognitionConfig(_api.Configuration.CustomDictionaryPlainWords,
-                    _api.Configuration.CustomDictionarySoundsLikes);
+                await SetRecognitionConfig();
             }
 
             var streamBuffer = new byte[2048];
@@ -111,11 +111,15 @@ namespace Speechmatics.Realtime.Client
             await msg.Send(_wsClient, _api.CancelToken);
         }
 
-        private async Task SetRecognitionConfig(IEnumerable<string> plainWords, IDictionary<string, IEnumerable<string>> soundsLikes)
+        private async Task SetRecognitionConfig()
         {
-            var config = new AdditionalVocabSubMessage(plainWords, soundsLikes);
+            var additionalVocab = new AdditionalVocabSubMessage(_api.Configuration.CustomDictionaryPlainWords, _api.Configuration.CustomDictionarySoundsLikes);
 
-            var msg = new SetRecognitionConfigMessage(config);
+            var msg = new SetRecognitionConfigMessage(
+                additionalVocab,
+                _api.Configuration.OutputLocale,
+                _api.Configuration.DynamicTranscriptConfiguration
+                );
             await msg.Send(_wsClient, _api.CancelToken);
         }
     }
