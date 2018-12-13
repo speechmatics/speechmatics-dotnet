@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>Speechmatics.Realtime.Client</id>
-    <version>1.0.0</version>
+    <version>0.7.1</version>
     <authors>James Gilmore</authors>
     <owners>James Gilmore</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
