@@ -34,6 +34,8 @@ namespace Speechmatics.Realtime.Client
                                 return "pcm_f32le";
                             case AudioFormatEncoding.PcmS16Le:
                                 return "pcm_s16le";
+                            case AudioFormatEncoding.Mulaw:
+                                return "mulaw";
                             default:
                                 throw new InvalidEnumArgumentException(nameof(enumValue));
                         }

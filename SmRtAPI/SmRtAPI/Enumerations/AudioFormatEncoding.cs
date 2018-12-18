@@ -23,6 +23,10 @@
         /// <summary>
         /// Audio file
         /// </summary>
-        File
+        File,
+        /// <summary>
+        /// Mulaw - https://en.wikipedia.org/wiki/%CE%9C-law_algorithm
+        /// </summary>
+        Mulaw
     }
 }
