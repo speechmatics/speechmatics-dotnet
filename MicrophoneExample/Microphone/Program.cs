@@ -24,6 +24,9 @@ namespace Speechmatics.Realtime.Microphone
             var t = new Task(() =>
             {
                 var waveSource = new WaveInEvent {WaveFormat = new WaveFormat(44100, 16, 1)};
+                // Experiment suggests that we need a buffer to prevent incomplete blocks
+                // being sent to the appliance.
+                waveSource.BufferMilliseconds = 2500;
                 waveSource.DataAvailable += WaveSourceOnDataAvailable;
                 waveSource.StartRecording();
             });
@@ -40,7 +43,7 @@ namespace Speechmatics.Realtime.Microphone
                     var config = new SmRtApiConfig("en", 44100, AudioFormatType.Raw, AudioFormatEncoding.PcmS16Le)
                     {
                         AddTranscriptCallback = Console.Write,
-                        AddPartialTranscriptMessageCallback = s => Console.Write("* " + s.transcript),
+                        // AddPartialTranscriptMessageCallback = s => Console.Write("* " + s.transcript),
                         ErrorMessageCallback = s => Console.WriteLine(ToJson(s)),
                         WarningMessageCallback = s => Console.WriteLine(ToJson(s)),
                         Insecure = true,
