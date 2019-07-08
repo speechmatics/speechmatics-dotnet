@@ -24,6 +24,10 @@ namespace Speechmatics.Realtime.Microphone
             var t = new Task(() =>
             {
                 var waveSource = new WaveInEvent {WaveFormat = new WaveFormat(44100, 16, 1)};
+                // This is an example, but experiment shows that making the value too low will
+                // result in incomplete buffers to send to the RT appliance, leading to bad
+                // transcripts.
+                waveSource.BufferMilliseconds = 2500;
                 waveSource.DataAvailable += WaveSourceOnDataAvailable;
                 waveSource.StartRecording();
             });
@@ -35,7 +39,7 @@ namespace Speechmatics.Realtime.Microphone
                 {
                     /*
                      * The API constructor is passed the websockets URL, callbacks for the messages it might receive,
-                     * the language to transcribe (as a .NET CultureInfo object) and stream to read data from.
+                     * the language to transcribe and stream to read data from.
                      */
                     var config = new SmRtApiConfig("en", 44100, AudioFormatType.Raw, AudioFormatEncoding.PcmS16Le)
                     {
