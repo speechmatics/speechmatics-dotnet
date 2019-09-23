@@ -52,7 +52,7 @@ namespace DemoApp
                         CustomDictionaryPlainWords = new[] {"speechmagic"},
                         CustomDictionarySoundsLikes = new Dictionary<string, IEnumerable<string>>(),
                         Insecure = true,
-                        DynamicTranscriptConfiguration = new DynamicTranscriptConfiguration(true, 10, 0.2, 0.4)
+                        // DynamicTranscriptConfiguration = new DynamicTranscriptConfiguration(true, 10, 0.2, 0.4)
                     };
 
                     // We can do this here, or earlier. It's not used until .Run() is called on the API object.
