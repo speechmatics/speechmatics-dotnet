@@ -6,6 +6,18 @@ C# client for Speechmatics real time API
 Install-Package Speechmatics.Realtime.Client
 ```
 
+## Configuration
+
+*New* - BlockSize parameter allows you to configure how big a binary block to send in each websockets message. This can be tuned to improve performance.
+
+```csharp
+        /// <summary>
+        /// Data block size to send in one message. Overly small or large values can overload the server, something like 8192
+        /// is usually safe. Large block sizes can affect latency.
+        /// </summary>
+        public int BlockSize { get; set; }
+```
+
 ## Sample code
 ```csharp
 using System;
