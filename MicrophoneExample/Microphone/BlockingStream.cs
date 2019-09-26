@@ -3,6 +3,8 @@ using System.Collections.Concurrent;
 using System.IO;
 using System.Threading;
 
+// https://stackoverflow.com/a/3729877
+
 namespace Speechmatics.Realtime.Microphone
 {
     public class BlockingStream : Stream
@@ -98,7 +100,7 @@ namespace Speechmatics.Realtime.Microphone
             ValidateBufferArgs(buffer, offset, count);
 
             var newBuf = new byte[count];
-            Array.Copy(buffer, offset, newBuf, 0, count);
+            Buffer.BlockCopy(buffer, offset, newBuf, 0, count);
             _blocks.Add(newBuf);
             TotalBytesWritten += count;
             WriteCount++;
