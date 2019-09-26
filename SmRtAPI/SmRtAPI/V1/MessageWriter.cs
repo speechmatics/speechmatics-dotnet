@@ -6,10 +6,11 @@ using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Speechmatics.Realtime.Client.Enumerations;
-using Speechmatics.Realtime.Client.Interfaces;
 using Speechmatics.Realtime.Client.Messages;
+using Speechmatics.Realtime.Client.V1.Interfaces;
+using Speechmatics.Realtime.Client.V1.Messages;
 
-namespace Speechmatics.Realtime.Client
+namespace Speechmatics.Realtime.Client.V1
 {
     internal class MessageWriter
     {
@@ -53,7 +54,7 @@ namespace Speechmatics.Realtime.Client
                 await SetRecognitionConfig();
             }
 
-            var streamBuffer = new byte[2048];
+            var streamBuffer = new byte[_api.Configuration.BlockSize];
             int bytesRead;
 
             while ((bytesRead = _stream.Read(streamBuffer, 0, streamBuffer.Length)) > 0 && !_transcriptionComplete.WaitOne(0))

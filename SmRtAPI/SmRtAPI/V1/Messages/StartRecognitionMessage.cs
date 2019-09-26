@@ -1,6 +1,7 @@
 ﻿using Speechmatics.Realtime.Client.Enumerations;
+using Speechmatics.Realtime.Client.Messages;
 
-namespace Speechmatics.Realtime.Client.Messages
+namespace Speechmatics.Realtime.Client.V1.Messages
 {
     internal class StartRecognitionMessage : BaseMessage
     {

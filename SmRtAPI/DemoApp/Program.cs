@@ -1,12 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
-using Speechmatics.Realtime.Client;
+using Speechmatics.Realtime.Client.V2;
 using Newtonsoft.Json;
+using Speechmatics.Realtime.Client.V2.Config;
 
 namespace DemoApp
 {
+    /*
+     This program is coded against an appliance using the v2 version of the API, releases 3.2.0 or above.
+    
+     To target a v1 appliance, change the V2 in `using Speechmatics.Realtime.Client.V2` and 
+     `using Speechmatics.Realtime.Client.V2.Config` to a V1.
+         
+     The v2 appliances have a compatibility layer which talks v1 protocol -- v2 is under wss://host:9000/v2, v1 is under wss://host:9000/.
+    */
     public class Program
     {
         private const string SampleAudio = "2013-8-british-soccer-football-commentary-alex-warner.mp3";
@@ -20,7 +30,7 @@ namespace DemoApp
         {
             get
             {
-                return "wss://staging.realtimeappliance.speechmatics.io:9000/";
+                return "wss://staging.realtimeappliance.speechmatics.io:9000/v2";
                 var host = Environment.GetEnvironmentVariable("TEST_HOST") ?? "api.rt.speechmatics.io";
                 return host.StartsWith("wss://") ? host : $"wss://{host}:9000/";
             }
@@ -29,6 +39,8 @@ namespace DemoApp
         // ReSharper disable once UnusedParameter.Local
         public static void Main(string[] args)
         {
+            var start = DateTime.Now;
+            Debug.WriteLine("Starting at {0}", start);
             var builder = new StringBuilder();
             var language = Environment.GetEnvironmentVariable("LANG") ?? "en";
             Console.WriteLine(language);
@@ -45,14 +57,15 @@ namespace DemoApp
                     {
                         OutputLocale = "en-GB",
                         AddTranscriptCallback = s => builder.Append(s),
-                        AddTranscriptMessageCallback = s => Console.WriteLine(ToJson(s.words)),
-                        AddPartialTranscriptMessageCallback = s => Console.WriteLine(ToJson(s)),
+                        AddTranscriptMessageCallback = s => Console.WriteLine(ToJson(s)),
+                        // The v2 appliances don't have partial transcripts, but rather "low-latency finals", so skip this bit.
+                        //AddPartialTranscriptMessageCallback = s => Console.WriteLine(ToJson(s)),
                         ErrorMessageCallback = s => Console.WriteLine(ToJson(s)),
                         WarningMessageCallback = s => Console.WriteLine(ToJson(s)),
                         CustomDictionaryPlainWords = new[] {"speechmagic"},
                         CustomDictionarySoundsLikes = new Dictionary<string, IEnumerable<string>>(),
                         Insecure = true,
-                        // DynamicTranscriptConfiguration = new DynamicTranscriptConfiguration(true, 10, 0.2, 0.4)
+                        BlockSize = 8192,
                     };
 
                     // We can do this here, or earlier. It's not used until .Run() is called on the API object.
@@ -73,6 +86,8 @@ namespace DemoApp
                 }
             }
 
+            var finish = DateTime.Now;
+            Debug.WriteLine("Starting at {0} -- {1}", finish, finish-start);
             Console.ReadLine();
         }
     }

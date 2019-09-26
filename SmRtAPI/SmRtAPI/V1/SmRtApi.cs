@@ -6,9 +6,10 @@ using System.Net;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
-using Speechmatics.Realtime.Client.Interfaces;
+using Speechmatics.Realtime.Client.V1.Config;
+using Speechmatics.Realtime.Client.V1.Interfaces;
 
-namespace Speechmatics.Realtime.Client
+namespace Speechmatics.Realtime.Client.V1
 {
     /// <summary>
     /// Speechmatics realtime API.

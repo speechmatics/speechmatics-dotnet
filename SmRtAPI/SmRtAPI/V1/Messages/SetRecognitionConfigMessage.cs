@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
+using Speechmatics.Realtime.Client.Messages;
 
-namespace Speechmatics.Realtime.Client.Messages
+namespace Speechmatics.Realtime.Client.V1.Messages
 {
     internal class SetRecognitionConfigMessage : BaseMessage
     {

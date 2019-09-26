@@ -39,8 +39,8 @@
     <AssemblyOriginatorKeyFile>..\speechmatics.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -67,26 +67,11 @@
     <Compile Include="..\SmRtAPI\ExtensionMethods.cs">
       <Link>ExtensionMethods.cs</Link>
     </Compile>
-    <Compile Include="..\SmRtAPI\Interfaces\ISmRtApi.cs">
-      <Link>Interfaces\ISmRtApi.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\MessageReader.cs">
-      <Link>MessageReader.cs</Link>
-    </Compile>
     <Compile Include="..\SmRtAPI\Messages\AddDataMessage.cs">
       <Link>Messages\AddDataMessage.cs</Link>
     </Compile>
     <Compile Include="..\SmRtAPI\Messages\AdditionalVocabSubMessage.cs">
       <Link>Messages\AdditionalVocabSubMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\Messages\AddPartialTranscriptMessage.cs">
-      <Link>Messages\AddPartialTranscriptMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\Messages\AddTranscriptMessage.cs">
-      <Link>Messages\AddTranscriptMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\Messages\AudioFormatSubMessage.cs">
-      <Link>Messages\AudioFormatSubMessage.cs</Link>
     </Compile>
     <Compile Include="..\SmRtAPI\Messages\BaseMessage.cs">
       <Link>Messages\BaseMessage.cs</Link>
@@ -109,26 +94,77 @@
     <Compile Include="..\SmRtAPI\Messages\RecognitionStartedMessage.cs">
       <Link>Messages\RecognitionStartedMessage.cs</Link>
     </Compile>
-    <Compile Include="..\SmRtAPI\Messages\SetRecognitionConfigMessage.cs">
-      <Link>Messages\SetRecognitionConfigMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\Messages\StartRecognitionMessage.cs">
-      <Link>Messages\StartRecognitionMessage.cs</Link>
-    </Compile>
     <Compile Include="..\SmRtAPI\Messages\WarningMessage.cs">
       <Link>Messages\WarningMessage.cs</Link>
     </Compile>
-    <Compile Include="..\SmRtAPI\Messages\WordSubMessage.cs">
-      <Link>Messages\WordSubMessage.cs</Link>
+    <Compile Include="..\SmRtAPI\SmRtApiConfigBase.cs">
+      <Link>SmRtApiConfigBase.cs</Link>
     </Compile>
-    <Compile Include="..\SmRtAPI\MessageWriter.cs">
-      <Link>MessageWriter.cs</Link>
+    <Compile Include="..\SmRtAPI\V1\Config\SmRtApiConfig.cs">
+      <Link>V1\Config\SmRtApiConfig.cs</Link>
     </Compile>
-    <Compile Include="..\SmRtAPI\SmRtApi.cs">
-      <Link>SmRtApi.cs</Link>
+    <Compile Include="..\SmRtAPI\V1\Interfaces\ISmRtApi.cs">
+      <Link>V1\Interfaces\ISmRtApi.cs</Link>
     </Compile>
-    <Compile Include="..\SmRtAPI\SmRtApiConfig.cs">
-      <Link>SmRtApiConfig.cs</Link>
+    <Compile Include="..\SmRtAPI\V1\MessageReader.cs">
+      <Link>V1\MessageReader.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\V1\Messages\AddPartialTranscriptMessage.cs">
+      <Link>V1\Messages\AddPartialTranscriptMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\V1\Messages\AddTranscriptMessage.cs">
+      <Link>V1\Messages\AddTranscriptMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\V1\Messages\AudioFormatSubMessage.cs">
+      <Link>V1\Messages\AudioFormatSubMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\V1\Messages\SetRecognitionConfigMessage.cs">
+      <Link>V1\Messages\SetRecognitionConfigMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\V1\Messages\StartRecognitionMessage.cs">
+      <Link>V1\Messages\StartRecognitionMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\V1\Messages\WordSubMessage.cs">
+      <Link>V1\Messages\WordSubMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\V1\MessageWriter.cs">
+      <Link>V1\MessageWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\V1\SmRtApi.cs">
+      <Link>V1\SmRtApi.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\V2\Config\SmRtApiConfig.cs">
+      <Link>V2\Config\SmRtApiConfig.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\V2\Interfaces\ISmRtApi.cs">
+      <Link>V2\Interfaces\ISmRtApi.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\V2\MessageReader.cs">
+      <Link>V2\MessageReader.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\V2\Messages\AddPartialTranscriptMessage.cs">
+      <Link>V2\Messages\AddPartialTranscriptMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\V2\Messages\AddTranscriptMessage.cs">
+      <Link>V2\Messages\AddTranscriptMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\V2\Messages\AudioFormatSubMessage.cs">
+      <Link>V2\Messages\AudioFormatSubMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\V2\Messages\SetRecognitionConfigMessage.cs">
+      <Link>V2\Messages\SetRecognitionConfigMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\V2\Messages\StartRecognitionMessage.cs">
+      <Link>V2\Messages\StartRecognitionMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\V2\Messages\WordSubMessage.cs">
+      <Link>V2\Messages\WordSubMessage.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\V2\MessageWriter.cs">
+      <Link>V2\MessageWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\SmRtAPI\V2\SmRtApi.cs">
+      <Link>V2\SmRtApi.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -138,5 +174,6 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

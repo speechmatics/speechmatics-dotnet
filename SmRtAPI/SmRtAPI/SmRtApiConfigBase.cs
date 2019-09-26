@@ -8,7 +8,7 @@ namespace Speechmatics.Realtime.Client
     /// <summary>
     /// Configuration for an SmRtApi session
     /// </summary>
-    public class SmRtApiConfig
+    public class SmRtApiConfigBase
     {
         /// <summary>
         /// Language, e.g. en-US, ru, de
@@ -31,17 +31,9 @@ namespace Speechmatics.Realtime.Client
         /// </summary>
         public Action<string> AddTranscriptCallback { get; set; }
         /// <summary>
-        /// Action to perform on extended transcript data
-        /// </summary>
-        public Action<Messages.AddTranscriptMessage> AddTranscriptMessageCallback { get; set; }
-        /// <summary>
         /// Action to perform on end of transcript
         /// </summary>
         public Action EndOfTranscriptCallback { get; set; }
-        /// <summary>
-        /// Action to perform on extended partial transcript data
-        /// </summary>
-        public Action<Messages.AddPartialTranscriptMessage> AddPartialTranscriptMessageCallback { get; set; }
         /// <summary>
         /// Action to perform when a warning message is received
         /// </summary>
@@ -70,6 +62,11 @@ namespace Speechmatics.Realtime.Client
         /// Dynamic transcript configuration
         /// </summary>
         public DynamicTranscriptConfiguration DynamicTranscriptConfiguration { get; set; }
+        /// <summary>
+        /// Data block size to send in one message. Overly small or large values can overload the server, something like 8192
+        /// is usually safe. Large block sizes can affect latency.
+        /// </summary>
+        public int BlockSize { get; set; }
 
         /// <summary>
         /// Constructor
@@ -78,7 +75,7 @@ namespace Speechmatics.Realtime.Client
         /// <param name="sampleRate"></param>
         /// <param name="audioFormatType"></param>
         /// <param name="audioFormatEncoding"></param>
-        public SmRtApiConfig(string model,
+        public SmRtApiConfigBase(string model,
             int sampleRate,
             AudioFormatType audioFormatType,
             AudioFormatEncoding audioFormatEncoding)
@@ -93,7 +90,7 @@ namespace Speechmatics.Realtime.Client
             {
                 var unused = new CultureInfo(model);
             }
-            catch(CultureNotFoundException ex)
+            catch (CultureNotFoundException ex)
             {
                 throw new ArgumentException($"Invalid language code {model}", ex);
             }
@@ -102,18 +99,20 @@ namespace Speechmatics.Realtime.Client
             SampleRate = sampleRate;
             AudioFormat = audioFormatType;
             AudioFormatEncoding = audioFormatEncoding;
+            BlockSize = 2048;
         }
 
         /// <summary>
         /// Constructor for transcribing a file
         /// </summary>
         /// <param name="model"></param>
-        public SmRtApiConfig(string model)
+        public SmRtApiConfigBase(string model)
         {
             Model = model;
             SampleRate = 0;
             AudioFormat = AudioFormatType.File;
             AudioFormatEncoding = AudioFormatEncoding.File;
+            BlockSize = 2048;
         }
     }
 }

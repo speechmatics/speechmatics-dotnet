@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>Speechmatics.Realtime.Client</id>
-    <version>0.8.0</version>
+    <version>1.0.3</version>
     <authors>James Gilmore</authors>
     <owners>James Gilmore</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -12,11 +12,11 @@
     <copyright>James Gilmore</copyright>
     <dependencies>
       <group targetFramework=".NETStandard2.0">
-        <dependency id="Newtonsoft.Json" version="11.0.2" exclude="Build,Analyzers" />
+        <dependency id="Newtonsoft.Json" version="12.0.2" exclude="Build,Analyzers" />
         <dependency id="System.Net.WebSockets.Client" version="4.3.2" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="net46">
-        <dependency id="Newtonsoft.Json" version="11.0.2" exclude="Build,Analyzers" />
+        <dependency id="Newtonsoft.Json" version="12.0.2" exclude="Build,Analyzers" />
       </group>
     </dependencies>
   </metadata>

@@ -2,7 +2,8 @@
 using System.IO;
 using System.Text;
 using NUnit.Framework;
-using Speechmatics.Realtime.Client;
+using Speechmatics.Realtime.Client.V2;
+using Speechmatics.Realtime.Client.V2.Config;
 
 namespace SpeechmaticsAPI.Tests
 {
@@ -50,7 +51,10 @@ namespace SpeechmaticsAPI.Tests
             {
                 try
                 {
-                    var config = new SmRtApiConfig(language) {AddTranscriptCallback = s => builder.Append(s)};
+                    var config = new SmRtApiConfig(language);
+                    {
+                        config.AddTranscriptCallback = s => builder.Append(s);
+                    };
 
                     var api = new SmRtApi("wss://api.rt.speechmatics.io:9000/",
                         stream,

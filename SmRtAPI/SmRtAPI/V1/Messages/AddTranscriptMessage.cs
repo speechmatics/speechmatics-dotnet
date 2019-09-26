@@ -1,14 +1,16 @@
-namespace Speechmatics.Realtime.Client.Messages
+using Speechmatics.Realtime.Client.Messages;
+
+namespace Speechmatics.Realtime.Client.V1.Messages
 {
     /// <summary>
-    /// A partial transcript -- later messages may improve on it
+    /// Detailed timings for a transcript
     /// </summary>
-    public class AddPartialTranscriptMessage : BaseMessage
+    public class AddTranscriptMessage : BaseMessage
     {
         /// <summary>
         /// Message type
         /// </summary>
-        public override string message => "AddPartialTranscript";
+        public override string message => "AddTranscript";
         /// <summary>
         /// Start time
         /// </summary>

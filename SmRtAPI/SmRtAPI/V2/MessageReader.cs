@@ -7,10 +7,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Speechmatics.Realtime.Client.Interfaces;
 using Speechmatics.Realtime.Client.Messages;
+using Speechmatics.Realtime.Client.V2.Interfaces;
+using Speechmatics.Realtime.Client.V2.Messages;
 
-namespace Speechmatics.Realtime.Client
+namespace Speechmatics.Realtime.Client.V2
 {
     internal class MessageReader
     {
@@ -52,7 +53,7 @@ namespace Speechmatics.Realtime.Client
             var messageAsString = Encoding.UTF8.GetString(subset.ToArray());
             var jsonObject = JObject.Parse(messageAsString);
 
-            Trace.WriteLine(messageAsString);
+            Trace.WriteLine("ProcessMessage: " + messageAsString);
 
             switch (jsonObject.Value<string>("message"))
             {
@@ -62,7 +63,7 @@ namespace Speechmatics.Realtime.Client
                     _recognitionStarted.Set();
                     break;
                 }
-                case "DataAdded":
+                case "AudioAdded":
                 {
                     // Log the ack
                     Interlocked.Increment(ref _ackedSequenceNumbers);
@@ -70,9 +71,10 @@ namespace Speechmatics.Realtime.Client
                 }
                 case "AddTranscript":
                 {
-                    string transcript = jsonObject.Value<string>("transcript");
+                    string transcript = jsonObject["metadata"]["transcript"].Value<string>();
+                    _api.Configuration.AddTranscriptMessageCallback?.Invoke(
+                        JsonConvert.DeserializeObject<AddTranscriptMessage>(messageAsString));
                     _api.Configuration.AddTranscriptCallback?.Invoke(transcript);
-                    _api.Configuration.AddTranscriptMessageCallback?.Invoke(JsonConvert.DeserializeObject<AddTranscriptMessage>(messageAsString));
                     break;
                 }
                 case "AddPartialTranscript":

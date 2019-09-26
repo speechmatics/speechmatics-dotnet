@@ -1,35 +1,51 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
+using NAudio.CoreAudioApi;
 using NAudio.Wave;
 using Newtonsoft.Json;
-using Speechmatics.Realtime.Client;
 using Speechmatics.Realtime.Client.Enumerations;
+using Speechmatics.Realtime.Client.V2;
+using Speechmatics.Realtime.Client.V2.Config;
 
 namespace Speechmatics.Realtime.Microphone
 {
     public class Program
     {
-        private static readonly ProducerConsumerStream AudioStream = new ProducerConsumerStream();
+        private static readonly BlockingStream AudioStream = new BlockingStream(1024*1024*10);
 
         private static string ToJson(object obj)
         {
             return JsonConvert.SerializeObject(obj);
         }
 
-        private static string RtUrl => "wss://192.168.128.30:9000/";
+        private static string RtUrl => "wss://staging.realtimeappliance.speechmatics.io:9000/v2";
 
         // ReSharper disable once UnusedParameter.Local
         public static void Main(string[] args)
         {
             var t = new Task(() =>
             {
-                var waveSource = new WaveInEvent {WaveFormat = new WaveFormat(44100, 16, 1)};
+                // NAudio has two audio capture APIs
+
+                // This is the first one I tried, but apparently the wasapi one is lower level and 
+                // therefore better.
+                //
+                // var waveSource = new WaveInEvent {WaveFormat = new WaveFormat(44100, 16, 1)};
                 // This is an example, but experiment shows that making the value too low will
                 // result in incomplete buffers to send to the RT appliance, leading to bad
                 // transcripts.
-                waveSource.BufferMilliseconds = 2500;
-                waveSource.DataAvailable += WaveSourceOnDataAvailable;
-                waveSource.StartRecording();
+                // waveSource.BufferMilliseconds = 100;
+                // waveSource.DataAvailable += WaveSourceOnDataAvailable;
+                // waveSource.StartRecording();
+
+                var wasapiClient = new WasapiCapture();
+                Debug.WriteLine("Sample rate {0}", wasapiClient.WaveFormat.SampleRate);
+                Debug.WriteLine("Bits per sample {0}", wasapiClient.WaveFormat.BitsPerSample);
+                Debug.WriteLine("Channels {0}", wasapiClient.WaveFormat.Channels);
+                Debug.WriteLine("Encoding {0}", wasapiClient.WaveFormat.Encoding);
+                wasapiClient.DataAvailable += WaveSourceOnDataAvailable;
+                wasapiClient.StartRecording();
             });
             t.Start();
 
@@ -41,13 +57,16 @@ namespace Speechmatics.Realtime.Microphone
                      * The API constructor is passed the websockets URL, callbacks for the messages it might receive,
                      * the language to transcribe and stream to read data from.
                      */
-                    var config = new SmRtApiConfig("en", 44100, AudioFormatType.Raw, AudioFormatEncoding.PcmS16Le)
+
+                    // Make sure the sampleRate matches the value in the wasapiClient object
+                    var config = new SmRtApiConfig("en", 16000, AudioFormatType.Raw, AudioFormatEncoding.PcmF32Le)
                     {
                         AddTranscriptCallback = Console.Write,
-                        AddPartialTranscriptMessageCallback = s => Console.Write("* " + s.transcript),
+                        // AddPartialTranscriptMessageCallback = s => Console.Write("* " + s.transcript),
                         ErrorMessageCallback = s => Console.WriteLine(ToJson(s)),
                         WarningMessageCallback = s => Console.WriteLine(ToJson(s)),
                         Insecure = true,
+                        BlockSize = 16384
                     };
 
                     var api = new SmRtApi(RtUrl,
