@@ -18,30 +18,11 @@ namespace Speechmatics.Realtime.Microphone
             _blocks = new BlockingCollection<byte[]>(streamWriteCountCache);
         }
 
-        public override bool CanTimeout
-        {
-            get { return false; }
-        }
-
-        public override bool CanRead
-        {
-            get { return true; }
-        }
-
-        public override bool CanSeek
-        {
-            get { return false; }
-        }
-
-        public override bool CanWrite
-        {
-            get { return true; }
-        }
-
-        public override long Length
-        {
-            get { throw new NotSupportedException(); }
-        }
+        public override bool CanTimeout => false;
+        public override bool CanRead => true;
+        public override bool CanSeek => false;
+        public override bool CanWrite => true;
+        public override long Length => throw new NotSupportedException();
 
         public override void Flush()
         {
@@ -52,8 +33,8 @@ namespace Speechmatics.Realtime.Microphone
 
         public override long Position
         {
-            get { throw new NotSupportedException(); }
-            set { throw new NotSupportedException(); }
+            get => throw new NotSupportedException();
+            set => throw new NotSupportedException();
         }
 
         public override long Seek(long offset, SeekOrigin origin)
@@ -129,13 +110,13 @@ namespace Speechmatics.Realtime.Microphone
         private static void ValidateBufferArgs(byte[] buffer, int offset, int count)
         {
             if (buffer == null)
-                throw new ArgumentNullException("buffer");
+                throw new ArgumentNullException(nameof(buffer));
             if (offset < 0)
-                throw new ArgumentOutOfRangeException("offset");
+                throw new ArgumentOutOfRangeException(nameof(offset));
             if (count < 0)
-                throw new ArgumentOutOfRangeException("count");
+                throw new ArgumentOutOfRangeException(nameof(count));
             if (buffer.Length - offset < count)
-                throw new ArgumentException("buffer.Length - offset < count");
+                throw new ArgumentException($"{nameof(buffer)}.Length - {nameof(offset)} < {nameof(count)}");
         }
     }
 }
