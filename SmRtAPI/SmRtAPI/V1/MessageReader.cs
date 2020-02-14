@@ -21,6 +21,7 @@ namespace Speechmatics.Realtime.Client.V1
         private readonly AutoResetEvent _resetEvent;
         private readonly AutoResetEvent _recognitionStarted;
         private readonly ISmRtApi _api;
+        private readonly StringBuilder _multipartMessageBuffer;
 
         internal MessageReader(ISmRtApi smRtApi, ClientWebSocket client, AutoResetEvent resetEvent, AutoResetEvent recognitionStarted)
         {
@@ -28,6 +29,7 @@ namespace Speechmatics.Realtime.Client.V1
             _wsClient = client;
             _resetEvent = resetEvent;
             _recognitionStarted = recognitionStarted;
+            _multipartMessageBuffer = new StringBuilder();
         }
 
         internal async Task Start()
@@ -50,10 +52,20 @@ namespace Speechmatics.Realtime.Client.V1
             // Return true if the message should cause the loop to exit, false otherwise.
 
             var subset = new ArraySegment<byte>(message.Array, 0, result.Count);
-            var messageAsString = Encoding.UTF8.GetString(subset.ToArray());
-            var jsonObject = JObject.Parse(messageAsString);
+            var subMessageAsString = Encoding.UTF8.GetString(subset.ToArray());
 
-            Trace.WriteLine("ProcessMessage: " + messageAsString);
+            _multipartMessageBuffer.Append(subMessageAsString);
+
+            if (!result.EndOfMessage)
+            {
+                // Seems like this will never happen (ie a Close message also being an incomplete message...)
+                return result.MessageType == WebSocketMessageType.Close;
+            }
+
+            var messageAsString = _multipartMessageBuffer.ToString();
+            var jsonObject = JObject.Parse(_multipartMessageBuffer.ToString());
+
+            Trace.WriteLine("ProcessMessage: " + _multipartMessageBuffer);
 
             switch (jsonObject.Value<string>("message"))
             {
@@ -105,6 +117,8 @@ namespace Speechmatics.Realtime.Client.V1
                     break;
                 }
             }
+
+            _multipartMessageBuffer.Clear();
             return result.MessageType == WebSocketMessageType.Close;
         }
     }
