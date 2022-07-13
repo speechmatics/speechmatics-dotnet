@@ -18,7 +18,15 @@
     <Description>A .NET client for the Speechmatics realtime speech transcription engine</Description>
     <PackageLicenseUrl>https://github.com/jrg1381/smrtapi.net/blob/master/LICENSE</PackageLicenseUrl>
     <Copyright>James Gilmore</Copyright>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>bin\Debug\netstandard2.0\Speechmatics.Realtime.Client.xml</DocumentationFile>
