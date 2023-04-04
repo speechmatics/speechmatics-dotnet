@@ -69,6 +69,12 @@ namespace Speechmatics.Realtime.Client
         public int BlockSize { get; set; }
 
         /// <summary>
+        /// API Authentication Token
+        /// only applicable for RT SaaS customers. 
+        /// </summary>
+        public string AuthToken { get; set; }
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="model"></param>
