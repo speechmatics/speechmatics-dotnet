@@ -11,7 +11,7 @@ namespace Speechmatics.Realtime.Client.V2.Messages
 
         public SetRecognitionConfigMessage(SmRtApiConfig smConfig, AdditionalVocabSubMessage additionalVocab = null)
         {
-            this.transcription_config = new Dictionary<string, object>();
+            transcription_config = new Dictionary<string, object>();
             transcription_config["language"] = "en";
             if (additionalVocab != null)
             {

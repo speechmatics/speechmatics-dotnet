@@ -137,7 +137,7 @@ namespace Speechmatics.Realtime.Client.V2
                         }, CancelToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
 
                         transcriptionComplete.WaitOne();
-                        await Task.WhenAny(t1, t2);
+                        await Task.WhenAll(t1, t2);
                     }
                 }
             }
