@@ -5,12 +5,11 @@ using System.Linq;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
-using Speechmatics.Realtime.Client.Enumerations;
 using Speechmatics.Realtime.Client.Messages;
-using Speechmatics.Realtime.Client.V1.Interfaces;
-using Speechmatics.Realtime.Client.V1.Messages;
+using Speechmatics.Realtime.Client.Interfaces;
+using Speechmatics.Realtime.Client.Messages;
 
-namespace Speechmatics.Realtime.Client.V1
+namespace Speechmatics.Realtime.Client
 {
     internal class MessageWriter
     {
@@ -48,8 +47,7 @@ namespace Speechmatics.Realtime.Client.V1
 
             if (_api.Configuration.CustomDictionaryPlainWords != null ||
                 _api.Configuration.CustomDictionarySoundsLikes != null ||
-                _api.Configuration.OutputLocale != null ||
-                _api.Configuration.DynamicTranscriptConfiguration != null)
+                _api.Configuration.OutputLocale != null)
             {
                 await SetRecognitionConfig();
             }
@@ -57,7 +55,7 @@ namespace Speechmatics.Realtime.Client.V1
             var streamBuffer = new byte[_api.Configuration.BlockSize];
             int bytesRead;
 
-            while ((bytesRead = _stream.Read(streamBuffer, 0, streamBuffer.Length)) > 0 && !_transcriptionComplete.WaitOne(0))
+            while ((bytesRead = await _stream.ReadAsync(streamBuffer, 0, streamBuffer.Length)) > 0 && !_transcriptionComplete.WaitOne(0))
             {
                 await SendData(new ArraySegment<byte>(streamBuffer, 0, bytesRead));
             }
@@ -79,15 +77,6 @@ namespace Speechmatics.Realtime.Client.V1
             var arrayCopy = data.ToArray();
             var finalSectionOffset = 0;
 
-            var msg = new AddDataMessage
-            {
-                size = data.Count,
-                offset = 0,
-                seq_no = Interlocked.Add(ref _sequenceNumber, 1)
-            };
-
-            await msg.Send(_wsClient, _api.CancelToken);
-
             if (data.Count > messageBlockSize)
             {
                 for (var offset = 0; offset < data.Count / messageBlockSize; offset += messageBlockSize)
@@ -96,7 +85,7 @@ namespace Speechmatics.Realtime.Client.V1
                     await _wsClient.SendAsync(new ArraySegment<byte>(arrayCopy, offset, messageBlockSize),
                         WebSocketMessageType.Binary, false, _api.CancelToken);
                 }
-            }
+            }   
 
             await _wsClient.SendAsync(
                 new ArraySegment<byte>(arrayCopy, finalSectionOffset, data.Count - finalSectionOffset),
@@ -108,7 +97,7 @@ namespace Speechmatics.Realtime.Client.V1
             var audioFormat = new AudioFormatSubMessage(_api.Configuration.AudioFormat,
                 _api.Configuration.AudioFormatEncoding,
                 _api.Configuration.SampleRate);
-            var msg = new StartRecognitionMessage(audioFormat, _api.Configuration.Model, OutputFormat.Json, "rt_test");
+            var msg = new StartRecognitionMessage(audioFormat, _api.Configuration);
             await msg.Send(_wsClient, _api.CancelToken);
         }
 
@@ -116,11 +105,7 @@ namespace Speechmatics.Realtime.Client.V1
         {
             var additionalVocab = new AdditionalVocabSubMessage(_api.Configuration.CustomDictionaryPlainWords, _api.Configuration.CustomDictionarySoundsLikes);
 
-            var msg = new SetRecognitionConfigMessage(
-                additionalVocab,
-                _api.Configuration.OutputLocale,
-                _api.Configuration.DynamicTranscriptConfiguration
-                );
+            var msg = new SetRecognitionConfigMessage(_api.Configuration, additionalVocab);
             await msg.Send(_wsClient, _api.CancelToken);
         }
     }

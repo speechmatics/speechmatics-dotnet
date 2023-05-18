@@ -1,6 +1,4 @@
-﻿using Speechmatics.Realtime.Client.Messages;
-
-namespace Speechmatics.Realtime.Client.V2.Messages
+﻿namespace Speechmatics.Realtime.Client.Messages
 {
     /// <summary>
     /// Metadata that aggregates information for a whole parital or final message.

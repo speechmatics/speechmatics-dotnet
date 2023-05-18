@@ -9,10 +9,10 @@ using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using Speechmatics.Realtime.Client.V2.Config;
-using Speechmatics.Realtime.Client.V2.Interfaces;
+using Speechmatics.Realtime.Client.Config;
+using Speechmatics.Realtime.Client.Interfaces;
 
-namespace Speechmatics.Realtime.Client.V2
+namespace Speechmatics.Realtime.Client
 {
     /// <summary>
     /// Speechmatics realtime API.

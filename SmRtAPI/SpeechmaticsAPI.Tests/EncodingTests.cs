@@ -3,9 +3,9 @@ using System.IO;
 using NUnit.Framework;
 using Speechmatics.Realtime.Client.Enumerations;
 using Speechmatics.Realtime.Client.Messages;
-using Speechmatics.Realtime.Client.V2;
-using Speechmatics.Realtime.Client.V2.Config;
-using Speechmatics.Realtime.Client.V2.Messages;
+using Speechmatics.Realtime.Client;
+using Speechmatics.Realtime.Client.Config;
+using Speechmatics.Realtime.Client.Messages;
 
 namespace SpeechmaticsAPI.Tests
 {
@@ -37,9 +37,8 @@ namespace SpeechmaticsAPI.Tests
         {
             // This is just a sanity check for now
             var expected = "{\"message\":\"StartRecognition\",\"audio_format\":{\"sample_rate\":44100,\"type\":\"raw\",\"encoding\":\"pcm_s16le\"},\"transcription_config\":{\"language\":\"en-US\"}}";
-            var audioFormat = new Speechmatics.Realtime.Client.V2.Messages.AudioFormatSubMessage(AudioFormatType.Raw, AudioFormatEncoding.PcmS16Le, 44100);
-            var config = new SmRtApiConfig("en");
-            var msg = new Speechmatics.Realtime.Client.V2.Messages.StartRecognitionMessage(audioFormat, config);
+            var audioFormat = new AudioFormatSubMessage(AudioFormatType.Raw, AudioFormatEncoding.PcmS16Le, 44100);
+            var msg = new StartRecognitionMessage(audioFormat, new SmRtApiConfig("en"));
             Assert.AreEqual(expected, msg.AsJson(), "Message serialization unexpected");
         }
 
@@ -66,8 +65,9 @@ namespace SpeechmaticsAPI.Tests
             "{\"message\":\"SetRecognitionConfig\",\"transcription_config\":{\"language\":\"en\",\"additional_vocab\":[\"foo\",{\"content\":\"foo\",\"sounds_like\":[\"fooo\",\"barrr\"]}],\"output_locale\":\"en-GB\"}}";
             var x = new Dictionary<string, IEnumerable<string>> { ["foo"] = new List<string> { "fooo", "barrr" } };
 
-            var config = new AdditionalVocabSubMessage(new[] { "foo" }, x);
-            var msg = new Speechmatics.Realtime.Client.V2.Messages.SetRecognitionConfigMessage(new SmRtApiConfig("en"));
+            var config = new SmRtApiConfig("en");
+            var vocab = new AdditionalVocabSubMessage(new[] { "foo" }, x);
+            var msg = new SetRecognitionConfigMessage(config, vocab);
             var y = msg.AsJson();
             Assert.AreEqual(expected, msg.AsJson(), "Message serialization unexpected");
         }

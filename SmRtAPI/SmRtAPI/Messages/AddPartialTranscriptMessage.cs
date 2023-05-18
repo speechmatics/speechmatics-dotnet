@@ -1,6 +1,4 @@
-using Speechmatics.Realtime.Client.Messages;
-
-namespace Speechmatics.Realtime.Client.V1.Messages
+namespace Speechmatics.Realtime.Client.Messages
 {
     /// <summary>
     /// A partial transcript -- later messages may improve on it
@@ -11,21 +9,14 @@ namespace Speechmatics.Realtime.Client.V1.Messages
         /// Message type
         /// </summary>
         public string message => "AddPartialTranscript";
+
         /// <summary>
-        /// Start time
+        /// Aggregate metadata for the whole message
         /// </summary>
-        public double start_time;
-        /// <summary>
-        /// Length of audio segment
-        /// </summary>
-        public double length;
-        /// <summary>
-        /// Transcript ext
-        /// </summary>
-        public string transcript;
+        public RecognitionMetadata metadata;
         /// <summary>
         /// Individual word data
         /// </summary>
-        public WordSubMessage[] words;
+        public WordSubMessage[] results;
     }
 }

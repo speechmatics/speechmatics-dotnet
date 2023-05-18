@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using Speechmatics.Realtime.Client.V2;
+using Speechmatics.Realtime.Client;
+using Speechmatics.Realtime.Client.Config;
 using Newtonsoft.Json;
-using Speechmatics.Realtime.Client.V2.Config;
 
 namespace DemoApp
 {
@@ -59,8 +59,6 @@ namespace DemoApp
                         AddTranscriptCallback = s => builder.Append(s),
                         AddTranscriptMessageCallback = s => Console.WriteLine(ToJson(s)),
                         AddPartialTranscriptMessageCallback = s => Console.WriteLine(ToJson(s)),
-                        // The v2 appliances don't have partial transcripts, but rather "low-latency finals", so skip this bit.
-                        //AddPartialTranscriptMessageCallback = s => Console.WriteLine(ToJson(s)),
                         ErrorMessageCallback = s => Console.WriteLine(ToJson(s)),
                         WarningMessageCallback = s => Console.WriteLine(ToJson(s)),
                         CustomDictionaryPlainWords = new[] {"speechmagic"},

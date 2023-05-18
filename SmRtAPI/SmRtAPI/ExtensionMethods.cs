@@ -19,8 +19,6 @@ namespace Speechmatics.Realtime.Client
                             return "raw";
                         case AudioFormatType.File:
                             return "file";
-                        case AudioFormatType.Opus:
-                            throw new NotSupportedException();
                         default:
                             throw new InvalidEnumArgumentException(nameof(enumValue));
                     }
@@ -36,18 +34,6 @@ namespace Speechmatics.Realtime.Client
                                 return "pcm_s16le";
                             case AudioFormatEncoding.Mulaw:
                                 return "mulaw";
-                            default:
-                                throw new InvalidEnumArgumentException(nameof(enumValue));
-                        }
-                    }
-                case "OutputFormat":
-                    {
-                        switch ((OutputFormat)enumValue)
-                        {
-                            case OutputFormat.Ttxt:
-                                return "ttxt";
-                            case OutputFormat.Json:
-                                return "json";
                             default:
                                 throw new InvalidEnumArgumentException(nameof(enumValue));
                         }

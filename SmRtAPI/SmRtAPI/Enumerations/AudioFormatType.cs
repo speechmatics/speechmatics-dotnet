@@ -13,9 +13,5 @@
         /// Audio is a file stream
         /// </summary>
         File,
-        /// <summary>
-        /// Not supported
-        /// </summary>
-        Opus
     }
 }

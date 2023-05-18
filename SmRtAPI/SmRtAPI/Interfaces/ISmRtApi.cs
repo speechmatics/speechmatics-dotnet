@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading;
-using Speechmatics.Realtime.Client.V1.Config;
+using Speechmatics.Realtime.Client.Config;
 
-namespace Speechmatics.Realtime.Client.V1.Interfaces
+namespace Speechmatics.Realtime.Client.Interfaces
 {
     internal interface ISmRtApi
     {
