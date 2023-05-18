@@ -11,10 +11,8 @@ namespace Speechmatics.Realtime.Client.V2.Messages
         /// Message type
         /// </summary>
         public override string message => "Word";
-        /// <summary>
-        /// Word text
-        /// </summary>
-        public string word;
+
+        public string type;
         /// <summary>
         /// Start time (offset from audio start)
         /// </summary>

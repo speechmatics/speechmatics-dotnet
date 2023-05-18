@@ -98,7 +98,7 @@ namespace Speechmatics.Realtime.Client.V2
             var audioFormat = new AudioFormatSubMessage(_api.Configuration.AudioFormat,
                 _api.Configuration.AudioFormatEncoding,
                 _api.Configuration.SampleRate);
-            var msg = new StartRecognitionMessage(audioFormat, _api.Configuration.Model);
+            var msg = new StartRecognitionMessage(audioFormat, _api.Configuration);
             await msg.Send(_wsClient, _api.CancelToken);
         }
 
@@ -106,11 +106,7 @@ namespace Speechmatics.Realtime.Client.V2
         {
             var additionalVocab = new AdditionalVocabSubMessage(_api.Configuration.CustomDictionaryPlainWords, _api.Configuration.CustomDictionarySoundsLikes);
 
-            var msg = new SetRecognitionConfigMessage(
-                additionalVocab,
-                _api.Configuration.OutputLocale,
-                _api.Configuration.DynamicTranscriptConfiguration
-                );
+            var msg = new SetRecognitionConfigMessage(_api.Configuration,additionalVocab);
             await msg.Send(_wsClient, _api.CancelToken);
         }
     }

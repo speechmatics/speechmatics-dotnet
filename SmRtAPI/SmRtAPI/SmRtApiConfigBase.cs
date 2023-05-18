@@ -75,6 +75,18 @@ namespace Speechmatics.Realtime.Client
         public string AuthToken { get; set; }
 
         /// <summary>
+        /// Maximum acceptable delay in seconds
+        /// Forces a "final" transcription every x seconds
+        /// </summary>
+        public int MaxDelay { get; set; } = 5;
+
+        /// <summary>
+        /// Indicates if partials for both transcripts and translation,
+        /// where words are produced immediately, is enabled
+        /// </summary>
+        public bool EnablePartials { get; set; } = false;
+
+        /// <summary>
         /// Constructor
         /// </summary>
         /// <param name="model"></param>
