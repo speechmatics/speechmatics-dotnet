@@ -30,6 +30,11 @@ namespace Speechmatics.Realtime.Client
         /// Action to perform on receiving a transcript
         /// </summary>
         public Action<string> AddTranscriptCallback { get; set; }
+
+        /// <summary>
+        /// Action to perform on receiving a partial
+        /// </summary>
+        public Action<string> AddPartialTranscriptCallback { get; set; }
         /// <summary>
         /// Action to perform on end of transcript
         /// </summary>

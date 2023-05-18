@@ -14,7 +14,7 @@ namespace Speechmatics.Realtime.Client.V2.Messages
             transcription_config["enable_partials"] = smConfig.EnablePartials;
         }
 
-        public override string message => "StartRecognition";
+        public string message => "StartRecognition";
         public AudioFormatSubMessage audio_format { get; }
         public Dictionary<string, object> transcription_config { get; } = new Dictionary<string, object>();
     }

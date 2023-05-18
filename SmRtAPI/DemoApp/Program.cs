@@ -58,6 +58,7 @@ namespace DemoApp
                         OutputLocale = "en-GB",
                         AddTranscriptCallback = s => builder.Append(s),
                         AddTranscriptMessageCallback = s => Console.WriteLine(ToJson(s)),
+                        AddPartialTranscriptMessageCallback = s => Console.WriteLine(ToJson(s)),
                         // The v2 appliances don't have partial transcripts, but rather "low-latency finals", so skip this bit.
                         //AddPartialTranscriptMessageCallback = s => Console.WriteLine(ToJson(s)),
                         ErrorMessageCallback = s => Console.WriteLine(ToJson(s)),
@@ -66,6 +67,7 @@ namespace DemoApp
                         CustomDictionarySoundsLikes = new Dictionary<string, IEnumerable<string>>(),
                         Insecure = true,
                         BlockSize = 8192,
+                        EnablePartials = true,
                     };
 
                     // We can do this here, or earlier. It's not used until .Run() is called on the API object.

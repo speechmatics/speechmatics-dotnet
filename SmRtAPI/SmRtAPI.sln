@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2026
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpeechmaticsAPI", "SmRtAPI\SpeechmaticsAPI.csproj", "{8CF2865C-2F1D-47E2-BB5C-5AD6B146365D}"
 EndProject
@@ -17,6 +17,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DemoAppNetCore", "DemoAppNetCore\DemoAppNetCore.csproj", "{F2755726-2137-4335-A663-C1D76BFBDD8D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeechmaticsAPIFull", "SpeechmaticsAPIFull\SpeechmaticsAPIFull.csproj", "{1F1232B2-8277-48E6-99CC-31EECBB7C482}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8CF2865C-2F1D-47E2-BB5C-5AD6B146365D} = {8CF2865C-2F1D-47E2-BB5C-5AD6B146365D}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

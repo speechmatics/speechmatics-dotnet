@@ -5,7 +5,7 @@ namespace Speechmatics.Realtime.Client.V1.Messages
 {
     internal class SetRecognitionConfigMessage : BaseMessage
     {
-        public override string message => "SetRecognitionConfig";
+        public string message => "SetRecognitionConfig";
         public Dictionary<string, object> config { get; }
 
         public SetRecognitionConfigMessage(AdditionalVocabSubMessage additionalVocab = null, 

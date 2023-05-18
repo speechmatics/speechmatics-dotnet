@@ -70,53 +70,54 @@ namespace Speechmatics.Realtime.Client.V2
             switch (jsonObject.Value<string>("message"))
             {
                 case "RecognitionStarted":
-                {
-                    Trace.WriteLine("Recognition started");
-                    _recognitionStarted.Set();
-                    break;
-                }
+                    {
+                        Trace.WriteLine("Recognition started");
+                        _recognitionStarted.Set();
+                        break;
+                    }
                 case "AudioAdded":
-                {
-                    // Log the ack
-                    Interlocked.Increment(ref _ackedSequenceNumbers);
-                    break;
-                }
+                    {
+                        // Log the ack
+                        Interlocked.Increment(ref _ackedSequenceNumbers);
+                        break;
+                    }
                 case "AddTranscript":
-                {
-                    string transcript = jsonObject["metadata"]["transcript"].Value<string>();
-                    _api.Configuration.AddTranscriptMessageCallback?.Invoke(
-                        JsonConvert.DeserializeObject<AddTranscriptMessage>(messageAsString));
-                    _api.Configuration.AddTranscriptCallback?.Invoke(transcript);
-                    break;
-                }
+                    {
+                        string transcript = jsonObject["metadata"]["transcript"].Value<string>();
+                        _api.Configuration.AddTranscriptMessageCallback?.Invoke(
+                            JsonConvert.DeserializeObject<AddTranscriptMessage>(messageAsString));
+                        _api.Configuration.AddTranscriptCallback?.Invoke(transcript);
+                        break;
+                    }
                 case "AddPartialTranscript":
-                {
-                    _lastPartial = jsonObject.Value<string>("transcript");
-                    _api.Configuration.AddPartialTranscriptMessageCallback?.Invoke(JsonConvert.DeserializeObject<AddPartialTranscriptMessage>(messageAsString));
-                    break;
-                }
+                    {
+                        _lastPartial = jsonObject["metadata"]["transcript"].Value<string>();
+                        _api.Configuration.AddPartialTranscriptMessageCallback?.Invoke(JsonConvert.DeserializeObject<AddPartialTranscriptMessage>(messageAsString));
+                        _api.Configuration.AddPartialTranscriptCallback?.Invoke(_lastPartial);
+                        break;
+                    }
                 case "EndOfTranscript":
-                {
-                    // Sometimes there is a partial without a corresponding transcript, let's pretend it was a transcript here.
-                    _api.Configuration.AddTranscriptCallback?.Invoke(_lastPartial);
-                    _api.Configuration.EndOfTranscriptCallback?.Invoke();
-                    return true;
-                }
+                    {
+                        // Sometimes there is a partial without a corresponding transcript, let's pretend it was a transcript here.
+                        _api.Configuration.AddTranscriptCallback?.Invoke(_lastPartial);
+                        _api.Configuration.EndOfTranscriptCallback?.Invoke();
+                        return true;
+                    }
                 case "Error":
-                {
-                    _api.Configuration.ErrorMessageCallback?.Invoke(JsonConvert.DeserializeObject<ErrorMessage>(messageAsString));
-                    return true;
-                }
+                    {
+                        _api.Configuration.ErrorMessageCallback?.Invoke(JsonConvert.DeserializeObject<ErrorMessage>(messageAsString));
+                        return true;
+                    }
                 case "Warning":
-                {
-                    _api.Configuration.WarningMessageCallback?.Invoke(JsonConvert.DeserializeObject<WarningMessage>(messageAsString));
-                    break;
-                }
+                    {
+                        _api.Configuration.WarningMessageCallback?.Invoke(JsonConvert.DeserializeObject<WarningMessage>(messageAsString));
+                        break;
+                    }
                 default:
-                {
-                    Trace.WriteLine(messageAsString);
-                    break;
-                }
+                    {
+                        Trace.WriteLine(messageAsString);
+                        break;
+                    }
             }
 
             _multipartMessageBuffer.Clear();

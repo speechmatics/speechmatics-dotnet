@@ -27,7 +27,8 @@ namespace SpeechmaticsAPI.Tests
             var expected =
                 "{\"message\":\"StartRecognition\",\"model\":\"en-US\",\"audio_format\":{\"sample_rate\":44100,\"type\":\"raw\",\"encoding\":\"pcm_s16le\"},\"output_format\":{\"type\":\"json\"},\"auth_token\":\"\",\"user\":1}";
             var audioFormat = new AudioFormatSubMessage(AudioFormatType.Raw, AudioFormatEncoding.PcmS16Le, 44100);
-            var msg = new StartRecognitionMessage(audioFormat, "en-US");
+            var smConfig = new SmRtApiConfig("en");
+            var msg = new StartRecognitionMessage(audioFormat, smConfig);
             Assert.AreEqual(expected, msg.AsJson(), "Message serialization unexpected");
         }
 
@@ -37,7 +38,8 @@ namespace SpeechmaticsAPI.Tests
             // This is just a sanity check for now
             var expected = "{\"message\":\"StartRecognition\",\"audio_format\":{\"sample_rate\":44100,\"type\":\"raw\",\"encoding\":\"pcm_s16le\"},\"transcription_config\":{\"language\":\"en-US\"}}";
             var audioFormat = new Speechmatics.Realtime.Client.V2.Messages.AudioFormatSubMessage(AudioFormatType.Raw, AudioFormatEncoding.PcmS16Le, 44100);
-            var msg = new Speechmatics.Realtime.Client.V2.Messages.StartRecognitionMessage(audioFormat, "en-US");
+            var config = new SmRtApiConfig("en");
+            var msg = new Speechmatics.Realtime.Client.V2.Messages.StartRecognitionMessage(audioFormat, config);
             Assert.AreEqual(expected, msg.AsJson(), "Message serialization unexpected");
         }
 
@@ -49,8 +51,9 @@ namespace SpeechmaticsAPI.Tests
                 "{\"message\":\"SetRecognitionConfig\",\"config\":{\"additional_vocab\":[\"foo\",{\"content\":\"foo\",\"sounds_like\":[\"fooo\",\"barrr\"]}],\"output_locale\":\"en-GB\"}}";
             var x = new Dictionary<string, IEnumerable<string>> { ["foo"] = new List<string> { "fooo", "barrr" } };
 
-            var config = new AdditionalVocabSubMessage(new[] { "foo" }, x);
-            var msg = new SetRecognitionConfigMessage(config, "en-GB");
+            var vocab = new AdditionalVocabSubMessage(new[] { "foo" }, x);
+            var config = new SmRtApiConfig("en");
+            var msg = new SetRecognitionConfigMessage(config, vocab);
             var y = msg.AsJson();
             Assert.AreEqual(expected, msg.AsJson(), "Message serialization unexpected");
         }
@@ -64,7 +67,7 @@ namespace SpeechmaticsAPI.Tests
             var x = new Dictionary<string, IEnumerable<string>> { ["foo"] = new List<string> { "fooo", "barrr" } };
 
             var config = new AdditionalVocabSubMessage(new[] { "foo" }, x);
-            var msg = new Speechmatics.Realtime.Client.V2.Messages.SetRecognitionConfigMessage(config,"en-GB");
+            var msg = new Speechmatics.Realtime.Client.V2.Messages.SetRecognitionConfigMessage(new SmRtApiConfig("en"));
             var y = msg.AsJson();
             Assert.AreEqual(expected, msg.AsJson(), "Message serialization unexpected");
         }

@@ -6,7 +6,7 @@ namespace Speechmatics.Realtime.Client.V2.Messages
 {
     internal class SetRecognitionConfigMessage : BaseMessage
     {
-        public override string message => "SetRecognitionConfig";
+        public string message => "SetRecognitionConfig";
         public Dictionary<string, object> transcription_config { get; }
 
         public SetRecognitionConfigMessage(SmRtApiConfig smConfig, AdditionalVocabSubMessage additionalVocab = null)
@@ -22,14 +22,8 @@ namespace Speechmatics.Realtime.Client.V2.Messages
                 transcription_config["output_locale"] = smConfig.OutputLocale;
             }
 
-            if (smConfig.MaxDelay > 0)
-            {
-                transcription_config["max_delay"] = smConfig.MaxDelay;
-            }
-            if (smConfig.EnablePartials)
-            {
-                transcription_config["enable_partials"] = true;
-            }
+            transcription_config["max_delay"] = smConfig.MaxDelay;
+            transcription_config["enable_partials"] = smConfig.EnablePartials;
 
         }
     }
