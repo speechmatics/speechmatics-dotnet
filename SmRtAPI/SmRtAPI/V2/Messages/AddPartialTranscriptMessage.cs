@@ -1,5 +1,6 @@
 using Speechmatics.Realtime.Client.Messages;
 
+
 namespace Speechmatics.Realtime.Client.V2.Messages
 {
     /// <summary>
@@ -10,22 +11,15 @@ namespace Speechmatics.Realtime.Client.V2.Messages
         /// <summary>
         /// Message type
         /// </summary>
-        public override string message => "AddPartialTranscript";
+        public string message => "AddPartialTranscript";
+
         /// <summary>
-        /// Start time
+        /// Aggregate metadata for the whole message
         /// </summary>
-        public double start_time;
-        /// <summary>
-        /// Length of audio segment
-        /// </summary>
-        public double length;
-        /// <summary>
-        /// Transcript ext
-        /// </summary>
-        public string transcript;
+        public RecognitionMetadata metadata;
         /// <summary>
         /// Individual word data
         /// </summary>
-        public WordSubMessage[] words;
+        public WordSubMessage[] results;
     }
 }

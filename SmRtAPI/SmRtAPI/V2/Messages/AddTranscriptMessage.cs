@@ -10,10 +10,14 @@ namespace Speechmatics.Realtime.Client.V2.Messages
         /// <summary>
         /// Message type
         /// </summary>
-        public override string message => "AddTranscript";
+        public string message => "AddTranscript";
         /// <summary>
         /// Individual word data
         /// </summary>
         public WordSubMessage[] results;
+        /// <summary>
+        /// Aggregate metadata for the whole message
+        /// </summary>
+        public RecognitionMetadata metadata;
     }
 }

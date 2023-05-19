@@ -91,10 +91,11 @@ namespace Speechmatics.Realtime.Client.V2
                 }
                 case "AddPartialTranscript":
                 {
-                    _lastPartial = jsonObject.Value<string>("transcript");
+                    _lastPartial = jsonObject["metadata"]["transcript"].Value<string>();
                     _api.Configuration.AddPartialTranscriptMessageCallback?.Invoke(JsonConvert.DeserializeObject<AddPartialTranscriptMessage>(messageAsString));
-                    break;
-                }
+                    _api.Configuration.AddPartialTranscriptCallback?.Invoke(_lastPartial);
+                        break;
+                 }
                 case "EndOfTranscript":
                 {
                     // Sometimes there is a partial without a corresponding transcript, let's pretend it was a transcript here.

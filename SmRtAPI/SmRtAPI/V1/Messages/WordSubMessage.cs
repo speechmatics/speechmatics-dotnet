@@ -8,10 +8,6 @@ namespace Speechmatics.Realtime.Client.V1.Messages
     public class WordSubMessage : BaseMessage
     {
         /// <summary>
-        /// Message type
-        /// </summary>
-        public override string message => "Word";
-        /// <summary>
         /// Word text
         /// </summary>
         public string word;

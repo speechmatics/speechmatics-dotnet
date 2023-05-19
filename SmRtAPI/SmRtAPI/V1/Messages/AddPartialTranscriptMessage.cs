@@ -10,7 +10,7 @@ namespace Speechmatics.Realtime.Client.V1.Messages
         /// <summary>
         /// Message type
         /// </summary>
-        public override string message => "AddPartialTranscript";
+        public string message => "AddPartialTranscript";
         /// <summary>
         /// Start time
         /// </summary>

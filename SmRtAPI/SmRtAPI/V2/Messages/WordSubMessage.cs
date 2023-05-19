@@ -8,13 +8,9 @@ namespace Speechmatics.Realtime.Client.V2.Messages
     public class WordSubMessage : BaseMessage
     {
         /// <summary>
-        /// Message type
+        /// Type for this token, one of "word", "punctuation" or "speaker_change"
         /// </summary>
-        public override string message => "Word";
-        /// <summary>
-        /// Word text
-        /// </summary>
-        public string word;
+        public string type;
         /// <summary>
         /// Start time (offset from audio start)
         /// </summary>

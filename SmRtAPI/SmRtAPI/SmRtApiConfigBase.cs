@@ -30,6 +30,11 @@ namespace Speechmatics.Realtime.Client
         /// Action to perform on receiving a transcript
         /// </summary>
         public Action<string> AddTranscriptCallback { get; set; }
+
+        /// <summary>
+        /// Action to perform on receiving a partial
+        /// </summary>
+        public Action<string> AddPartialTranscriptCallback { get; set; }
         /// <summary>
         /// Action to perform on end of transcript
         /// </summary>
@@ -67,6 +72,24 @@ namespace Speechmatics.Realtime.Client
         /// is usually safe. Large block sizes can affect latency.
         /// </summary>
         public int BlockSize { get; set; }
+
+        /// <summary>
+        /// API Authentication Token
+        /// only applicable for RT SaaS customers. 
+        /// </summary>
+        public string AuthToken { get; set; }
+
+        /// <summary>
+        /// Maximum acceptable delay in seconds
+        /// Forces a "final" transcription every x seconds
+        /// </summary>
+        public int MaxDelay { get; set; } = 5;
+
+        /// <summary>
+        /// Indicates if partials for both transcripts and translation,
+        /// where words are produced immediately, is enabled
+        /// </summary>
+        public bool EnablePartials { get; set; } = false;
 
         /// <summary>
         /// Constructor

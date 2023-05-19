@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Speechmatics.Realtime.Client.V2.Config;
 using Speechmatics.Realtime.Client.V2.Interfaces;
 
@@ -51,12 +54,44 @@ namespace Speechmatics.Realtime.Client.V2
             CancelToken = src.Token;
         }
 
+        public SmRtApi(string wsUrl,
+            Stream stream,
+            SmRtApiConfig configuration, 
+            CancellationToken cancellationToken)
+        {
+            Configuration = configuration;
+            WsUrl = new Uri(wsUrl);
+            _stream = stream;
+
+            CancelToken = cancellationToken;
+        }
+
+        public void Run()
+        {
+            Task.WaitAll(RunAsync());
+        }
+
+        private async Task<string> GenerateTempToken(string authToken)
+        {
+            using (HttpClient httpClient = new HttpClient())
+            {
+                var request = new HttpRequestMessage(HttpMethod.Post, "https://mp.speechmatics.com/v1/api_keys?type=rt");
+
+                request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", authToken);
+                request.Content = new StringContent("{\"ttl\": 3600 }", System.Text.Encoding.UTF8, "application/json");
+                var response = await httpClient.SendAsync(request).ConfigureAwait(false);
+                var json = await response.Content.ReadAsStringAsync();
+                var values = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+                return values["key_value"];
+            }
+        }
+
         /// <summary>
         /// Start the message loop and do not return until the file is transcribed
         /// </summary>
         [SuppressMessage("ReSharper", "AccessToDisposedClosure")]
         // Justification: The AutoResetEvent prevent the using block from terminating until the web socket client is no longer needed.
-        public void Run()
+        public async Task RunAsync()
         {
             using (var recognitionStarted = new AutoResetEvent(false))
             {
@@ -72,11 +107,15 @@ namespace Speechmatics.Realtime.Client.V2
                             ServicePointManager.ServerCertificateValidationCallback =
                                 (sender, certificate, chain, errors) => true;
                         }
+                        if (!String.IsNullOrEmpty(Configuration.AuthToken))
+                        {
+                            var tempToken = await GenerateTempToken(Configuration.AuthToken);
+                            wsClient.Options.SetRequestHeader("Authorization", $"Bearer {tempToken}");
+                        }
 
-                        var connect = wsClient.ConnectAsync(WsUrl, CancelToken);
+                        await wsClient.ConnectAsync(WsUrl, CancelToken);
                         Trace.WriteLine("Starting connection");
-                        connect.Wait(CancelToken);
-                        if (connect.IsFaulted || wsClient.State != WebSocketState.Open)
+                        if (wsClient.State != WebSocketState.Open)
                         {
                             throw new InvalidOperationException("Connection failed");
                         }
@@ -98,7 +137,7 @@ namespace Speechmatics.Realtime.Client.V2
                         }, CancelToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
 
                         transcriptionComplete.WaitOne();
-                        Task.WaitAll(t1, t2);
+                        await Task.WhenAll(t1, t2);
                     }
                 }
             }

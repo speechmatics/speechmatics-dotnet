@@ -14,7 +14,7 @@ namespace Speechmatics.Realtime.Client.Messages
         /// <summary>
         /// Message type
         /// </summary>
-        public override string message => "Error";
+        public string message => "Error";
         /// <summary>
         /// Code for the warning
         /// </summary>

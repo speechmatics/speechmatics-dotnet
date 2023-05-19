@@ -14,7 +14,7 @@ namespace Speechmatics.Realtime.Client.V1.Messages
             this.user = user;
         }
 
-        public override string message => "StartRecognition";
+        public string message => "StartRecognition";
         public string model { get; }
         public AudioFormatSubMessage audio_format { get; }
         public OutputFormatSubMessage output_format { get; }

@@ -22,7 +22,7 @@ namespace Speechmatics.Realtime.Client.Messages
         /// <summary>
         /// Message type
         /// </summary>
-        public override string message => "Warning";
+        public string message => "Warning";
         /// <summary>
         /// Code for the warning
         /// </summary>

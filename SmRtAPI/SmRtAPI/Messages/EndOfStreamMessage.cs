@@ -8,6 +8,6 @@ namespace Speechmatics.Realtime.Client.Messages
         }
 
         public int last_seq_no { get; }
-        public override string message => "EndOfStream";
+        public string message => "EndOfStream";
     }
 }
