@@ -107,10 +107,13 @@ namespace Speechmatics.Realtime.Client.V2
                             ServicePointManager.ServerCertificateValidationCallback =
                                 (sender, certificate, chain, errors) => true;
                         }
-                        if (!String.IsNullOrEmpty(Configuration.AuthToken))
+                        if (Configuration.GenerateTempToken)
                         {
                             var tempToken = await GenerateTempToken(Configuration.AuthToken);
                             wsClient.Options.SetRequestHeader("Authorization", $"Bearer {tempToken}");
+                        } else
+                        {
+                            wsClient.Options.SetRequestHeader("Authorization", $"Bearer {Configuration.AuthToken}");
                         }
 
                         await wsClient.ConnectAsync(WsUrl, CancelToken);

@@ -19,6 +19,16 @@ namespace Speechmatics.Realtime.Client.V2.Messages
         /// End time
         /// </summary>
         public double end_time;
+
+        /// <summary>
+        /// Whether the element represents an end of sentence marker (e.g. full stop, question mark, exclamation mark)
+        /// </summary>
+        public bool is_eos;
+
+        /// <summary>
+        /// Whether this punctuation mark attaches to previous or next token.
+        /// </summary>
+        public string? attaches_to;
         /// <summary>
         /// Audio length (seconds)
         /// </summary>
@@ -46,9 +56,11 @@ namespace Speechmatics.Realtime.Client.V2.Messages
         /// The language. Currently this will be the same for all words
         /// </summary>
         public string language;
+
+
         /// <summary>
-        /// Whether the element represents an end of sentence marker (e.g. full stop, question mark, exclamation mark)
+        /// Label indicating who said this word.
         /// </summary>
-        public bool is_eos;
+        public string? speaker;
     }
 }

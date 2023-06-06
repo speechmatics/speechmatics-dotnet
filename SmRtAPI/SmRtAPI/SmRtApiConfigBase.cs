@@ -80,6 +80,12 @@ namespace Speechmatics.Realtime.Client
         public string AuthToken { get; set; }
 
         /// <summary>
+        /// API keys obtained through portal.speechmatics.com 
+        /// need to set this to true
+        /// </summary>
+        public bool GenerateTempToken { get; set; } = false;
+
+        /// <summary>
         /// Maximum acceptable delay in seconds
         /// Forces a "final" transcription every x seconds
         /// </summary>
