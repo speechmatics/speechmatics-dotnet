@@ -1,6 +1,6 @@
 using Speechmatics.Realtime.Client.Messages;
 
-namespace Speechmatics.Realtime.Client.V2.Messages
+namespace Speechmatics.Realtime.Client.Messages
 {
     /// <summary>
     /// Data for an individual word in a transcript message

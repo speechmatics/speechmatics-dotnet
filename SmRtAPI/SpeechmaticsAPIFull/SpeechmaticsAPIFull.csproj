@@ -12,7 +12,7 @@
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-	<LangVersion>8.0</LangVersion>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,9 +40,9 @@
     <AssemblyOriginatorKeyFile>..\speechmatics.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-	<Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-        <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-	</Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -53,32 +53,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SmRtAPI\DynamicTranscriptConfiguration.cs">
-      <Link>DynamicTranscriptConfiguration.cs</Link>
-    </Compile>
     <Compile Include="..\SmRtAPI\Enumerations\AudioFormatEncoding.cs">
       <Link>Enumerations\AudioFormatEncoding.cs</Link>
     </Compile>
     <Compile Include="..\SmRtAPI\Enumerations\AudioFormatType.cs">
       <Link>Enumerations\AudioFormatType.cs</Link>
     </Compile>
-    <Compile Include="..\SmRtAPI\Enumerations\OutputFormat.cs">
-      <Link>Enumerations\OutputFormat.cs</Link>
-    </Compile>
     <Compile Include="..\SmRtAPI\ExtensionMethods.cs">
       <Link>ExtensionMethods.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\Messages\AddDataMessage.cs">
-      <Link>Messages\AddDataMessage.cs</Link>
     </Compile>
     <Compile Include="..\SmRtAPI\Messages\AdditionalVocabSubMessage.cs">
       <Link>Messages\AdditionalVocabSubMessage.cs</Link>
     </Compile>
     <Compile Include="..\SmRtAPI\Messages\BaseMessage.cs">
       <Link>Messages\BaseMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\Messages\DataAddedMessage.cs">
-      <Link>Messages\DataAddedMessage.cs</Link>
     </Compile>
     <Compile Include="..\SmRtAPI\Messages\EndOfStreamMessage.cs">
       <Link>Messages\EndOfStreamMessage.cs</Link>
@@ -89,9 +77,6 @@
     <Compile Include="..\SmRtAPI\Messages\ErrorMessage.cs">
       <Link>Messages\ErrorMessage.cs</Link>
     </Compile>
-    <Compile Include="..\SmRtAPI\Messages\OutputFormatSubMessage.cs">
-      <Link>Messages\OutputFormatSubMessage.cs</Link>
-    </Compile>
     <Compile Include="..\SmRtAPI\Messages\RecognitionStartedMessage.cs">
       <Link>Messages\RecognitionStartedMessage.cs</Link>
     </Compile>
@@ -100,75 +85,6 @@
     </Compile>
     <Compile Include="..\SmRtAPI\SmRtApiConfigBase.cs">
       <Link>SmRtApiConfigBase.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\V1\Config\SmRtApiConfig.cs">
-      <Link>V1\Config\SmRtApiConfig.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\V1\Interfaces\ISmRtApi.cs">
-      <Link>V1\Interfaces\ISmRtApi.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\V1\MessageReader.cs">
-      <Link>V1\MessageReader.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\V1\Messages\AddPartialTranscriptMessage.cs">
-      <Link>V1\Messages\AddPartialTranscriptMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\V1\Messages\AddTranscriptMessage.cs">
-      <Link>V1\Messages\AddTranscriptMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\V1\Messages\AudioFormatSubMessage.cs">
-      <Link>V1\Messages\AudioFormatSubMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\V1\Messages\SetRecognitionConfigMessage.cs">
-      <Link>V1\Messages\SetRecognitionConfigMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\V1\Messages\StartRecognitionMessage.cs">
-      <Link>V1\Messages\StartRecognitionMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\V1\Messages\WordSubMessage.cs">
-      <Link>V1\Messages\WordSubMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\V1\MessageWriter.cs">
-      <Link>V1\MessageWriter.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\V1\SmRtApi.cs">
-      <Link>V1\SmRtApi.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\V2\Config\SmRtApiConfig.cs">
-      <Link>V2\Config\SmRtApiConfig.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\V2\Interfaces\ISmRtApi.cs">
-      <Link>V2\Interfaces\ISmRtApi.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\V2\MessageReader.cs">
-      <Link>V2\MessageReader.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\V2\Messages\AddPartialTranscriptMessage.cs">
-      <Link>V2\Messages\AddPartialTranscriptMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\V2\Messages\AddTranscriptMessage.cs">
-      <Link>V2\Messages\AddTranscriptMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\V2\Messages\AudioFormatSubMessage.cs">
-      <Link>V2\Messages\AudioFormatSubMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\V2\Messages\SetRecognitionConfigMessage.cs">
-      <Link>V2\Messages\SetRecognitionConfigMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\V2\Messages\StartRecognitionMessage.cs">
-      <Link>V2\Messages\StartRecognitionMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\V2\Messages\WordSubMessage.cs">
-      <Link>V2\Messages\WordSubMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\V2\Messages\RecognitionMetadata.cs">
-      <Link>V2\Messages\RecognitionMetadata.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\V2\MessageWriter.cs">
-      <Link>V2\MessageWriter.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\V2\SmRtApi.cs">
-      <Link>V2\SmRtApi.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

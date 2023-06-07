@@ -1,8 +1,8 @@
 ﻿using System;
 using Speechmatics.Realtime.Client.Enumerations;
-using Speechmatics.Realtime.Client.V2.Messages;
+using Speechmatics.Realtime.Client.Messages;
 
-namespace Speechmatics.Realtime.Client.V2.Config
+namespace Speechmatics.Realtime.Client.Config
 {
     public class SmRtApiConfig : SmRtApiConfigBase
     {

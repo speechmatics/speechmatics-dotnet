@@ -64,10 +64,6 @@ namespace Speechmatics.Realtime.Client
         /// </summary>
         public string OutputLocale { get; set; }
         /// <summary>
-        /// Dynamic transcript configuration
-        /// </summary>
-        public DynamicTranscriptConfiguration DynamicTranscriptConfiguration { get; set; }
-        /// <summary>
         /// Data block size to send in one message. Overly small or large values can overload the server, something like 8192
         /// is usually safe. Large block sizes can affect latency.
         /// </summary>

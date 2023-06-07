@@ -2,8 +2,8 @@
 using System.IO;
 using System.Text;
 using NUnit.Framework;
-using Speechmatics.Realtime.Client.V2;
-using Speechmatics.Realtime.Client.V2.Config;
+using Speechmatics.Realtime.Client;
+using Speechmatics.Realtime.Client.Config;
 
 namespace SpeechmaticsAPI.Tests
 {

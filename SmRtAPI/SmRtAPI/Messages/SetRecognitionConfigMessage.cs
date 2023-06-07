@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
-using Speechmatics.Realtime.Client.Messages;
-using Speechmatics.Realtime.Client.V2.Config;
+using Speechmatics.Realtime.Client.Config;
 
-namespace Speechmatics.Realtime.Client.V2.Messages
+namespace Speechmatics.Realtime.Client.Messages
 {
     internal class SetRecognitionConfigMessage : BaseMessage
     {
@@ -12,16 +11,6 @@ namespace Speechmatics.Realtime.Client.V2.Messages
         public SetRecognitionConfigMessage(SmRtApiConfig smConfig, AdditionalVocabSubMessage additionalVocab = null)
         {
             transcription_config = new Dictionary<string, object>();
-            transcription_config["language"] = "en";
-            if (additionalVocab != null)
-            {
-                transcription_config["additional_vocab"] = additionalVocab.Data;
-            }
-            if (smConfig.OutputLocale != null)
-            {
-                transcription_config["output_locale"] = smConfig.OutputLocale;
-            }
-
             transcription_config["max_delay"] = smConfig.MaxDelay;
             transcription_config["enable_partials"] = smConfig.EnablePartials;
 

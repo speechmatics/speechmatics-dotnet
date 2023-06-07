@@ -1,6 +1,4 @@
-using Speechmatics.Realtime.Client.Messages;
-
-namespace Speechmatics.Realtime.Client.V2.Messages
+namespace Speechmatics.Realtime.Client.Messages
 {
     /// <summary>
     /// Detailed timings for a transcript
