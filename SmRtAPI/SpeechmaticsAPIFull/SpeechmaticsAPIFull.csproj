@@ -59,6 +59,9 @@
     <Compile Include="..\SmRtAPI\Enumerations\AudioFormatType.cs">
       <Link>Enumerations\AudioFormatType.cs</Link>
     </Compile>
+	 <Compile Include="..\SmRtAPI\Enumerations\DiarizationType.cs">
+		  <Link>Enumerations\DiarizationType.cs</Link>
+	  </Compile>
     <Compile Include="..\SmRtAPI\ExtensionMethods.cs">
       <Link>ExtensionMethods.cs</Link>
     </Compile>
@@ -83,6 +86,12 @@
     <Compile Include="..\SmRtAPI\Messages\WarningMessage.cs">
       <Link>Messages\WarningMessage.cs</Link>
     </Compile>
+	<Compile Include="..\SmRtAPI\Messages\PunctuationConfig.cs">
+      <Link>Messages\PunctuationConfig.cs</Link>
+	</Compile>
+	  <Compile Include="..\SmRtAPI\Messages\SpeakerDiarizationConfig.cs">
+		  <Link>Messages\SpeakerDiarizationConfig.cs</Link>
+	  </Compile>
     <Compile Include="..\SmRtAPI\SmRtApiConfigBase.cs">
       <Link>SmRtApiConfigBase.cs</Link>
     </Compile>
