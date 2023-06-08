@@ -1,5 +1,3 @@
-using Speechmatics.Realtime.Client.Messages;
-
 namespace Speechmatics.Realtime.Client.Messages
 {
     /// <summary>
@@ -41,10 +39,6 @@ namespace Speechmatics.Realtime.Client.Messages
     public class Alternative
     {
         /// <summary>
-        /// The type of object, "word" or "punctuation"
-        /// </summary>
-        public string type;
-        /// <summary>
         /// The content, e.g. "hello" (a word) or "," (a punctuation mark)
         /// </summary>
         public string content;
@@ -56,7 +50,6 @@ namespace Speechmatics.Realtime.Client.Messages
         /// The language. Currently this will be the same for all words
         /// </summary>
         public string language;
-
 
         /// <summary>
         /// Label indicating who said this word.

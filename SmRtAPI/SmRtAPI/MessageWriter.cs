@@ -45,13 +45,6 @@ namespace Speechmatics.Realtime.Client
                 throw new InvalidOperationException("Recognition started not received");
             }
 
-            if (_api.Configuration.CustomDictionaryPlainWords != null ||
-                _api.Configuration.CustomDictionarySoundsLikes != null ||
-                _api.Configuration.OutputLocale != null)
-            {
-                await SetRecognitionConfig();
-            }
-
             var streamBuffer = new byte[_api.Configuration.BlockSize];
             int bytesRead;
 
@@ -85,7 +78,7 @@ namespace Speechmatics.Realtime.Client
                     await _wsClient.SendAsync(new ArraySegment<byte>(arrayCopy, offset, messageBlockSize),
                         WebSocketMessageType.Binary, false, _api.CancelToken);
                 }
-            }   
+            }
 
             await _wsClient.SendAsync(
                 new ArraySegment<byte>(arrayCopy, finalSectionOffset, data.Count - finalSectionOffset),
@@ -97,15 +90,14 @@ namespace Speechmatics.Realtime.Client
             var audioFormat = new AudioFormatSubMessage(_api.Configuration.AudioFormat,
                 _api.Configuration.AudioFormatEncoding,
                 _api.Configuration.SampleRate);
-            var msg = new StartRecognitionMessage(audioFormat, _api.Configuration);
+            var additionalVocab = new AdditionalVocabSubMessage(_api.Configuration.CustomDictionaryPlainWords, _api.Configuration.CustomDictionarySoundsLikes);
+            var msg = new StartRecognitionMessage(_api.Configuration, audioFormat, additionalVocab);
             await msg.Send(_wsClient, _api.CancelToken);
         }
 
-        private async Task SetRecognitionConfig()
+        public async Task SetRecognitionConfig()
         {
-            var additionalVocab = new AdditionalVocabSubMessage(_api.Configuration.CustomDictionaryPlainWords, _api.Configuration.CustomDictionarySoundsLikes);
-
-            var msg = new SetRecognitionConfigMessage(_api.Configuration, additionalVocab);
+            var msg = new SetRecognitionConfigMessage(_api.Configuration);
             await msg.Send(_wsClient, _api.CancelToken);
         }
     }

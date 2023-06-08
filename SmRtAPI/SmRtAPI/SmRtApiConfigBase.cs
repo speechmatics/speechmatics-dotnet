@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Speechmatics.Realtime.Client.Enumerations;
+using Speechmatics.Realtime.Client.Messages;
 
 namespace Speechmatics.Realtime.Client
 {
@@ -85,13 +86,55 @@ namespace Speechmatics.Realtime.Client
         /// Maximum acceptable delay in seconds
         /// Forces a "final" transcription every x seconds
         /// </summary>
-        public int MaxDelay { get; set; } = 5;
+        public double MaxDelay { get; set; } = 5;
+
+        /// <summary>
+        /// 
+        /// Determines whether the threshold specified in max_delay can be exceeded
+        /// if a potential entity is detected.Flexible means if a potential entity
+        /// is detected, then the max_delay can be overriden until the end of that
+        /// entity. Fixed means that max_delay specified ignores any potential
+        /// entity that would not be completed within that threshold
+        /// </summary>
+        public string? MaxDelayMode { get; set; } = null;
 
         /// <summary>
         /// Indicates if partials for both transcripts and translation,
         /// where words are produced immediately, is enabled
         /// </summary>
         public bool EnablePartials { get; set; } = false;
+
+        /// <summary>
+        /// Optional. Whether a user wishes for entities to be identified with additional spoken and written word format
+        /// </summary>
+        public bool EnableEntities { get; set; } = false;
+
+
+        /// <summary>
+        /// Which operating point to use for transcription.
+        /// Valid values are "standard" and "enhanced"
+        /// See https://docs.speechmatics.com/features/accuracy-language-packs#accuracy for the difference between them
+        /// </summary>
+        public string? OperatingPoint { get; set; } = null;
+
+        /// <summary>
+        /// </summary>
+        public DiarizationType Diarization { get; set; } = DiarizationType.None;
+
+        /// <summary>
+        /// Extra configuration for Speaker Diarization
+        /// </summary>
+        public SpeakerDiarizationConfig? SpeakerDiarizationConfig { get; set; }
+
+        /// <summary>
+        /// Optional configuration for customizing punctuation
+        /// </summary>
+        public PunctuationConfig? PunctuationOverrides { get; set; }
+
+        /// <summary>
+        /// Optionally request a language pack optimized for a specific domain, e.g. 'finance'"
+        /// </summary>
+        public string? Domain { get; set; }
 
         /// <summary>
         /// Constructor

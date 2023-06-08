@@ -9,6 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeechmaticsAPI.Tests", "Sp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8547BB54-0B55-47F3-90A6-C3445CEB1300}"
 	ProjectSection(SolutionItems) = preProject
+		..\README.md = ..\README.md
 		speechmatics.snk = speechmatics.snk
 	EndProjectSection
 EndProject

@@ -36,6 +36,8 @@ namespace Speechmatics.Realtime.Client
         /// </summary>
         public Uri WsUrl { get; }
 
+        private MessageWriter _writer;
+
         /// <summary>
         /// Transcribe raw audio from a stream
         /// </summary>
@@ -135,14 +137,40 @@ namespace Speechmatics.Realtime.Client
                         /* The writing loop */
                         var t2 = Task.Factory.StartNew(async () =>
                         {
-                            var writer = new MessageWriter(this, wsClient, transcriptionComplete, _stream, recognitionStarted);
-                            await writer.Start();
+                            _writer = new MessageWriter(this, wsClient, transcriptionComplete, _stream, recognitionStarted);
+                            await _writer.Start();
                         }, CancelToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
 
                         transcriptionComplete.WaitOne();
                         await Task.WhenAll(t1, t2);
                     }
                 }
+            }
+        }
+
+        /// <summary>
+        /// Change recognition config while transcription is in progress
+        /// </summary>
+        /// <param name="maxDelay"></param>
+        /// <param name="maxDelayMode"></param>
+        /// <param name="enablePartials"></param>
+        public async void SetRecognitionConfig(double? maxDelay = null, string? maxDelayMode = null, bool? enablePartials = null)
+        {
+            if (maxDelay.HasValue)
+            {
+                Configuration.MaxDelay = maxDelay.Value;
+            }
+            if (maxDelayMode != null)
+            {
+                Configuration.MaxDelayMode = maxDelayMode;
+            }
+            if (enablePartials.HasValue)
+            {
+                Configuration.EnablePartials = enablePartials.Value;
+            }
+            if (_writer != null)
+            {
+                await _writer.SetRecognitionConfig();
             }
         }
     }

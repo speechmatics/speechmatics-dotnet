@@ -6,6 +6,7 @@ using System.Text;
 using Speechmatics.Realtime.Client;
 using Speechmatics.Realtime.Client.Config;
 using Newtonsoft.Json;
+using Speechmatics.Realtime.Client.Enumerations;
 
 namespace DemoApp
 {
@@ -30,7 +31,7 @@ namespace DemoApp
         {
             get
             {
-                return "wss://staging.realtimeappliance.speechmatics.io:9000/v2";
+                return "wss://neu.rt.speechmatics.com/v2/en";
                 var host = Environment.GetEnvironmentVariable("TEST_HOST") ?? "api.rt.speechmatics.io";
                 return host.StartsWith("wss://") ? host : $"wss://{host}:9000/";
             }
@@ -51,10 +52,11 @@ namespace DemoApp
                 {
                     /*
                      * The API constructor is passed the websockets URL, callbacks for the messages it might receive,
-                     * the language to transcribe (as a .NET CultureInfo object) and stream to read data from.
+                     * the language to transcribe and stream to read data from.
                      */
                     var config = new SmRtApiConfig(language)
                     {
+                        AuthToken = Environment.GetEnvironmentVariable("SM_TOKEN"),
                         OutputLocale = "en-GB",
                         AddTranscriptCallback = s => builder.Append(s),
                         AddTranscriptMessageCallback = s => Console.WriteLine(ToJson(s)),
@@ -64,8 +66,9 @@ namespace DemoApp
                         CustomDictionaryPlainWords = new[] {"speechmagic"},
                         CustomDictionarySoundsLikes = new Dictionary<string, IEnumerable<string>>(),
                         Insecure = true,
-                        BlockSize = 8192,
                         EnablePartials = true,
+                        EnableEntities = true,
+                        Diarization=DiarizationType.Speaker,
                     };
 
                     // We can do this here, or earlier. It's not used until .Run() is called on the API object.
