@@ -11,11 +11,11 @@
     <Product>Speechmatics Real-Time API</Product>
     <PackageId>Speechmatics</PackageId>
     <PackageProjectUrl>https://github.com/speechmatics/speechmatics-dotnet</PackageProjectUrl>
-    <Version>0.5.1</Version>
+    <Version>1.0.0</Version>
     <AssemblyName>Speechmatics</AssemblyName>
     <RootNamespace>Speechmatics</RootNamespace>
-    <AssemblyVersion>0.5.0.1</AssemblyVersion>
-    <FileVersion>0.5.0.1</FileVersion>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
     <Description>A .NET client for the Speechmatics Real-Time speech transcription engine</Description>
     <PackageLicenseUrl>https://github.com/speechmatics/speechmatics-dotnet/blob/master/LICENSE</PackageLicenseUrl>
     <Copyright>Speechmatics</Copyright>
