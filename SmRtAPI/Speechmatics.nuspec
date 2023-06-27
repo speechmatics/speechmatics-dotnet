@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Speechmatics</id>
+    <version>1.0.0</version>
+    <authors>James Gilmore</authors>
+    <owners>Speechmatics</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/speechmatics/speechmatics-dotnet/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/speechmatics/speechmatics-dotnet</projectUrl>
+    <description>A .NET client for the Speechmatics Real-Time speech transcription engine</description>
+    <copyright>Speechmatics</copyright>
+    <dependencies>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="Newtonsoft.Json" version="13.0.3" exclude="Build,Analyzers" />
+        <dependency id="System.Net.WebSockets.Client" version="4.3.2" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net46">
+        <dependency id="Newtonsoft.Json" version="13.0.3" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="SmRtAPI\bin\Release\netstandard2.0\Speechmatics.dll" target="lib\netstandard2.0\Speechmatics.dll" />
+    <file src="SmRtAPI\bin\Release\netstandard2.0\Speechmatics.xml" target="lib\netstandard2.0\Speechmatics.xml" />
+    <file src="SpeechmaticsAPIFull\bin\Release\Speechmatics.dll" target="lib\net46\Speechmatics.dll" />
+    <file src="SpeechmaticsAPIFull\bin\Release\Speechmatics.xml" target="lib\net46\Speechmatics.xml" />
+  </files>
+</package>

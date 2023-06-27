@@ -3,7 +3,7 @@ C# client for Speechmatics real time API
 
 ## Installation
 ```powershell
-Install-Package Speechmatics.Realtime.Client
+Install-Package Speechmatics
 ```
 
 ## Sample code
