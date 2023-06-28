@@ -53,12 +53,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="..\SmRtAPI\obj" />
-    <Compile Remove="..\SmRtAPI\Properties" />
+    <Compile Remove="..\SmRtAPI\obj\**" />
     <Compile Include="..\SmRtAPI\**\*.cs">
       <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
+    <Compile Remove="..\SmRtAPI\obj\**" />
+    <Compile Remove="..\SmRtAPI\Properties\**" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
