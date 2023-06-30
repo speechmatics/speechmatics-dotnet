@@ -57,7 +57,6 @@ namespace DemoApp
                     var config = new SmRtApiConfig(language)
                     {
                         AuthToken = Environment.GetEnvironmentVariable("SM_TOKEN"),
-                        OutputLocale = "en-GB",
                         AddTranscriptCallback = s => builder.Append(s),
                         AddTranscriptMessageCallback = s => Console.WriteLine(ToJson(s)),
                         AddPartialTranscriptMessageCallback = s => Console.WriteLine(ToJson(s)),

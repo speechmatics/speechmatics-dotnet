@@ -2,23 +2,23 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net60</TargetFrameworks>
-	 <LangVersion>8.0</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\speechmatics.snk</AssemblyOriginatorKeyFile>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>James Gilmore</Authors>
-    <Company />
-    <Product>Speechmatics Realtime API</Product>
-    <PackageId>Speechmatics.Realtime.Client</PackageId>
-    <PackageProjectUrl>https://github.com/jrg1381/smrtapi.net</PackageProjectUrl>
-    <Version>0.5.1</Version>
-    <AssemblyName>Speechmatics.Realtime.Client</AssemblyName>
-    <RootNamespace>Speechmatics.Realtime.Client</RootNamespace>
-    <AssemblyVersion>0.5.0.1</AssemblyVersion>
-    <FileVersion>0.5.0.1</FileVersion>
-    <Description>A .NET client for the Speechmatics realtime speech transcription engine</Description>
-    <PackageLicenseUrl>https://github.com/jrg1381/smrtapi.net/blob/master/LICENSE</PackageLicenseUrl>
-    <Copyright>James Gilmore</Copyright>
+    <Company>Speechmatics</Company>
+    <Product>Speechmatics Real-Time API</Product>
+    <PackageId>Speechmatics</PackageId>
+    <PackageProjectUrl>https://github.com/speechmatics/speechmatics-dotnet</PackageProjectUrl>
+    <Version>1.0.0</Version>
+    <AssemblyName>Speechmatics</AssemblyName>
+    <RootNamespace>Speechmatics</RootNamespace>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Description>A .NET client for the Speechmatics Real-Time speech transcription engine</Description>
+    <PackageLicenseUrl>https://github.com/speechmatics/speechmatics-dotnet/blob/master/LICENSE</PackageLicenseUrl>
+    <Copyright>Speechmatics</Copyright>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -30,11 +30,11 @@
 
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>bin\Debug\netstandard2.0\Speechmatics.Realtime.Client.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\netstandard2.0\Speechmatics.xml</DocumentationFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\Release\netstandard2.0\Speechmatics.Realtime.Client.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\netstandard2.0\Speechmatics.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -42,7 +42,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Net.WebSockets.Client" Version="4.3.2" />
   </ItemGroup>
 

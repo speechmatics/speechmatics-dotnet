@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SpeechmaticsAPIFull</RootNamespace>
-    <AssemblyName>Speechmatics.Realtime.Client</AssemblyName>
+    <AssemblyName>Speechmatics</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -22,7 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Speechmatics.Realtime.Client.xml</DocumentationFile>
+    <DocumentationFile>bin\Debug\Speechmatics.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,7 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\Speechmatics.Realtime.Client.xml</DocumentationFile>
+    <DocumentationFile>bin\Release\Speechmatics.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -53,48 +53,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\SmRtAPI\Enumerations\AudioFormatEncoding.cs">
-      <Link>Enumerations\AudioFormatEncoding.cs</Link>
+    <Compile Remove="..\SmRtAPI\obj\**" />
+    <Compile Include="..\SmRtAPI\**\*.cs">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\SmRtAPI\Enumerations\AudioFormatType.cs">
-      <Link>Enumerations\AudioFormatType.cs</Link>
-    </Compile>
-	 <Compile Include="..\SmRtAPI\Enumerations\DiarizationType.cs">
-		  <Link>Enumerations\DiarizationType.cs</Link>
-	  </Compile>
-    <Compile Include="..\SmRtAPI\ExtensionMethods.cs">
-      <Link>ExtensionMethods.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\Messages\AdditionalVocabSubMessage.cs">
-      <Link>Messages\AdditionalVocabSubMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\Messages\BaseMessage.cs">
-      <Link>Messages\BaseMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\Messages\EndOfStreamMessage.cs">
-      <Link>Messages\EndOfStreamMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\Messages\EndOfTranscriptMessage.cs">
-      <Link>Messages\EndOfTranscriptMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\Messages\ErrorMessage.cs">
-      <Link>Messages\ErrorMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\Messages\RecognitionStartedMessage.cs">
-      <Link>Messages\RecognitionStartedMessage.cs</Link>
-    </Compile>
-    <Compile Include="..\SmRtAPI\Messages\WarningMessage.cs">
-      <Link>Messages\WarningMessage.cs</Link>
-    </Compile>
-	<Compile Include="..\SmRtAPI\Messages\PunctuationConfig.cs">
-      <Link>Messages\PunctuationConfig.cs</Link>
-	</Compile>
-	  <Compile Include="..\SmRtAPI\Messages\SpeakerDiarizationConfig.cs">
-		  <Link>Messages\SpeakerDiarizationConfig.cs</Link>
-	  </Compile>
-    <Compile Include="..\SmRtAPI\SmRtApiConfigBase.cs">
-      <Link>SmRtApiConfigBase.cs</Link>
-    </Compile>
+    <Compile Remove="..\SmRtAPI\obj\**" />
+    <Compile Remove="..\SmRtAPI\Properties\**" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

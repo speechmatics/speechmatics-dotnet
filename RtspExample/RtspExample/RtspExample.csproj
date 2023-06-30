@@ -37,8 +37,8 @@
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Speechmatics.Realtime.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c128590f0c8a2a8c, processorArchitecture=MSIL">
-      <HintPath>..\packages\Speechmatics.Realtime.Client.0.7.0\lib\net46\Speechmatics.Realtime.Client.dll</HintPath>
+    <Reference Include="Speechmatics, Version=1.0.0.0, Culture=neutral, PublicKeyToken=c128590f0c8a2a8c, processorArchitecture=MSIL">
+      <HintPath>..\packages\Speechmatics.0.7.0\lib\net46\Speechmatics.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

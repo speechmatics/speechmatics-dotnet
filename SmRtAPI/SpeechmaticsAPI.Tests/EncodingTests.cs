@@ -24,7 +24,7 @@ namespace SpeechmaticsAPI.Tests
             // This is just a sanity check for now
             var expected = "{\"message\":\"StartRecognition\",\"audio_format\":{\"sample_rate\":44100,\"type\":\"raw\",\"encoding\":\"pcm_s16le\"},\"transcription_config\":{\"language\":\"en-US\"}}";
             var audioFormat = new AudioFormatSubMessage(AudioFormatType.Raw, AudioFormatEncoding.PcmS16Le, 44100);
-            var msg = new StartRecognitionMessage(audioFormat, new SmRtApiConfig("en"));
+            var msg = new StartRecognitionMessage(new SmRtApiConfig("en"), audioFormat, null);
             Assert.AreEqual(expected, msg.AsJson(), "Message serialization unexpected");
         }
 
