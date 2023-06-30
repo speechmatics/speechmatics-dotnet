@@ -1,7 +1,9 @@
 namespace Speechmatics.Realtime.Client.Messages
 {
     /// <summary>
-    /// A partial transcript -- later messages may improve on it
+    /// A partial transcript is a transcript that can be changed and expanded by a future AddTranscript or AddPartialTranscript message 
+    /// corresponds to the part of audio since the last AddTranscript message. 
+    /// For AddPartialTranscript messages the confidence field for alternatives has no meaning and will always be equal to 0.
     /// </summary>
     public class AddPartialTranscriptMessage : BaseMessage
     {

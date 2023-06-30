@@ -38,7 +38,6 @@ namespace DemoApp
             }
         }
 
-        // ReSharper disable once UnusedParameter.Local
         public static void Main(string[] args)
         {
             var start = DateTime.Now;
@@ -51,16 +50,15 @@ namespace DemoApp
             {
                 try
                 {
-                    /*
-                     * The API constructor is passed the websockets URL, callbacks for the messages it might receive,
-                     * the language to transcribe (as a .NET CultureInfo object) and stream to read data from.
-                     */
+
                     var config = new SmRtApiConfig(language)
                     {
                         AuthToken= Environment.GetEnvironmentVariable("AUTH_TOKEN"),
+                        // GenerateTempToken = True <- set this to True for accounts from portal.speechmatics.com
                         OutputLocale = "en-GB",
                         AddTranscriptCallback = s => builder.Append(s),
                         AddTranscriptMessageCallback = s => Console.WriteLine(ToJson(s)),
+                        AddTranslationMessageCallback = s => Console.WriteLine(ToJson(s)),
                         AddPartialTranscriptMessageCallback = s => Console.WriteLine(ToJson(s)),
                         ErrorMessageCallback = s => Console.WriteLine(ToJson(s)),
                         WarningMessageCallback = s => Console.WriteLine(ToJson(s)),
@@ -68,6 +66,10 @@ namespace DemoApp
                         CustomDictionarySoundsLikes = new Dictionary<string, IEnumerable<string>>(),
                         Insecure = true,
                         EnablePartials=true,
+                        TranslationConfig = new TranslationConfig() {
+                            TargetLanguages = new [] {"de"},
+                            EnablePartials = true
+                        }
                     };
 
                     // We can do this here, or earlier. It's not used until .Run() is called on the API object.

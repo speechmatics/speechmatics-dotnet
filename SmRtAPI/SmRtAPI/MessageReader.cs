@@ -93,7 +93,18 @@ namespace Speechmatics.Realtime.Client
                     _lastPartial = jsonObject["metadata"]["transcript"].Value<string>();
                     _api.Configuration.AddPartialTranscriptMessageCallback?.Invoke(JsonConvert.DeserializeObject<AddPartialTranscriptMessage>(messageAsString));
                     _api.Configuration.AddPartialTranscriptCallback?.Invoke(_lastPartial);
-                        break;
+                    break;
+                 }
+                case "AddTranslation":
+                {
+                    _api.Configuration.AddTranslationMessageCallback?.Invoke(
+                        JsonConvert.DeserializeObject<AddTranslationMessage>(messageAsString));
+                    break;
+                }
+                case "AddPartialTranslation":
+                {
+                    _api.Configuration.AddPartialTranslationMessageCallback?.Invoke(JsonConvert.DeserializeObject<AddPartialTranslationMessage>(messageAsString));
+                    break;
                  }
                 case "EndOfTranscript":
                 {
