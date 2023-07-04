@@ -16,6 +16,16 @@ namespace Speechmatics.Realtime.Client.Config
         /// </summary>
         public Action<AddTranscriptMessage> AddTranscriptMessageCallback { get; set; }
 
+        /// <summary>
+        /// Action to perform on partial translation data
+        /// </summary>
+        public Action<AddPartialTranslationMessage> AddPartialTranslationMessageCallback { get; set; }
+
+        /// <summary>
+        /// Action to perform on translation data
+        /// </summary>
+        public Action<AddTranslationMessage> AddTranslationMessageCallback { get; set; }
+
         public SmRtApiConfig(string model, int sampleRate, AudioFormatType audioFormatType, AudioFormatEncoding audioFormatEncoding) : base(model, sampleRate, audioFormatType, audioFormatEncoding)
         {
         }

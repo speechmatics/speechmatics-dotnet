@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Speechmatics.Realtime.Client.Messages
+namespace Speechmatics.Realtime.Client.Config
 {
     public class PunctuationConfig
     {
-        public List<string>? PermittedMarks { get; set; }
+        public IEnumerable<string>? PermittedMarks { get; set; }
 
         public double? Sensitivity { get; set; }
     }

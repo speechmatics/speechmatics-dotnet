@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using Speechmatics.Realtime.Client.Enumerations;
 using Speechmatics.Realtime.Client.Messages;
+using Speechmatics.Realtime.Client.Config;
 
 namespace Speechmatics.Realtime.Client
 {
@@ -135,6 +136,8 @@ namespace Speechmatics.Realtime.Client
         /// Optionally request a language pack optimized for a specific domain, e.g. 'finance'"
         /// </summary>
         public string? Domain { get; set; }
+
+        public TranslationConfig? TranslationConfig { get; set; }
 
         /// <summary>
         /// Constructor

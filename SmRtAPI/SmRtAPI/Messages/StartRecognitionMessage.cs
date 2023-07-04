@@ -60,10 +60,18 @@ namespace Speechmatics.Realtime.Client.Messages
             {
                 transcription_config["domain"] = smConfig.Domain;
             }
+
+            if (smConfig.TranslationConfig != null) {
+                translation_config = new Dictionary<string, object>();
+                translation_config["target_languages"] = smConfig.TranslationConfig.TargetLanguages;
+                translation_config["enable_partials"] = smConfig.TranslationConfig.EnablePartials;
+            }
         }
 
         public string message => "StartRecognition";
         public AudioFormatSubMessage audio_format { get; }
         public Dictionary<string, object> transcription_config { get; } = new Dictionary<string, object>();
+
+        public Dictionary<string, object>? translation_config { get; }
     }
 }
