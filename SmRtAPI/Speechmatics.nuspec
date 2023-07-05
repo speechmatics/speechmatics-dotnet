@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
 	<metadata>
-		<id>Speechmatics.API</id>
+		<id>Speechmatics</id>
 		<version>1.0.0</version>
 		<authors>Speechmatics</authors>
 		<owners>Speechmatics</owners>
