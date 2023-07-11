@@ -1,6 +1,7 @@
 ﻿using Speechmatics.Realtime.Client.Enumerations;
 using Speechmatics.Realtime.Client.Messages;
 using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Speechmatics.Realtime.Client.Messages
 {
@@ -9,6 +10,10 @@ namespace Speechmatics.Realtime.Client.Messages
         public StartRecognitionMessage(SmRtApiConfigBase smConfig, AudioFormatSubMessage audioFormatSubMessage, AdditionalVocabSubMessage? additionalVocab)
         {
             audio_format = audioFormatSubMessage;
+            if (smConfig.Ctrl != null)
+            {
+                transcription_config["ctrl"] = JsonSerializer.Deserialize<Dictionary<string, object>>(smConfig.Ctrl);
+            }
             transcription_config["language"] = smConfig.Model;
             if (additionalVocab != null)
             {
@@ -23,13 +28,17 @@ namespace Speechmatics.Realtime.Client.Messages
             {
                 transcription_config["max_delay_mode"] = smConfig.MaxDelayMode;
             }
+            if (smConfig.StreamingMode != null)
+            {
+                transcription_config["streaming_mode"] = smConfig.StreamingMode;
+            }
             transcription_config["enable_partials"] = smConfig.EnablePartials;
             transcription_config["enable_entities"] = smConfig.EnableEntities;
             if (smConfig.OperatingPoint != null)
             {
                 transcription_config["operating_point"] = smConfig.OperatingPoint;
             }
-            if (DiarizationType.Speaker.Equals(smConfig.Diarization)) 
+            if (DiarizationType.Speaker.Equals(smConfig.Diarization))
             {
                 transcription_config["diarization"] = "speaker";
             }

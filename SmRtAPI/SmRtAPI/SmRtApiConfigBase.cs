@@ -73,15 +73,20 @@ namespace Speechmatics.Realtime.Client
 
         /// <summary>
         /// API Authentication Token
-        /// only applicable for RT SaaS customers. 
+        /// only applicable for RT SaaS customers.
         /// </summary>
         public string AuthToken { get; set; }
 
         /// <summary>
-        /// API keys obtained through portal.speechmatics.com 
+        /// API keys obtained through portal.speechmatics.com
         /// need to set this to true
         /// </summary>
         public bool GenerateTempToken { get; set; } = false;
+
+        /// <summary>
+        /// Internal Speechmatics flag that allows to give special commands to the engine.
+        /// </summary>
+        public string Ctrl { get; set; }
 
         /// <summary>
         /// Maximum acceptable delay in seconds
@@ -90,7 +95,6 @@ namespace Speechmatics.Realtime.Client
         public double MaxDelay { get; set; } = 5;
 
         /// <summary>
-        /// 
         /// Determines whether the threshold specified in max_delay can be exceeded
         /// if a potential entity is detected.Flexible means if a potential entity
         /// is detected, then the max_delay can be overriden until the end of that
@@ -104,6 +108,11 @@ namespace Speechmatics.Realtime.Client
         /// where words are produced immediately, is enabled
         /// </summary>
         public bool EnablePartials { get; set; } = false;
+
+        /// <summary>
+        /// Indicates if we run the engine in streaming mode, or regular RT mode.
+        /// </summary>
+        public bool StreamingMode { get; set; } = false;
 
         /// <summary>
         /// Optional. Whether a user wishes for entities to be identified with additional spoken and written word format
