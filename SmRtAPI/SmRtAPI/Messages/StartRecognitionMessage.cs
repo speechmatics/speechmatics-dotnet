@@ -1,7 +1,7 @@
-﻿using Speechmatics.Realtime.Client.Enumerations;
+﻿using Newtonsoft.Json;
+using Speechmatics.Realtime.Client.Enumerations;
 using Speechmatics.Realtime.Client.Messages;
 using System.Collections.Generic;
-using System.Text.Json;
 
 namespace Speechmatics.Realtime.Client.Messages
 {
@@ -12,7 +12,7 @@ namespace Speechmatics.Realtime.Client.Messages
             audio_format = audioFormatSubMessage;
             if (smConfig.Ctrl != null)
             {
-                transcription_config["ctrl"] = JsonSerializer.Deserialize<Dictionary<string, object>>(smConfig.Ctrl);
+                transcription_config["ctrl"] = JsonConvert.DeserializeObject<Dictionary<string, object>>(smConfig.Ctrl);
             }
             transcription_config["language"] = smConfig.Model;
             if (additionalVocab != null)
