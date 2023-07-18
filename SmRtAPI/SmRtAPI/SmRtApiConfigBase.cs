@@ -86,7 +86,7 @@ namespace Speechmatics.Realtime.Client
         /// <summary>
         /// Internal Speechmatics flag that allows to give special commands to the engine.
         /// </summary>
-        public string Ctrl { get; set; }
+        public string? Ctrl { get; set; }
 
         /// <summary>
         /// Maximum acceptable delay in seconds

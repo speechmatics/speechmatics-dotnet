@@ -28,7 +28,7 @@ namespace Speechmatics.Realtime.Client.Messages
             {
                 transcription_config["max_delay_mode"] = smConfig.MaxDelayMode;
             }
-            if (smConfig.StreamingMode != null)
+            if (smConfig.StreamingMode)
             {
                 transcription_config["streaming_mode"] = smConfig.StreamingMode;
             }
