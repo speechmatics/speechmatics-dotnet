@@ -146,6 +146,9 @@ namespace Speechmatics.Realtime.Client
         /// </summary>
         public string? Domain { get; set; }
 
+        /// <summary>
+        /// Optional configuration for Translation
+        /// </summary>
         public TranslationConfig? TranslationConfig { get; set; }
 
         /// <summary>

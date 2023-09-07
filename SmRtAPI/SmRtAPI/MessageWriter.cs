@@ -7,7 +7,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Speechmatics.Realtime.Client.Messages;
 using Speechmatics.Realtime.Client.Interfaces;
-using Speechmatics.Realtime.Client.Messages;
 
 namespace Speechmatics.Realtime.Client
 {
@@ -15,7 +14,7 @@ namespace Speechmatics.Realtime.Client
     {
         private readonly ClientWebSocket _wsClient;
         private readonly AutoResetEvent _transcriptionComplete;
-        private int _sequenceNumber;
+        private int _sequenceNumber = 0;
         private readonly Stream _stream;
         private readonly AutoResetEvent _recognitionStarted;
         private readonly ISmRtApi _api;
@@ -51,6 +50,7 @@ namespace Speechmatics.Realtime.Client
             while ((bytesRead = await _stream.ReadAsync(streamBuffer, 0, streamBuffer.Length)) > 0 && !_transcriptionComplete.WaitOne(0))
             {
                 await SendData(new ArraySegment<byte>(streamBuffer, 0, bytesRead));
+                _sequenceNumber++;
             }
 
             var endOfStream = new EndOfStreamMessage(_sequenceNumber);

@@ -1,6 +1,8 @@
 namespace Speechmatics.Realtime.Client.Messages
 {
-
+    /// <summary>
+    /// Translation final message
+    /// </summary>
     public class TranslationSubMessage: BaseMessage 
     {
         /// <summary>

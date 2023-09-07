@@ -3,7 +3,7 @@ namespace Speechmatics.Realtime.Client.Messages
 
     /// <summary>
     /// A partial translation is a translation that can be changed and expanded by a future AddTranslation or AddPartialTranslation message 
-    // and corresponds to the part of audio since the last AddTranslation message.
+    /// and corresponds to the part of audio since the last AddTranslation message.
     /// </summary>
     public class AddPartialTranslationMessage : BaseMessage
     {
