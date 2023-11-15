@@ -81,6 +81,7 @@ namespace Speechmatics.Realtime.Client.Messages
         public AudioFormatSubMessage audio_format { get; }
         public Dictionary<string, object> transcription_config { get; } = new Dictionary<string, object>();
 
+        [JsonProperty("translation_config", NullValueHandling = NullValueHandling.Ignore)]
         public Dictionary<string, object>? translation_config { get; }
     }
 }
