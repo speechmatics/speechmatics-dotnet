@@ -104,7 +104,7 @@ namespace DemoApp
 FROM microsoft/dotnet as build-env
 WORKDIR /app
 
-RUN git clone https://github.com/jrg1381/smrtapi.net.git
+RUN git clone https://github.com/speechmatics/speechmatics-dotnet.git
 WORKDIR /app/smrtapi.net/SmRtAPI/DemoAppNetCore
 RUN sed -i 's/<SignAssembly>true<\/SignAssembly>/<SignAssembly>false<\/SignAssembly>/' ../SmRtAPI/SpeechmaticsAPI.csproj
 RUN dotnet build && dotnet publish -c Release -o out
