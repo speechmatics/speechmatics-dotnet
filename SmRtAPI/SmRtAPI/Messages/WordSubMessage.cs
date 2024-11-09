@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace Speechmatics.Realtime.Client.Messages
 {
     /// <summary>
@@ -6,7 +8,7 @@ namespace Speechmatics.Realtime.Client.Messages
     public class WordSubMessage : BaseMessage
     {
         /// <summary>
-        /// Type for this token, one of "word", "punctuation" or "speaker_change"
+        /// Type for this token, one of "word", "punctuation" or "entity"
         /// </summary>
         public string type;
         /// <summary>
@@ -28,9 +30,36 @@ namespace Speechmatics.Realtime.Client.Messages
         /// </summary>
         public string? attaches_to;
         /// <summary>
-        /// Audio length (seconds)
+        /// Alternative options for the words (currently of length 1)
         /// </summary>
         public Alternative[] alternatives;
+        /// <summary>
+        /// If the word is a named entity, the class of the entity (money, date, etc)
+        /// </summary>
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string? entity_class;
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public EntitySpokenOrWrittenForm[]? spoken_form;
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public EntitySpokenOrWrittenForm[]? written_form;
+    }
+
+    public class EntitySpokenOrWrittenForm
+    {
+        public Alternative[] alternatives;
+        /// <summary>
+        /// Type for this token, one of "word", "punctuation" or "entity"
+        /// </summary>
+        public string type;
+        /// <summary>
+        /// Start time (offset from audio start)
+        /// </summary>
+        public double start_time;
+        /// <summary>
+        /// End time
+        /// </summary>
+        public double end_time;
     }
 
     /// <summary>
