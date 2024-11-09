@@ -19,12 +19,10 @@ namespace Speechmatics.Realtime.Client.Messages
         /// End time
         /// </summary>
         public double end_time;
-
         /// <summary>
         /// Whether the element represents an end of sentence marker (e.g. full stop, question mark, exclamation mark)
         /// </summary>
         public bool is_eos;
-
         /// <summary>
         /// Whether this punctuation mark attaches to previous or next token.
         /// </summary>
@@ -34,30 +32,41 @@ namespace Speechmatics.Realtime.Client.Messages
         /// </summary>
         public Alternative[] alternatives;
         /// <summary>
-        /// If the word is a named entity, the class of the entity (money, date, etc)
+        /// If the word is a named entity, the class of the entity (money, date, etc), otherwise omitted
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string? entity_class;
+        /// <summary>
+        /// For an entity, the recognized spoken words, otherwise omitted
+        /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public EntitySpokenOrWrittenForm[]? spoken_form;
-
+        /// <summary>
+        /// For an entity, the written form of the recognised words, otherwise omitted
+        /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public EntitySpokenOrWrittenForm[]? written_form;
     }
 
+    /// <summary>
+    /// Represents the spoken or written form of an entity (money, date, etc)
+    /// </summary>
     public class EntitySpokenOrWrittenForm
     {
+        /// <summary>
+        /// Alternative options for the words (currently of length 1)
+        /// </summary>
         public Alternative[] alternatives;
         /// <summary>
-        /// Type for this token, one of "word", "punctuation" or "entity"
+        /// Type for this token (usually 'word' when dealing with entity sub-components)
         /// </summary>
         public string type;
         /// <summary>
-        /// Start time (offset from audio start)
+        /// Start time (offset from audio start) of the whole entity
         /// </summary>
         public double start_time;
         /// <summary>
-        /// End time
+        /// End time of the whole entity
         /// </summary>
         public double end_time;
     }
