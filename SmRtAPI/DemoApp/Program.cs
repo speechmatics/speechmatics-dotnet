@@ -24,9 +24,13 @@ namespace DemoApp
         {
             get
             {
-                return "wss://neu.rt.speechmatics.com/v2/en";
-                var host = Environment.GetEnvironmentVariable("TEST_HOST") ?? "api.rt.speechmatics.io";
-                return host.StartsWith("wss://") ? host : $"wss://{host}:9000/";
+                var host = Environment.GetEnvironmentVariable("TEST_HOST") ?? "wss://neu.rt.speechmatics.com/v2/en";;
+                if(host.StartsWith("wss://") || host.StartsWith("ws://"))
+                {
+                    return host;
+                }
+                Console.WriteLine("Defaulting to secure connection (wss) on port 9000");
+                return $"wss://{host}:9000/";
             }
         }
 
@@ -37,7 +41,6 @@ namespace DemoApp
             Debug.WriteLine("Starting at {0}", start);
             var builder = new StringBuilder();
             var language = Environment.GetEnvironmentVariable("SM_LANG") ?? "en";
-            Console.WriteLine(language);
 
             using (var stream = File.Open(SampleAudio, FileMode.Open, FileAccess.Read))
             {
