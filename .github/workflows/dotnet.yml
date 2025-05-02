@@ -1,0 +1,148 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: .NET
+
+on:
+  push:
+    tags:
+      - 'v*'
+  pull_request:
+
+jobs:
+  format-check:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: ./SmRtAPI
+    - name: lint
+      run: dotnet format --verify-no-changes
+      working-directory: ./SmRtAPI
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: ./SmRtAPI
+    - name: Lint
+      run: dotnet format --verify-no-changes
+      working-directory: ./SmRtAPI
+    - name: Build
+      run: dotnet build --no-restore SmRtAPI
+      working-directory: ./SmRtAPI
+    - name: Test
+      run: dotnet test --no-build --verbosity normal SmRtAPI
+      working-directory: ./SmRtAPI
+
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+      - name: Extract version from tag
+        id: version
+        run: |
+            TAG_NAME="${GITHUB_REF##*/}"  # e.g., v2.0.0
+            VERSION="${TAG_NAME#v}"       # strip the leading "v"
+            if [[ "$VERSION" = "merge" ]]; then
+              VERSION="2.0.0"
+            fi
+            echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+      - name: Restore dependencies
+        run: dotnet restore
+        working-directory: ./SmRtAPI/SmRtAPI
+      - name: Pack NuGet Package
+        run: |
+          dotnet pack \
+            -p:PackageVersion=${{ steps.version.outputs.version }} \
+            -p:Version=${{ steps.version.outputs.version }} \
+            -p:AssemblyVersion=${{ steps.version.outputs.version }}.0  \
+            -p:Configuration=Release \
+            -o ../../nupkgs
+        working-directory: ./SmRtAPI/SmRtAPI
+      - name: Upload NuGet Packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: nupkgs
+          path: nupkgs/*.nupkg
+          retention-days: 1
+
+  sign:
+    runs-on: windows-latest
+    needs: package
+    env:
+      APP_ID: ${{ secrets.APP_ID }}
+      TENANT_ID: ${{ secrets.TENANT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: nupkgs
+          path: nupkgs
+      - name: Sign
+        shell: pwsh
+        run: |
+          $timeserver = "http://timestamp.digicert.com"
+          $certificate_name = "GlobalSign-Code-Signing-Certificate"
+
+          dotnet tool install --tool-path . NuGetKeyVaultSignTool
+    
+          $nupkgFiles = Get-ChildItem -Path nupkgs -Filter *.nupkg
+          if ($nupkgFiles.Count -eq 0) {
+              Write-Host "No .nupkg files found in the directory."
+              exit 1
+          }
+          foreach ($file in $nupkgFiles) {
+            Write-Output "Signing $file"
+            ./NuGetKeyVaultSignTool sign $file `
+              --azure-key-vault-tenant-id "${{ env.TENANT_ID }}" `
+              --azure-key-vault-url "https://signing-key.vault.azure.net/" `
+              --azure-key-vault-client-id "${{ env.APP_ID }}" `
+              --azure-key-vault-client-secret "${{ env.AZURE_CLIENT_SECRET }}" `
+              --azure-key-vault-certificate "$certificate_name" `
+              --timestamp-rfc3161 $timeserver
+          }
+      - name: Upload NuGet packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: signed_nupkgs
+          path: nupkgs/*.nupkg
+          retention-days: 1
+
+  publish:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: sign
+    env:
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: signed_nupkgs
+          path: nupkgs
+      - name: Publish
+        shell: bash
+        run: |
+          set -euxo pipefail
+          for file in nupkgs/*.nupkg; do
+            echo "Publishing $file"
+            dotnet nuget verify $file
+            dotnet nuget push $file --api-key "$NUGET_API_KEY" --source "https://api.nuget.org/v3/index.json" 
+          done

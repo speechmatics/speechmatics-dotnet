@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.1;net80</TargetFrameworks>
+    <LangVersion>11.0</LangVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\speechmatics.snk</AssemblyOriginatorKeyFile>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Authors>James Gilmore</Authors>
+    <Company>Speechmatics</Company>
+    <Product>Speechmatics Real-Time API</Product>
+    <PackageId>Speechmatics</PackageId>
+    <PackageProjectUrl>https://github.com/speechmatics/speechmatics-dotnet</PackageProjectUrl>
+    <Version>1.0.0</Version>
+    <AssemblyName>Speechmatics</AssemblyName>
+    <RootNamespace>Speechmatics</RootNamespace>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Description>A .NET client for the Speechmatics Real-Time speech transcription engine</Description>
+    <PackageLicenseUrl>https://github.com/speechmatics/speechmatics-dotnet/blob/master/LICENSE</PackageLicenseUrl>
+    <Copyright>Speechmatics</Copyright>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>bin\Debug\netstandard2.0\Speechmatics.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\Release\netstandard2.0\Speechmatics.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\speechmatics.snk" Link="speechmatics.snk" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Net.WebSockets.Client" Version="4.3.2" />
+  </ItemGroup>
+
+</Project>
