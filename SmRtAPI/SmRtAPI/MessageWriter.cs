@@ -90,7 +90,13 @@ namespace Speechmatics.Realtime.Client
             var audioFormat = new AudioFormatSubMessage(_api.Configuration.AudioFormat,
                 _api.Configuration.AudioFormatEncoding,
                 _api.Configuration.SampleRate);
-            var additionalVocab = new AdditionalVocabSubMessage(_api.Configuration.CustomDictionaryPlainWords, _api.Configuration.CustomDictionarySoundsLikes);
+
+            AdditionalVocabSubMessage? additionalVocab = null;
+            if (_api.Configuration.CustomDictionaryPlainWords.Any() || _api.Configuration.CustomDictionarySoundsLikes.Any())
+            {
+                additionalVocab = new AdditionalVocabSubMessage(_api.Configuration.CustomDictionaryPlainWords, _api.Configuration.CustomDictionarySoundsLikes);
+            }
+
             var msg = new StartRecognitionMessage(_api.Configuration, audioFormat, additionalVocab);
             await msg.Send(_wsClient, _api.CancelToken);
         }

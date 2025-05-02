@@ -29,6 +29,7 @@ namespace Speechmatics.Realtime.Client
             _resetEvent = resetEvent;
             _recognitionStarted = recognitionStarted;
             _multipartMessageBuffer = new StringBuilder();
+            _lastPartial = string.Empty;
         }
 
         internal async Task Start()
@@ -37,7 +38,7 @@ namespace Speechmatics.Realtime.Client
 
             while (true)
             {
-                var webSocketReceiveResult = await _wsClient.ReceiveAsync(receiveBuffer, _api.CancelToken);
+                var webSocketReceiveResult = await _wsClient.ReceiveAsync(receiveBuffer, _api.CancelToken) ?? throw new InvalidOperationException("_wsClient.ReceiveAsync: webSocketReceiveResult is null");
                 if (ProcessMessage(webSocketReceiveResult, receiveBuffer))
                 {
                     _resetEvent.Set();
@@ -48,8 +49,8 @@ namespace Speechmatics.Realtime.Client
 
         private bool ProcessMessage(WebSocketReceiveResult result, ArraySegment<byte> message)
         {
+            Debug.Assert(message.Array != null);
             // Return true if the message should cause the loop to exit, false otherwise.
-
             var subset = new ArraySegment<byte>(message.Array, 0, result.Count);
             var subMessageAsString = Encoding.UTF8.GetString(subset.ToArray());
 
@@ -69,65 +70,69 @@ namespace Speechmatics.Realtime.Client
             switch (jsonObject.Value<string>("message"))
             {
                 case "RecognitionStarted":
-                {
-                    Trace.WriteLine("Recognition started");
-                    _recognitionStarted.Set();
-                    break;
-                }
+                    {
+                        Trace.WriteLine("Recognition started");
+                        _recognitionStarted.Set();
+                        break;
+                    }
                 case "AudioAdded":
-                {
-                    // Log the ack
-                    Interlocked.Increment(ref _ackedSequenceNumbers);
-                    break;
-                }
+                    {
+                        // Log the ack
+                        Interlocked.Increment(ref _ackedSequenceNumbers);
+                        break;
+                    }
                 case "AddTranscript":
-                {
-                    string transcript = jsonObject["metadata"]["transcript"].Value<string>();
-                    _api.Configuration.AddTranscriptMessageCallback?.Invoke(
-                        JsonConvert.DeserializeObject<AddTranscriptMessage>(messageAsString));
-                    _api.Configuration.AddTranscriptCallback?.Invoke(transcript);
-                    break;
-                }
+                    {
+                        string transcript = jsonObject["metadata"]?["transcript"]?.Value<string>() ?? string.Empty;
+                        var obj = JsonConvert.DeserializeObject<AddTranscriptMessage>(messageAsString) ?? throw new InvalidOperationException("AddTranscriptMessage is null");
+                        _api.Configuration.AddTranscriptMessageCallback?.Invoke(obj);
+                        _api.Configuration.AddTranscriptCallback?.Invoke(transcript);
+                        break;
+                    }
                 case "AddPartialTranscript":
-                {
-                    _lastPartial = jsonObject["metadata"]["transcript"].Value<string>();
-                    _api.Configuration.AddPartialTranscriptMessageCallback?.Invoke(JsonConvert.DeserializeObject<AddPartialTranscriptMessage>(messageAsString));
-                    _api.Configuration.AddPartialTranscriptCallback?.Invoke(_lastPartial);
-                    break;
-                 }
+                    {
+                        _lastPartial = jsonObject["metadata"]?["transcript"]?.Value<string>() ?? string.Empty;
+                        var obj = JsonConvert.DeserializeObject<AddPartialTranscriptMessage>(messageAsString) ?? throw new InvalidOperationException("AddPartialTranscriptMessage is null");
+                        _api.Configuration.AddPartialTranscriptMessageCallback?.Invoke(obj);
+                        _api.Configuration.AddPartialTranscriptCallback?.Invoke(_lastPartial);
+                        break;
+                    }
                 case "AddTranslation":
-                {
-                    _api.Configuration.AddTranslationMessageCallback?.Invoke(
-                        JsonConvert.DeserializeObject<AddTranslationMessage>(messageAsString));
-                    break;
-                }
+                    {
+                        var obj = JsonConvert.DeserializeObject<AddTranslationMessage>(messageAsString) ?? throw new InvalidOperationException("AddTranslationMessage is null");
+                        _api.Configuration.AddTranslationMessageCallback?.Invoke(obj);
+                        break;
+                    }
                 case "AddPartialTranslation":
-                {
-                    _api.Configuration.AddPartialTranslationMessageCallback?.Invoke(JsonConvert.DeserializeObject<AddPartialTranslationMessage>(messageAsString));
-                    break;
-                 }
+                    {
+                        var obj = JsonConvert.DeserializeObject<AddPartialTranslationMessage>(messageAsString) ?? throw new InvalidOperationException("AddPartialTranslationMessage is null");
+                        _api.Configuration.AddPartialTranslationMessageCallback?.Invoke(obj);
+                        break;
+                    }
                 case "EndOfTranscript":
-                {
-                    // Sometimes there is a partial without a corresponding transcript, let's pretend it was a transcript here.
-                    _api.Configuration.AddTranscriptCallback?.Invoke(_lastPartial);
-                    _api.Configuration.EndOfTranscriptCallback?.Invoke();
-                    return true;
-                }
+                    {
+                        // Sometimes there is a partial without a corresponding transcript, let's pretend it was a transcript here.
+                        _api.Configuration.AddTranscriptCallback?.Invoke(_lastPartial);
+                        _api.Configuration.EndOfTranscriptCallback?.Invoke();
+                        return true;
+                    }
                 case "Error":
-                {
-                    _api.Configuration.ErrorMessageCallback?.Invoke(JsonConvert.DeserializeObject<ErrorMessage>(messageAsString));
-                    return true;
-                }
+                    {
+                        var obj = JsonConvert.DeserializeObject<ErrorMessage>(messageAsString) ?? throw new InvalidOperationException("ErrorMessage is null");
+                        _api.Configuration.ErrorMessageCallback?.Invoke(obj);
+                        return true;
+                    }
                 case "Warning":
-                {
-                    _api.Configuration.WarningMessageCallback?.Invoke(JsonConvert.DeserializeObject<WarningMessage>(messageAsString));
-                    break;
-                }
+                    {
+                        var obj = JsonConvert.DeserializeObject<WarningMessage>(messageAsString) ?? throw new InvalidOperationException("WarningMessage is null");
+                        _api.Configuration.WarningMessageCallback?.Invoke(obj);
+                        break;
+                    }
                 default:
-                {
-                    Trace.WriteLine(messageAsString);
-                    break;
-                }
+                    {
+                        Trace.WriteLine(messageAsString);
+                        break;
+                    }
             }
 
             _multipartMessageBuffer.Clear();

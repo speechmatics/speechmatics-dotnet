@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Speechmatics.Realtime.Client.Enumerations;
 using Speechmatics.Realtime.Client.Messages;
+using System;
 using System.Collections.Generic;
 
 namespace Speechmatics.Realtime.Client.Messages
@@ -12,7 +13,8 @@ namespace Speechmatics.Realtime.Client.Messages
             audio_format = audioFormatSubMessage;
             if (smConfig.Ctrl != null)
             {
-                transcription_config["ctrl"] = JsonConvert.DeserializeObject<Dictionary<string, object>>(smConfig.Ctrl);
+                var obj = JsonConvert.DeserializeObject<Dictionary<string, object>>(smConfig.Ctrl) ?? throw new ArgumentException("ctrl is not a valid JSON object");
+                transcription_config["ctrl"] = obj;
             }
             transcription_config["language"] = smConfig.Model;
             if (additionalVocab != null)
@@ -70,7 +72,8 @@ namespace Speechmatics.Realtime.Client.Messages
                 transcription_config["domain"] = smConfig.Domain;
             }
 
-            if (smConfig.TranslationConfig != null) {
+            if (smConfig.TranslationConfig != null)
+            {
                 translation_config = new Dictionary<string, object>();
                 translation_config["target_languages"] = smConfig.TranslationConfig.TargetLanguages;
                 translation_config["enable_partials"] = smConfig.TranslationConfig.EnablePartials;

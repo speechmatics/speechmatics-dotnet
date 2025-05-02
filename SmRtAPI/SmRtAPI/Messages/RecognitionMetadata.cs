@@ -1,4 +1,6 @@
-﻿namespace Speechmatics.Realtime.Client.Messages
+﻿using System;
+
+namespace Speechmatics.Realtime.Client.Messages
 {
     /// <summary>
     /// Metadata that aggregates information for a whole parital or final message.
@@ -9,7 +11,7 @@
         /// <summary>
         /// Concatenated tokens for this message
         /// </summary>
-        public string transcript;
+        public string transcript = String.Empty;
 
         /// <summary>
         /// Start time of first token in seconds.

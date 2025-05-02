@@ -12,22 +12,22 @@ namespace Speechmatics.Realtime.Client.Config
         /// <summary>
         /// Action to perform on extended partial transcript data
         /// </summary>
-        public Action<AddPartialTranscriptMessage> AddPartialTranscriptMessageCallback { get; set; }
+        public Action<AddPartialTranscriptMessage>? AddPartialTranscriptMessageCallback { get; set; }
 
         /// <summary>
         /// Action to perform on extended transcript data
         /// </summary>
-        public Action<AddTranscriptMessage> AddTranscriptMessageCallback { get; set; }
+        public Action<AddTranscriptMessage>? AddTranscriptMessageCallback { get; set; }
 
         /// <summary>
         /// Action to perform on partial translation data
         /// </summary>
-        public Action<AddPartialTranslationMessage> AddPartialTranslationMessageCallback { get; set; }
+        public Action<AddPartialTranslationMessage>? AddPartialTranslationMessageCallback { get; set; }
 
         /// <summary>
         /// Action to perform on translation data
         /// </summary>
-        public Action<AddTranslationMessage> AddTranslationMessageCallback { get; set; }
+        public Action<AddTranslationMessage>? AddTranslationMessageCallback { get; set; }
 
         /// <summary>
         /// Create new config for a given language,

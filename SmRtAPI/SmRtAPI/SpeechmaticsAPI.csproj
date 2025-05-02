@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net60</TargetFrameworks>
-    <LangVersion>8.0</LangVersion>
+    <TargetFrameworks>netstandard2.1;net80</TargetFrameworks>
+    <LangVersion>11.0</LangVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\speechmatics.snk</AssemblyOriginatorKeyFile>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-    <Authors>James Gilmore</Authors>
+    <Authors>James Gilmore, Markus Hennerbichler, Speechmatics</Authors>
     <Company>Speechmatics</Company>
     <Product>Speechmatics Real-Time API</Product>
     <PackageId>Speechmatics</PackageId>
@@ -16,12 +16,13 @@
     <RootNamespace>Speechmatics</RootNamespace>
     <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <FileVersion>1.0.0.0</FileVersion>
-    <Description>A .NET client for the Speechmatics Real-Time speech transcription engine</Description>
-    <PackageLicenseUrl>https://github.com/speechmatics/speechmatics-dotnet/blob/master/LICENSE</PackageLicenseUrl>
+    <Description>A .NET client for the Speechmatics real-time speech transcription engine</Description>
     <Copyright>Speechmatics</Copyright>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Nullable>enable</Nullable>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -44,6 +45,10 @@
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Net.WebSockets.Client" Version="4.3.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="docs/README.md" Pack="true" PackagePath="" />
   </ItemGroup>
 
 </Project>

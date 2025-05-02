@@ -116,7 +116,21 @@ COPY --from=build-env /app/smrtapi.net/SmRtAPI/DemoAppNetCore/out ./
 ENTRYPOINT ["dotnet", "DemoAppNetCore.dll"]
 ```
 
-# Debugging
+# Building
+
+Any commit on a pull request will trigger Github actions to build and sign a nuget package which can be downloaded as an artifact.
+
+A tagged Github release will be published to `nuget.org` for tags of the form `v\d+.\d+.\d+` and for release candidates or special builds, `v\d+.\d+.\d+-*`. Examples: 2.0.3, 2.0.5-rc1. To avoid confusion, only tag `main`, not other branches.
+
+To test the build process without polluting nuget.org (releases cannot be deleted, only 'delisted'), use a tag ending with `-test*`, for example `2.0.3-testjohnd`. This will run the CI for tagged builds but publish to the nuget test repository `apiint.nugettest.org`.
+
+# Testing
+
+## TODO
+
+Give this repo an API key for testing against the Speechmatics Realtime SaaS, update the unit tests and run them with `dotnet test`
+
+# Debugging websockets
 
 Merge the following with your `app.config` file to enable debugging to a file. If you don't have an `app.config` file, use this XML as-is. This technique will work whether you're building from source or using the Nuget package.
 

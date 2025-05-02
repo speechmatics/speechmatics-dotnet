@@ -1,9 +1,11 @@
+using System;
+
 namespace Speechmatics.Realtime.Client.Messages
 {
     /// <summary>
     /// Translation final message
     /// </summary>
-    public class TranslationSubMessage: BaseMessage 
+    public class TranslationSubMessage : BaseMessage
     {
         /// <summary>
         ///  The start time (in seconds) of the original transcribed audio segment.
@@ -13,12 +15,12 @@ namespace Speechmatics.Realtime.Client.Messages
         /// <summary>
         /// The end time (in seconds) of the original transcribed audio segment.
         /// </summary>
-        public double end_time; 
+        public double end_time;
 
         /// <summary>
         /// The translated segment of speech
         /// </summary>
-        public string content;
+        public string content = String.Empty;
 
         /// <summary>
         /// The speaker that uttered the speech if speaker diarization is enabled. See Transcription config.
@@ -42,11 +44,11 @@ namespace Speechmatics.Realtime.Client.Messages
         /// <summary>
         /// Target language translation relates to
         /// </summary>
-        public string language;
+        public string language = String.Empty;
 
         /// <summary>
         /// List of translated sentences.
         /// </summary>
-        public TranslationSubMessage[] results;
+        public TranslationSubMessage[] results = Array.Empty<TranslationSubMessage>();
     }
 }

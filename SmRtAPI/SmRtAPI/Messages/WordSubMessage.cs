@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 
 namespace Speechmatics.Realtime.Client.Messages
@@ -10,7 +11,7 @@ namespace Speechmatics.Realtime.Client.Messages
         /// <summary>
         /// Type for this token, one of "word", "punctuation" or "entity"
         /// </summary>
-        public string type;
+        public string type = String.Empty;
         /// <summary>
         /// Start time (offset from audio start)
         /// </summary>
@@ -30,7 +31,7 @@ namespace Speechmatics.Realtime.Client.Messages
         /// <summary>
         /// Alternative options for the words (currently of length 1)
         /// </summary>
-        public Alternative[] alternatives;
+        public Alternative[] alternatives = Array.Empty<Alternative>();
         /// <summary>
         /// If the word is a named entity, the class of the entity (money, date, etc), otherwise omitted
         /// </summary>
@@ -56,11 +57,11 @@ namespace Speechmatics.Realtime.Client.Messages
         /// <summary>
         /// Alternative options for the words (currently of length 1)
         /// </summary>
-        public Alternative[] alternatives;
+        public Alternative[] alternatives = Array.Empty<Alternative>();
         /// <summary>
         /// Type for this token (usually 'word' when dealing with entity sub-components)
         /// </summary>
-        public string type;
+        public string type = String.Empty;
         /// <summary>
         /// Start time (offset from audio start) of the whole entity
         /// </summary>
@@ -79,7 +80,7 @@ namespace Speechmatics.Realtime.Client.Messages
         /// <summary>
         /// The content, e.g. "hello" (a word) or "," (a punctuation mark)
         /// </summary>
-        public string content;
+        public string content = String.Empty;
         /// <summary>
         /// How confident the ASR is in the result
         /// </summary>
@@ -87,7 +88,7 @@ namespace Speechmatics.Realtime.Client.Messages
         /// <summary>
         /// The language. Currently this will be the same for all words
         /// </summary>
-        public string language;
+        public string language = String.Empty;
 
         /// <summary>
         /// Label indicating who said this word.

@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Speechmatics.Realtime.Client.Config
 {
@@ -8,12 +6,13 @@ namespace Speechmatics.Realtime.Client.Config
     /// <summary>
     /// Additional configuration for translation
     /// </summary>
-    public class TranslationConfig {
+    public class TranslationConfig
+    {
 
         /// <summary>
         /// List of target languages to translate to
         /// </summary>
-        public IEnumerable<string> TargetLanguages { get; set; }
+        public IEnumerable<string> TargetLanguages { get; set; } = new List<string>();
 
         /// <summary>
         /// Flag for enabling translation partials.

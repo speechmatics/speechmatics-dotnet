@@ -36,7 +36,7 @@ namespace Speechmatics.Realtime.Client
         /// </summary>
         public Uri WsUrl { get; }
 
-        private MessageWriter _writer;
+        private MessageWriter? _writer;
 
         /// <summary>
         /// Transcribe raw audio from a stream
@@ -56,9 +56,16 @@ namespace Speechmatics.Realtime.Client
             CancelToken = src.Token;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SmRtApi"/> class with the specified parameters.
+        /// </summary>
+        /// <param name="wsUrl">The websocket endpoint URL.</param>
+        /// <param name="stream">The input stream for audio data.</param>
+        /// <param name="configuration">The configuration object containing model and audio properties.</param>
+        /// <param name="cancellationToken">The cancellation token to cancel the operation.</param>
         public SmRtApi(string wsUrl,
             Stream stream,
-            SmRtApiConfig configuration, 
+            SmRtApiConfig configuration,
             CancellationToken cancellationToken)
         {
             Configuration = configuration;
@@ -68,13 +75,20 @@ namespace Speechmatics.Realtime.Client
             CancelToken = cancellationToken;
         }
 
+        /// <summary>
+        /// Starts the transcription process synchronously and waits for it to complete.
+        /// </summary>
         public void Run()
         {
             Task.WaitAll(RunAsync());
         }
 
-        private async Task<string> GenerateTempToken(string authToken)
+        private async Task<string> GenerateTempToken(string? authToken)
         {
+            if (string.IsNullOrEmpty(authToken))
+            {
+                throw new InvalidOperationException("Auth token is required to generate a temporary token");
+            }
             using (HttpClient httpClient = new HttpClient())
             {
                 var request = new HttpRequestMessage(HttpMethod.Post, "https://mp.speechmatics.com/v1/api_keys?type=rt");
@@ -84,7 +98,11 @@ namespace Speechmatics.Realtime.Client
                 var response = await httpClient.SendAsync(request).ConfigureAwait(false);
                 var json = await response.Content.ReadAsStringAsync();
                 var values = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
-                return values["key_value"];
+                if (values != null)
+                {
+                    return values["key_value"];
+                }
+                throw new InvalidOperationException($"Failed to generate temporary token from {json}");
             }
         }
 
@@ -113,7 +131,8 @@ namespace Speechmatics.Realtime.Client
                         {
                             var tempToken = await GenerateTempToken(Configuration.AuthToken);
                             wsClient.Options.SetRequestHeader("Authorization", $"Bearer {tempToken}");
-                        } else
+                        }
+                        else
                         {
                             wsClient.Options.SetRequestHeader("Authorization", $"Bearer {Configuration.AuthToken}");
                         }

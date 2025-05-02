@@ -1,3 +1,4 @@
+using System;
 using Newtonsoft.Json;
 
 namespace Speechmatics.Realtime.Client.Messages
@@ -10,7 +11,7 @@ namespace Speechmatics.Realtime.Client.Messages
         /// <summary>
         /// Reason
         /// </summary>
-        public string reason;
+        public string reason = String.Empty;
         /// <summary>
         /// Message type
         /// </summary>
@@ -18,7 +19,7 @@ namespace Speechmatics.Realtime.Client.Messages
         /// <summary>
         /// Code for the warning
         /// </summary>
-        public string type;
+        public string type = String.Empty;
         /// <summary>
         /// Seq no of corresponding API call which caused the error
         /// </summary>

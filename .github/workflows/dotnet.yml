@@ -5,13 +5,13 @@ name: .NET
 
 on:
   push:
-    branches: [ "master" ]
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+-*'
   pull_request:
-    branches: [ "master" ]
 
 jobs:
-  build:
-
+  format-check:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,9 +19,28 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.x
+        dotnet-version: 8.0.x
     - name: Restore dependencies
       run: dotnet restore
+      working-directory: ./SmRtAPI
+    - name: lint
+      run: dotnet format --verify-no-changes
+      working-directory: ./SmRtAPI
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: ./SmRtAPI
+    - name: Lint
+      run: dotnet format --verify-no-changes
       working-directory: ./SmRtAPI
     - name: Build
       run: dotnet build --no-restore SmRtAPI
@@ -29,3 +48,145 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal SmRtAPI
       working-directory: ./SmRtAPI
+
+  package:
+    runs-on: ubuntu-latest
+    outputs:
+      nuget_repo: ${{ steps.version.outputs.nuget_repo }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
+      - name: Extract version from tag, choose nuget repo
+        id: version
+        run: |
+            set -euxo pipefail
+            NUGET_REPO="https://api.nuget.org/v3/index.json"
+            TAG_NAME="${GITHUB_REF##*/}"  # e.g., v2.0.0
+
+            if [[ "$TAG_NAME" != "merge" ]] && [[ ! "$TAG_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]; then
+              echo "Invalid SemVer tag: $TAG_NAME"
+              exit 1
+            fi
+
+            VERSION="${TAG_NAME#v}"       # strip the leading "v"
+
+            if [[ "$VERSION" = "merge" ]]; then
+              # If it's not a tag, use a fixed version for the package, which will not be published.
+              # The text 'merge' comes from parsing "refs/pull/PULL_REQUEST_NUMBER/merge"
+              PR_NUMBER=$(echo "$GITHUB_REF" | sed -n 's#refs/pull/\([0-9]\+\)/merge#\1#p')
+              # To be helpful if someone is downloading different packages, add the PR number
+              VERSION="2.0.${PR_NUMBER}"
+            fi
+
+            PACKAGE_VERSION=$VERSION
+
+            if [[ "$VERSION" == *-test* ]]; then
+              # If it's a test build, use the test NuGet repo
+              SUFFIX="${VERSION#*-}"
+              VERSION="${VERSION%%-*}"
+              NUGET_REPO="https://apiint.nugettest.org/v3/index.json"
+            fi
+
+            echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+            echo "nuget_repo=$NUGET_REPO" >> "$GITHUB_OUTPUT"
+            echo "package_version=$PACKAGE_VERSION" >> "$GITHUB_OUTPUT"
+      - name: Restore dependencies
+        run: dotnet restore
+        working-directory: ./SmRtAPI/SmRtAPI
+      - name: Pack NuGet Package
+        run: |
+          set -euxo pipefail
+          mkdir -p docs
+          cp ../../README.md docs/README.md
+          COMMIT_SHA=$(git rev-parse HEAD)
+
+          dotnet pack \
+            -p:PackageLicenseExpression=MIT \
+            -p:PackageVersion=${{ steps.version.outputs.package_version }} \
+            -p:Version=${{ steps.version.outputs.version }} \
+            -p:AssemblyVersion=${{ steps.version.outputs.version }}.0  \
+            -p:RepositoryCommit=$COMMIT_SHA \
+            -p:Configuration=Release \
+            -p:PackageProjectUrl="https://github.com/speechmatics/speechmatics-dotnet" \
+            -o ../../nupkgs
+        working-directory: ./SmRtAPI/SmRtAPI
+      - name: Upload NuGet Packages to github
+        uses: actions/upload-artifact@v4
+        with:
+          name: nupkgs
+          path: nupkgs/*.nupkg
+          retention-days: 1
+
+  sign:
+    runs-on: windows-latest
+    needs: package
+    env:
+      APP_ID: ${{ secrets.APP_ID }}
+      TENANT_ID: ${{ secrets.TENANT_ID }}
+      AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: nupkgs
+          path: nupkgs
+      - name: Sign
+        shell: pwsh
+        run: |
+          $timeserver = "http://timestamp.digicert.com"
+          $certificate_name = "GlobalSign-Code-Signing-Certificate"
+
+          dotnet tool install --tool-path . NuGetKeyVaultSignTool
+    
+          $nupkgFiles = Get-ChildItem -Path nupkgs -Filter *.nupkg
+          if ($nupkgFiles.Count -eq 0) {
+              Write-Host "No .nupkg files found in the directory."
+              exit 1
+          }
+          foreach ($file in $nupkgFiles) {
+            Write-Output "Signing $file"
+            ./NuGetKeyVaultSignTool sign $file `
+              --azure-key-vault-tenant-id "${{ env.TENANT_ID }}" `
+              --azure-key-vault-url "https://signing-key.vault.azure.net/" `
+              --azure-key-vault-client-id "${{ env.APP_ID }}" `
+              --azure-key-vault-client-secret "${{ env.AZURE_CLIENT_SECRET }}" `
+              --azure-key-vault-certificate "$certificate_name" `
+              --timestamp-rfc3161 $timeserver
+          }
+      - name: Upload signed NuGet packages to github
+        uses: actions/upload-artifact@v4
+        with:
+          name: signed_nupkgs
+          path: nupkgs/*.nupkg
+          retention-days: 1
+
+  publish:
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: ["sign", "package"]
+    env:
+      NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+      NUGET_API_KEY_TESTING: ${{ secrets.NUGET_API_KEY_TESTING }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: signed_nupkgs
+          path: nupkgs
+      - name: Publish nuget packages
+        shell: bash
+        run: |
+          set -euxo pipefail
+          NUGET_REPO="${{ needs.package.outputs.nuget_repo }}"
+
+          if [[ "$NUGET_REPO" == *nugettest* ]]; then
+            echo "Publishing to test NuGet repo"
+            NUGET_API_KEY="$NUGET_API_KEY_TESTING"
+          fi
+
+          for file in nupkgs/*.nupkg; do
+            echo "Publishing $file"
+            dotnet nuget verify $file
+            dotnet nuget push $file --api-key "$NUGET_API_KEY" --source "$NUGET_REPO"
+          done

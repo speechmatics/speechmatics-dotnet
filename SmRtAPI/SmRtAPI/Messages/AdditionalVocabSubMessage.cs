@@ -26,7 +26,7 @@ namespace Speechmatics.Realtime.Client.Messages
 
             foreach (var o in soundsLikes)
             {
-                var t = new 
+                var t = new
                 {
                     content = o.Key,
                     sounds_like = o.Value

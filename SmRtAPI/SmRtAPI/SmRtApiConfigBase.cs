@@ -31,24 +31,24 @@ namespace Speechmatics.Realtime.Client
         /// <summary>
         /// Action to perform on receiving a transcript
         /// </summary>
-        public Action<string> AddTranscriptCallback { get; set; }
+        public Action<string>? AddTranscriptCallback { get; set; }
 
         /// <summary>
         /// Action to perform on receiving a partial
         /// </summary>
-        public Action<string> AddPartialTranscriptCallback { get; set; }
+        public Action<string>? AddPartialTranscriptCallback { get; set; }
         /// <summary>
         /// Action to perform on end of transcript
         /// </summary>
-        public Action EndOfTranscriptCallback { get; set; }
+        public Action? EndOfTranscriptCallback { get; set; }
         /// <summary>
         /// Action to perform when a warning message is received
         /// </summary>
-        public Action<Messages.WarningMessage> WarningMessageCallback { get; set; }
+        public Action<Messages.WarningMessage>? WarningMessageCallback { get; set; }
         /// <summary>
         /// Action to perform when an error message is received
         /// </summary>
-        public Action<Messages.ErrorMessage> ErrorMessageCallback { get; set; }
+        public Action<Messages.ErrorMessage>? ErrorMessageCallback { get; set; }
         /// <summary>
         /// True if SSL errors should be ignored (default false)
         /// </summary>
@@ -56,15 +56,15 @@ namespace Speechmatics.Realtime.Client
         /// <summary>
         /// A list of words to add to the custom dictionary. Pronunciation will be inferred.
         /// </summary>
-        public IEnumerable<string> CustomDictionaryPlainWords { get; set; }
+        public IEnumerable<string> CustomDictionaryPlainWords { get; set; } = new List<string>();
         /// <summary>
         /// A mapping of words to alternative phonetic pronunciations, e.g. "gnocchi" => ("nokey", "noki")
         /// </summary>
-        public IDictionary<string, IEnumerable<string>> CustomDictionarySoundsLikes { get; set; }
+        public IDictionary<string, IEnumerable<string>> CustomDictionarySoundsLikes { get; set; } = new Dictionary<string, IEnumerable<string>>();
         /// <summary>
         /// For language models which support it, an optional output locale to use for output. e.g. en-GB, en-US (default), en-AU.
         /// </summary>
-        public string OutputLocale { get; set; }
+        public string? OutputLocale { get; set; }
         /// <summary>
         /// Data block size to send in one message. Overly small or large values can overload the server, something like 8192
         /// is usually safe. Large block sizes can affect latency.
@@ -75,7 +75,7 @@ namespace Speechmatics.Realtime.Client
         /// API Authentication Token
         /// only applicable for RT SaaS customers.
         /// </summary>
-        public string AuthToken { get; set; }
+        public string? AuthToken { get; set; }
 
         /// <summary>
         /// API keys obtained through portal.speechmatics.com

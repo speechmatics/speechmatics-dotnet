@@ -1,3 +1,5 @@
+using System;
+
 namespace Speechmatics.Realtime.Client.Messages
 {
 
@@ -15,11 +17,11 @@ namespace Speechmatics.Realtime.Client.Messages
         /// <summary>
         /// Target language translation relates to
         /// </summary>
-        public string language;
+        public string? language;
 
         /// <summary>
         /// List of translated sentences.
         /// </summary>
-        public TranslationSubMessage[] results;
+        public TranslationSubMessage[] results = Array.Empty<TranslationSubMessage>();
     }
 }

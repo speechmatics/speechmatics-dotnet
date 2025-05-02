@@ -58,20 +58,21 @@ namespace DemoApp
                         AddPartialTranslationMessageCallback = s => Console.WriteLine(ToJson(s)),
                         ErrorMessageCallback = s => Console.WriteLine(ToJson(s)),
                         WarningMessageCallback = s => Console.WriteLine(ToJson(s)),
-                        CustomDictionaryPlainWords = new[] {"speechmagic"},
+                        CustomDictionaryPlainWords = new[] { "speechmagic" },
                         CustomDictionarySoundsLikes = new Dictionary<string, IEnumerable<string>>(),
                         Insecure = true,
                         EnablePartials = true,
                         EnableEntities = true,
-                        Diarization=DiarizationType.Speaker,
-                        TranslationConfig = new TranslationConfig() {
-                            TargetLanguages = new [] {"de"},
+                        Diarization = DiarizationType.Speaker,
+                        TranslationConfig = new TranslationConfig()
+                        {
+                            TargetLanguages = new[] { "de" },
                             EnablePartials = true
                         }
                     };
 
                     // We can do this here, or earlier. It's not used until .Run() is called on the API object.
-                    config.CustomDictionarySoundsLikes["gnocchi"] = new[] {"nokey", "noki"};
+                    config.CustomDictionarySoundsLikes["gnocchi"] = new[] { "nokey", "noki" };
 
                     var api = new SmRtApi(RtUrl,
                         stream,
@@ -89,7 +90,7 @@ namespace DemoApp
             }
 
             var finish = DateTime.Now;
-            Debug.WriteLine("Starting at {0} -- {1}", finish, finish-start);
+            Debug.WriteLine("Starting at {0} -- {1}", finish, finish - start);
             Console.ReadLine();
         }
     }
