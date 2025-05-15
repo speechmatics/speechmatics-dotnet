@@ -32,8 +32,8 @@ namespace DemoApp
         {
             get
             {
-                return "wss://staging.realtimeappliance.speechmatics.io:9000/v2";
-                var host = Environment.GetEnvironmentVariable("TEST_HOST") ?? "api.rt.speechmatics.io";
+                var host = Environment.GetEnvironmentVariable("TEST_HOST") ?? "wss://api.rt.speechmatics.io";
+                // Port 9000 for Speechmatics docker containers
                 return host.StartsWith("wss://") ? host : $"wss://{host}:9000/";
             }
         }
@@ -116,7 +116,9 @@ COPY --from=build-env /app/smrtapi.net/SmRtAPI/DemoAppNetCore/out ./
 ENTRYPOINT ["dotnet", "DemoAppNetCore.dll"]
 ```
 
-# Building
+# Building in the CI
+
+## For those with direct access to the repository
 
 Any commit on a pull request will trigger Github actions to build and sign a nuget package which can be downloaded as an artifact.
 
