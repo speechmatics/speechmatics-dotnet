@@ -41,6 +41,6 @@ namespace Speechmatics.Realtime.Client.Messages
         /// Encoding (e.g. pcm_s16le)
         /// </summary>
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string encoding { get; }
+        public string? encoding { get; }
     }
 }

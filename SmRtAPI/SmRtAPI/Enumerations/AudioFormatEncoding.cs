@@ -7,9 +7,9 @@
 
     */
 
-/// <summary>
-/// Type of audio
-/// </summary>
+    /// <summary>
+    /// Type of audio
+    /// </summary>
     public enum AudioFormatEncoding
     {
         /// <summary>

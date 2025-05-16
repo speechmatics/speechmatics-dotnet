@@ -32,8 +32,8 @@ namespace DemoApp
         {
             get
             {
-                return "wss://staging.realtimeappliance.speechmatics.io:9000/v2";
-                var host = Environment.GetEnvironmentVariable("TEST_HOST") ?? "api.rt.speechmatics.io";
+                var host = Environment.GetEnvironmentVariable("TEST_HOST") ?? "wss://api.rt.speechmatics.io";
+                // Port 9000 for Speechmatics docker containers
                 return host.StartsWith("wss://") ? host : $"wss://{host}:9000/";
             }
         }
@@ -116,7 +116,23 @@ COPY --from=build-env /app/smrtapi.net/SmRtAPI/DemoAppNetCore/out ./
 ENTRYPOINT ["dotnet", "DemoAppNetCore.dll"]
 ```
 
-# Debugging
+# Building in the CI
+
+## For those with direct access to the repository
+
+Any commit on a pull request will trigger Github actions to build and sign a nuget package which can be downloaded as an artifact.
+
+A tagged Github release will be published to `nuget.org` for tags of the form `v\d+.\d+.\d+` and for release candidates or special builds, `v\d+.\d+.\d+-*`. Examples: 2.0.3, 2.0.5-rc1. To avoid confusion, only tag `main`, not other branches.
+
+To test the build process without polluting nuget.org (releases cannot be deleted, only 'delisted'), use a tag ending with `-test*`, for example `2.0.3-testjohnd`. This will run the CI for tagged builds but publish to the nuget test repository `apiint.nugettest.org`.
+
+# Testing
+
+## TODO
+
+Give this repo an API key for testing against the Speechmatics Realtime SaaS, update the unit tests and run them with `dotnet test`
+
+# Debugging websockets
 
 Merge the following with your `app.config` file to enable debugging to a file. If you don't have an `app.config` file, use this XML as-is. This technique will work whether you're building from source or using the Nuget package.
 

@@ -1,3 +1,5 @@
+using System;
+
 namespace Speechmatics.Realtime.Client.Messages
 {
     /// <summary>
@@ -15,10 +17,10 @@ namespace Speechmatics.Realtime.Client.Messages
         /// <summary>
         /// Aggregate metadata for the whole message
         /// </summary>
-        public RecognitionMetadata metadata;
+        public RecognitionMetadata? metadata;
         /// <summary>
         /// Individual word data
         /// </summary>
-        public WordSubMessage[] results;
+        public WordSubMessage[] results = Array.Empty<WordSubMessage>();
     }
 }
