@@ -81,11 +81,13 @@ jobs:
               VERSION="2.0.${PR_NUMBER}"
             fi
 
+            # The nuget package version can match the tag (allows semver pre-release tags)
+            # but the version used for the assembly version must only be a dot-separated 4-part number
             PACKAGE_VERSION=$VERSION
 
             if [[ "$VERSION" == *-test* ]]; then
-              # If it's a test build, use the test NuGet repo
-              SUFFIX="${VERSION#*-}"
+              # If it's a test build, use the test NuGet repo, and strip the test part from the version
+              # to make the uploaded package look more like a release.
               VERSION="${VERSION%%-*}"
               NUGET_REPO="https://apiint.nugettest.org/v3/index.json"
             fi
