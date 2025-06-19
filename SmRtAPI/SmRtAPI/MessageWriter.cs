@@ -47,7 +47,7 @@ namespace Speechmatics.Realtime.Client
             var streamBuffer = new byte[_api.Configuration.BlockSize];
             int bytesRead;
 
-            while ((bytesRead = await _stream.ReadAsync(streamBuffer, 0, streamBuffer.Length)) > 0 && !_transcriptionComplete.WaitOne(0))
+            while ((bytesRead = await _stream.ReadAsync(streamBuffer, 0, streamBuffer.Length, _api.CancelToken)) > 0 && !_transcriptionComplete.WaitOne(0))
             {
                 await SendData(new ArraySegment<byte>(streamBuffer, 0, bytesRead));
                 _sequenceNumber++;

@@ -148,16 +148,32 @@ namespace Speechmatics.Realtime.Client
                         /* The reading loop */
                         var t1 = Task.Factory.StartNew(async () =>
                         {
-                            var reader = new MessageReader(this, wsClient, transcriptionComplete, recognitionStarted);
-                            await reader.Start();
+                            try
+                            {
+                                var reader = new MessageReader(this, wsClient, transcriptionComplete, recognitionStarted);
+                                await reader.Start();
+                            }
+                            catch (OperationCanceledException)
+                            {
+                                transcriptionComplete.Set();
+                            }
+
 
                         }, CancelToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
 
                         /* The writing loop */
                         var t2 = Task.Factory.StartNew(async () =>
                         {
-                            _writer = new MessageWriter(this, wsClient, transcriptionComplete, _stream, recognitionStarted);
-                            await _writer.Start();
+                            try
+                            {
+                                _writer = new MessageWriter(this, wsClient, transcriptionComplete, _stream, recognitionStarted);
+                                await _writer.Start();
+                            }
+                            catch (OperationCanceledException)
+                            {
+                                transcriptionComplete.Set();
+                            }
+
                         }, CancelToken, TaskCreationOptions.LongRunning, TaskScheduler.Default);
 
                         transcriptionComplete.WaitOne();
